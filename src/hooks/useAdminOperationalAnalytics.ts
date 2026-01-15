@@ -26,6 +26,31 @@ export interface OrderStatusBreakdown {
   percentage: number;
 }
 
+export interface ProductionMetrics {
+  totalBatches: number;
+  batchesByStatus: { status: string; count: number; quantity: number }[];
+  batchesByMonth: { month: string; batches: number; quantity: number }[];
+  batchesByProduct: { product_id: number; product_name: string; batches: number; total_quantity: number }[];
+  averageBatchSize: number;
+}
+
+export interface InventoryMetrics {
+  totalItems: number;
+  lowStockItems: number;
+  totalValue: number;
+  itemsByCategory: { category: string; count: number }[];
+  stockMovements: { month: string; movements: number; quantity: number }[];
+}
+
+export interface DistributorMetrics {
+  totalDistributors: number;
+  totalShipments: number;
+  totalReturns: number;
+  shipmentsByMonth: { month: string; shipments: number; quantity: number }[];
+  stockByDistributor: { distributor_id: number; distributor_name: string; total_stock: number }[];
+  topProductsByDistributor: { product_id: number; product_name: string; total_sent: number; total_returned: number }[];
+}
+
 export interface OperationalMetrics {
   totalOrders: number;
   monthlyOrders: number;
@@ -39,6 +64,9 @@ export interface OperationalMetrics {
   ordersByStatus: OrderStatusBreakdown[];
   ordersByDayOfWeek: { day: string; count: number }[];
   ordersByHour: { hour: number; count: number }[];
+  production: ProductionMetrics;
+  inventory: InventoryMetrics;
+  distributors: DistributorMetrics;
 }
 
 // ==================== HOOKS ====================
@@ -289,6 +317,260 @@ export const useAdminOperationalAnalytics = (filters?: {
         count: hourMap.get(i) || 0,
       }));
 
+      // ==================== DATOS DE PRODUCCIÓN ====================
+      let productionBatches: any[] = [];
+      try {
+        const { data: batchesData, error: batchesError } = await supabase
+          .from('production_batches')
+          .select('id, product_id, quantity, status, production_date, product:products(id, name)')
+          .gte('production_date', format(startDate, 'yyyy-MM-dd'))
+          .lte('production_date', format(endDate, 'yyyy-MM-dd'))
+          .order('production_date', { ascending: true });
+
+        if (!batchesError && batchesData) {
+          productionBatches = batchesData;
+        }
+      } catch (e) {
+        console.error('Error fetching production batches:', e);
+      }
+
+      // Métricas de producción
+      const totalBatches = productionBatches.length;
+      const batchesByStatusMap = new Map<string, { count: number; quantity: number }>();
+      productionBatches.forEach(batch => {
+        const status = batch.status || 'unknown';
+        const current = batchesByStatusMap.get(status) || { count: 0, quantity: 0 };
+        batchesByStatusMap.set(status, {
+          count: current.count + 1,
+          quantity: current.quantity + (batch.quantity || 0),
+        });
+      });
+
+      const batchesByStatus = Array.from(batchesByStatusMap.entries()).map(([status, data]) => ({
+        status,
+        count: data.count,
+        quantity: data.quantity,
+      }));
+
+      // Batches por mes
+      const batchesByMonthMap = new Map<string, { batches: number; quantity: number }>();
+      productionBatches.forEach(batch => {
+        if (!batch.production_date) return;
+        const date = typeof batch.production_date === 'string' 
+          ? parseISO(batch.production_date) 
+          : new Date(batch.production_date);
+        const monthKey = format(date, 'yyyy-MM');
+        const current = batchesByMonthMap.get(monthKey) || { batches: 0, quantity: 0 };
+        batchesByMonthMap.set(monthKey, {
+          batches: current.batches + 1,
+          quantity: current.quantity + (batch.quantity || 0),
+        });
+      });
+
+      const batchesByMonth = Array.from(batchesByMonthMap.entries())
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([month, data]) => ({
+          month,
+          batches: data.batches,
+          quantity: data.quantity,
+        }));
+
+      // Batches por producto
+      const batchesByProductMap = new Map<number, {
+        product_id: number;
+        product_name: string;
+        batches: number;
+        total_quantity: number;
+      }>();
+      productionBatches.forEach(batch => {
+        if (!batch.product_id || !batch.product) return;
+        const productId = batch.product_id;
+        const productName = batch.product.name || `Producto ${productId}`;
+        const current = batchesByProductMap.get(productId) || {
+          product_id: productId,
+          product_name: productName,
+          batches: 0,
+          total_quantity: 0,
+        };
+        batchesByProductMap.set(productId, {
+          ...current,
+          batches: current.batches + 1,
+          total_quantity: current.total_quantity + (batch.quantity || 0),
+        });
+      });
+
+      const batchesByProduct = Array.from(batchesByProductMap.values())
+        .sort((a, b) => b.total_quantity - a.total_quantity)
+        .slice(0, 10);
+
+      const totalQuantity = productionBatches.reduce((sum, b) => sum + (b.quantity || 0), 0);
+      const averageBatchSize = totalBatches > 0 ? totalQuantity / totalBatches : 0;
+
+      // ==================== DATOS DE INVENTARIO ====================
+      let inventoryItems: any[] = [];
+      try {
+        const { data: inventoryData, error: inventoryError } = await supabase
+          .from('inventory')
+          .select('id, name, category, current_stock, min_stock, unit_price')
+          .order('name', { ascending: true });
+
+        if (inventoryError) {
+          console.error('Error fetching inventory:', inventoryError);
+        } else {
+          inventoryItems = inventoryData || [];
+          console.log('Inventory items fetched:', inventoryItems.length);
+        }
+      } catch (e) {
+        console.error('Exception fetching inventory:', e);
+      }
+
+      const totalItems = inventoryItems.length;
+      const lowStockItems = inventoryItems.filter(item => 
+        item.current_stock <= item.min_stock
+      ).length;
+      const totalValue = inventoryItems.reduce((sum, item) => 
+        sum + ((item.current_stock || 0) * (item.unit_price || 0)), 0
+      );
+
+      // Items por categoría
+      const itemsByCategoryMap = new Map<string, number>();
+      inventoryItems.forEach(item => {
+        const category = item.category || 'Sin categoría';
+        const current = itemsByCategoryMap.get(category) || 0;
+        itemsByCategoryMap.set(category, current + 1);
+      });
+
+      const itemsByCategory = Array.from(itemsByCategoryMap.entries()).map(([category, count]) => ({
+        category,
+        count,
+      }));
+
+      // Movimientos de inventario (simplificado - podrías tener una tabla de movimientos)
+      const stockMovements: { month: string; movements: number; quantity: number }[] = [];
+
+      // ==================== DATOS DE DISTRIBUIDORES ====================
+      let distributorMovements: any[] = [];
+      let distributors: any[] = [];
+      try {
+        // Obtener distribuidores
+        const { data: distributorsData, error: distributorsError } = await supabase
+          .from('distributors')
+          .select('id, store_name')
+          .order('store_name', { ascending: true });
+
+        if (!distributorsError && distributorsData) {
+          distributors = distributorsData;
+        }
+
+        // Obtener movimientos de distribuidores
+        const { data: movementsData, error: movementsError } = await supabase
+          .from('distributor_inventory_movements')
+          .select(`
+            id,
+            distributor_id,
+            product_id,
+            movement_type,
+            quantity,
+            movement_date,
+            distributor:distributors(id, store_name),
+            product:products(id, name)
+          `)
+          .gte('movement_date', format(startDate, 'yyyy-MM-dd'))
+          .lte('movement_date', format(endDate, 'yyyy-MM-dd'))
+          .order('movement_date', { ascending: true });
+
+        if (!movementsError && movementsData) {
+          distributorMovements = movementsData;
+        }
+      } catch (e) {
+        console.error('Error fetching distributor data:', e);
+      }
+
+      const totalDistributors = distributors.length;
+      const totalShipments = distributorMovements.filter(m => m.movement_type === 'envio').length;
+      const totalReturns = distributorMovements.filter(m => m.movement_type === 'devolucion').length;
+
+      // Envíos por mes
+      const shipmentsByMonthMap = new Map<string, { shipments: number; quantity: number }>();
+      distributorMovements
+        .filter(m => m.movement_type === 'envio')
+        .forEach(movement => {
+          if (!movement.movement_date) return;
+          const date = typeof movement.movement_date === 'string' 
+            ? parseISO(movement.movement_date) 
+            : new Date(movement.movement_date);
+          const monthKey = format(date, 'yyyy-MM');
+          const current = shipmentsByMonthMap.get(monthKey) || { shipments: 0, quantity: 0 };
+          shipmentsByMonthMap.set(monthKey, {
+            shipments: current.shipments + 1,
+            quantity: current.quantity + (movement.quantity || 0),
+          });
+        });
+
+      const shipmentsByMonth = Array.from(shipmentsByMonthMap.entries())
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([month, data]) => ({
+          month,
+          shipments: data.shipments,
+          quantity: data.quantity,
+        }));
+
+      // Stock por distribuidor
+      const stockByDistributorMap = new Map<number, {
+        distributor_id: number;
+        distributor_name: string;
+        total_stock: number;
+      }>();
+      distributorMovements.forEach(movement => {
+        if (!movement.distributor_id || !movement.distributor) return;
+        const distributorId = movement.distributor_id;
+        const distributorName = movement.distributor.store_name || `Distribuidor ${distributorId}`;
+        const current = stockByDistributorMap.get(distributorId) || {
+          distributor_id: distributorId,
+          distributor_name: distributorName,
+          total_stock: 0,
+        };
+        const quantityChange = movement.movement_type === 'envio' 
+          ? (movement.quantity || 0)
+          : -(movement.quantity || 0);
+        stockByDistributorMap.set(distributorId, {
+          ...current,
+          total_stock: current.total_stock + quantityChange,
+        });
+      });
+
+      const stockByDistributor = Array.from(stockByDistributorMap.values())
+        .sort((a, b) => b.total_stock - a.total_stock);
+
+      // Top productos por distribuidor
+      const topProductsByDistributorMap = new Map<number, {
+        product_id: number;
+        product_name: string;
+        total_sent: number;
+        total_returned: number;
+      }>();
+      distributorMovements.forEach(movement => {
+        if (!movement.product_id || !movement.product) return;
+        const productId = movement.product_id;
+        const productName = movement.product.name || `Producto ${productId}`;
+        const current = topProductsByDistributorMap.get(productId) || {
+          product_id: productId,
+          product_name: productName,
+          total_sent: 0,
+          total_returned: 0,
+        };
+        if (movement.movement_type === 'envio') {
+          current.total_sent += movement.quantity || 0;
+        } else {
+          current.total_returned += movement.quantity || 0;
+        }
+        topProductsByDistributorMap.set(productId, current);
+      });
+
+      const topProductsByDistributor = Array.from(topProductsByDistributorMap.values())
+        .sort((a, b) => b.total_sent - a.total_sent)
+        .slice(0, 10);
+
       return {
         totalOrders,
         monthlyOrders,
@@ -302,6 +584,28 @@ export const useAdminOperationalAnalytics = (filters?: {
         ordersByStatus,
         ordersByDayOfWeek,
         ordersByHour,
+        production: {
+          totalBatches,
+          batchesByStatus,
+          batchesByMonth,
+          batchesByProduct,
+          averageBatchSize,
+        },
+        inventory: {
+          totalItems,
+          lowStockItems,
+          totalValue,
+          itemsByCategory,
+          stockMovements,
+        },
+        distributors: {
+          totalDistributors,
+          totalShipments,
+          totalReturns,
+          shipmentsByMonth,
+          stockByDistributor,
+          topProductsByDistributor,
+        },
       };
     },
   });

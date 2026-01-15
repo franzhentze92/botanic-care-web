@@ -8,15 +8,17 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Plus, Save, X, Loader2, ArrowLeft, X as XIcon } from 'lucide-react';
-import Layout from '@/components/Layout';
+import AdminLayout from '@/components/AdminLayout';
 import { useCreateProduct, CreateProductData } from '@/hooks/useAdminProducts';
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
 import { MultiSelectNutrients } from '@/components/MultiSelectNutrients';
+import { useProductCategories } from '@/hooks/useProductCategories';
 
 const AdminProductCreate: React.FC = () => {
   const navigate = useNavigate();
   const createProductMutation = useCreateProduct();
+  const { data: productCategories = [], isLoading: isLoadingCategories } = useProductCategories();
 
   const [uploadingImage, setUploadingImage] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -43,17 +45,27 @@ const AdminProductCreate: React.FC = () => {
     sku: '',
   });
 
-  const categories = [
-    { value: 'skin-care', label: 'Cuidado de la Piel' },
-    { value: 'body-care', label: 'Cuidado Corporal' },
-    { value: 'baby-care', label: 'Cuidado del Bebé' },
-    { value: 'home-care', label: 'Cuidado del Hogar' }
-  ];
+  // Get first category ID as default, or 'skin-care' if no categories exist
+  const defaultCategory = productCategories.length > 0 ? productCategories[0].id : 'skin-care';
+
+  // Update category when categories load
+  React.useEffect(() => {
+    if (productCategories.length > 0 && !productCategories.find(cat => cat.id === formData.category)) {
+      setFormData(prev => ({ ...prev, category: productCategories[0].id }));
+    }
+  }, [productCategories, formData.category]);
+
+  // Map product categories from database to select format
+  const categories = productCategories.map(cat => ({
+    value: cat.id,
+    label: cat.name
+  }));
 
   const badges = [
     { value: 'MÁS VENDIDO', label: 'Más Vendido' },
     { value: 'NUEVO', label: 'Nuevo' },
-    { value: 'OFERTA', label: 'Oferta' }
+    { value: 'OFERTA', label: 'Oferta' },
+    { value: 'TEMPORADA', label: 'Temporada' }
   ];
 
   const uploadImageToStorage = async (file: File): Promise<string> => {
@@ -183,8 +195,8 @@ const AdminProductCreate: React.FC = () => {
   };
 
   return (
-    <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-[#7d8768]/10 via-[#9d627b]/10 to-[#7a7539]/10 py-12">
+    <AdminLayout>
+      <div className="min-h-screen bg-[#7d8768]/5 py-12">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-6">
             <Button
@@ -196,7 +208,7 @@ const AdminProductCreate: React.FC = () => {
               Volver a la lista
             </Button>
             <h1 className="text-4xl font-bold text-gray-900 mb-2 font-editorial-new">
-              Crear <span className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] bg-clip-text text-transparent">Nuevo Producto</span>
+              Crear <span className="text-[#7d8768]">Nuevo Producto</span>
             </h1>
             <p className="text-lg text-gray-600 font-audrey">
               Completa el formulario para agregar un nuevo producto a tu tienda
@@ -254,18 +266,24 @@ const AdminProductCreate: React.FC = () => {
 
                   <div>
                     <Label htmlFor="category" className="text-gray-700 font-medium">Categoría</Label>
-                    <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category: value})}>
-                      <SelectTrigger className="mt-1">
-                        <SelectValue placeholder="Seleccionar categoría" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {categories.map((category) => (
-                          <SelectItem key={category.value} value={category.value}>
-                            {category.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    {isLoadingCategories ? (
+                      <div className="mt-1 text-sm text-gray-500">Cargando categorías...</div>
+                    ) : categories.length > 0 ? (
+                      <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category: value})}>
+                        <SelectTrigger className="mt-1">
+                          <SelectValue placeholder="Seleccionar categoría" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {categories.map((category) => (
+                            <SelectItem key={category.value} value={category.value}>
+                              {category.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <div className="mt-1 text-sm text-red-500">No hay categorías disponibles. Por favor crea una categoría primero.</div>
+                    )}
                   </div>
 
                   <div>
@@ -464,7 +482,7 @@ const AdminProductCreate: React.FC = () => {
                           <Badge
                             key={index}
                             variant="secondary"
-                            className="bg-gradient-to-r from-[#9d627b] to-[#7a7539] text-white border-0 px-3 py-1 text-sm flex items-center gap-2"
+                            className="bg-[#8e421e] text-white border-0 px-3 py-1 text-sm flex items-center gap-2"
                           >
                             {benefit}
                             <button
@@ -491,7 +509,7 @@ const AdminProductCreate: React.FC = () => {
                 <Button 
                   onClick={handleSubmit}
                   disabled={createProductMutation.isPending}
-                  className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] hover:from-[#7a7539] hover:to-[#9d627b] text-white px-6 py-2"
+                  className="bg-[#7d8768] hover:bg-[#6d7660] text-white px-6 py-2"
                 >
                   {createProductMutation.isPending ? (
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -513,7 +531,7 @@ const AdminProductCreate: React.FC = () => {
           </Card>
         </div>
       </div>
-    </Layout>
+    </AdminLayout>
   );
 };
 

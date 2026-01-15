@@ -214,9 +214,9 @@ const InvoiceDetail: React.FC = () => {
           <Card className="max-w-md">
             <CardContent className="p-6 text-center">
               <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-              <h2 className="text-xl font-bold text-gray-900 mb-2">Factura no encontrada</h2>
-              <p className="text-gray-600 mb-4">La factura que buscas no existe.</p>
-              <Button onClick={() => navigate('/dashboard')} className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] text-white">
+              <h2 className="text-xl font-bold text-gray-900 mb-2 font-editorial-new">Factura no encontrada</h2>
+              <p className="text-gray-600 mb-4 font-body">La factura que buscas no existe.</p>
+              <Button onClick={() => navigate('/dashboard')} className="bg-[#7d8768] hover:bg-[#6d7660] text-white font-body">
                 Volver al Dashboard
               </Button>
             </CardContent>
@@ -250,7 +250,7 @@ const InvoiceDetail: React.FC = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-[#7d8768]/10 via-[#9d627b]/10 to-[#7a7539]/10 py-12">
+      <div className="min-h-screen bg-white py-12">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-6 flex items-center justify-between">
@@ -279,7 +279,7 @@ const InvoiceDetail: React.FC = () => {
               )}
               <Button
                 onClick={downloadPDF}
-                className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] hover:from-[#7a7539] hover:to-[#9d627b] text-white"
+                className="bg-[#7d8768] hover:bg-[#6d7660] text-white font-body"
               >
                 <Download className="h-4 w-4 mr-2" />
                 Descargar PDF
@@ -293,7 +293,7 @@ const InvoiceDetail: React.FC = () => {
             <div className="flex justify-between items-start mb-8 pb-8 border-b">
               <div>
                 <h1 className="text-4xl font-bold text-gray-900 mb-2 font-editorial-new">FACTURA</h1>
-                <div className="text-gray-600 font-audrey">
+                <div className="text-gray-600 font-body">
                   <p className="font-semibold text-lg">BOTANIC CARE</p>
                   <p>Productos Naturales de Belleza</p>
                   <p>Guatemala</p>
@@ -314,7 +314,7 @@ const InvoiceDetail: React.FC = () => {
                   <FileText className="h-5 w-5 mr-2 text-[#7d8768]" />
                   Facturar a:
                 </h3>
-                <div className="text-gray-700 font-audrey">
+                <div className="text-gray-700 font-body">
                   <p className="font-semibold">
                     {userProfile 
                       ? `${userProfile.first_name || ''} ${userProfile.last_name || ''}`.trim() || 'Cliente'
@@ -328,7 +328,7 @@ const InvoiceDetail: React.FC = () => {
                   <Calendar className="h-5 w-5 mr-2 text-[#7d8768]" />
                   Detalles de la Factura:
                 </h3>
-                <div className="text-gray-700 font-audrey space-y-1">
+                <div className="text-gray-700 font-body space-y-1">
                   <p><span className="font-semibold">Fecha:</span> {new Date(order.created_at).toLocaleDateString('es-GT', { 
                     year: 'numeric', 
                     month: 'long', 
@@ -361,11 +361,11 @@ const InvoiceDetail: React.FC = () => {
                         <td className="py-4 px-4">
                           <div className="font-medium text-gray-900 font-gilda-display">{item.product_name}</div>
                           {item.product_sku && (
-                            <div className="text-sm text-gray-500 font-audrey">SKU: {item.product_sku}</div>
+                            <div className="text-sm text-gray-500 font-body">SKU: {item.product_sku}</div>
                           )}
                         </td>
-                        <td className="text-center py-4 px-4 font-audrey">{item.quantity}</td>
-                        <td className="text-right py-4 px-4 font-audrey">Q. {item.unit_price.toFixed(2)}</td>
+                        <td className="text-center py-4 px-4 font-body">{item.quantity}</td>
+                        <td className="text-right py-4 px-4 font-body">Q. {item.unit_price.toFixed(2)}</td>
                         <td className="text-right py-4 px-4 font-semibold text-gray-900 font-gilda-display">Q. {item.total_price.toFixed(2)}</td>
                       </tr>
                     ))}
@@ -377,15 +377,15 @@ const InvoiceDetail: React.FC = () => {
             {/* Totals */}
             <div className="flex justify-end mb-8">
               <div className="w-full md:w-80 space-y-3">
-                <div className="flex justify-between text-gray-700 font-audrey">
+                <div className="flex justify-between text-gray-700 font-body">
                   <span>Subtotal:</span>
                   <span>Q. {order.subtotal.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-gray-700 font-audrey">
+                <div className="flex justify-between text-gray-700 font-body">
                   <span>Envío:</span>
                   <span>Q. {order.shipping_cost.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-gray-700 font-audrey">
+                <div className="flex justify-between text-gray-700 font-body">
                   <span>Impuestos:</span>
                   <span>Q. {order.tax.toFixed(2)}</span>
                 </div>
@@ -409,7 +409,7 @@ const InvoiceDetail: React.FC = () => {
                       <p className="text-sm font-semibold text-blue-900 mb-1 font-gilda-display">Número de Seguimiento</p>
                       <p className="text-lg text-blue-700 font-mono font-semibold">{order.tracking_number}</p>
                       {order.status === 'shipped' && (
-                        <p className="text-xs text-blue-600 mt-2 font-audrey">Tu pedido está en camino</p>
+                        <p className="text-xs text-blue-600 mt-2 font-body">Tu pedido está en camino</p>
                       )}
                     </div>
                   )}
@@ -445,12 +445,12 @@ const InvoiceDetail: React.FC = () => {
                   {getStatusText(order.status)}
                 </Badge>
                 {order.status === 'processing' && !order.tracking_number && (
-                  <p className="text-sm text-gray-600 font-audrey">
+                  <p className="text-sm text-gray-600 font-body">
                     Tu pedido está siendo procesado. Recibirás una notificación cuando sea enviado.
                   </p>
                 )}
                 {order.status === 'delivered' && (
-                  <p className="text-sm text-green-600 font-audrey flex items-center">
+                  <p className="text-sm text-green-600 font-body flex items-center">
                     <CheckCircle className="h-4 w-4 mr-1" />
                     Pedido entregado exitosamente
                   </p>
@@ -462,12 +462,12 @@ const InvoiceDetail: React.FC = () => {
             {order.notes && (
               <div className="mt-8 pt-8 border-t">
                 <h3 className="font-semibold text-gray-900 mb-2 font-gilda-display">Notas:</h3>
-                <p className="text-gray-600 font-audrey">{order.notes}</p>
+                <p className="text-gray-600 font-body">{order.notes}</p>
               </div>
             )}
 
             {/* Footer */}
-            <div className="mt-12 pt-8 border-t text-center text-gray-500 text-sm font-audrey">
+            <div className="mt-12 pt-8 border-t text-center text-gray-500 text-sm font-body">
               <p>Gracias por su compra. Botanic Care - Productos Naturales de Belleza</p>
             </div>
           </div>

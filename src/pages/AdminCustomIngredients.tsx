@@ -351,41 +351,44 @@ const AdminCustomIngredients: React.FC = () => {
 
   return (
     <AdminLayout>
-      <div className="p-6 space-y-6">
+      <div className="p-4 md:p-6 space-y-4 md:space-y-6">
         <AdminPageHeader
           title="Gestión de Ingredientes para Cremas Personalizadas"
           description="Administra los aceites base, extractos botánicos y funciones activas disponibles para que los clientes personalicen sus cremas"
         />
 
-        <Tabs defaultValue="oils" className="space-y-6">
+        <Tabs defaultValue="oils" className="space-y-4 md:space-y-6">
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="oils" className="flex items-center gap-2">
-              <Droplet className="h-4 w-4" />
-              Aceites Base
+            <TabsTrigger value="oils" className="flex items-center gap-1 md:gap-2 text-xs md:text-sm">
+              <Droplet className="h-3 w-3 md:h-4 md:w-4" />
+              <span className="hidden sm:inline">Aceites Base</span>
+              <span className="sm:hidden">Aceites</span>
             </TabsTrigger>
-            <TabsTrigger value="extracts" className="flex items-center gap-2">
-              <Leaf className="h-4 w-4" />
-              Extractos Botánicos
+            <TabsTrigger value="extracts" className="flex items-center gap-1 md:gap-2 text-xs md:text-sm">
+              <Leaf className="h-3 w-3 md:h-4 md:w-4" />
+              <span className="hidden sm:inline">Extractos Botánicos</span>
+              <span className="sm:hidden">Extractos</span>
             </TabsTrigger>
-            <TabsTrigger value="functions" className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4" />
-              Funciones Activas
+            <TabsTrigger value="functions" className="flex items-center gap-1 md:gap-2 text-xs md:text-sm">
+              <Sparkles className="h-3 w-3 md:h-4 md:w-4" />
+              <span className="hidden sm:inline">Funciones Activas</span>
+              <span className="sm:hidden">Funciones</span>
             </TabsTrigger>
           </TabsList>
 
           {/* Tab: Aceites Base */}
           <TabsContent value="oils" className="space-y-4">
             <Card>
-              <CardHeader>
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                  <CardTitle>Aceites Base</CardTitle>
+              <CardHeader className="p-4 md:p-6">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
+                  <CardTitle className="text-lg md:text-xl">Aceites Base</CardTitle>
                   <Button onClick={() => handleOpenOilDialog()} className="w-full md:w-auto">
                     <Plus className="h-4 w-4 mr-2" />
                     Agregar Aceite
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-4 md:p-6">
                 <div className="relative mb-4">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
@@ -404,51 +407,102 @@ const AdminCustomIngredients: React.FC = () => {
                     <p className="text-gray-500">No se encontraron aceites base.</p>
                   </div>
                 ) : (
-                  <div className="overflow-x-auto">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>ID</TableHead>
-                          <TableHead>Nombre</TableHead>
-                          <TableHead>Emoji</TableHead>
-                          <TableHead>Descripción</TableHead>
-                          <TableHead className="text-right">Modificador Precio</TableHead>
-                          <TableHead className="text-right">Acciones</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {filteredOils.map((oil) => (
-                          <TableRow key={oil.id}>
-                            <TableCell className="font-mono text-sm">{oil.id}</TableCell>
-                            <TableCell className="font-medium">{oil.name}</TableCell>
-                            <TableCell>{oil.emoji || '-'}</TableCell>
-                            <TableCell className="max-w-xs truncate">{oil.description || '-'}</TableCell>
-                            <TableCell className="text-right">{formatCurrency(oil.price_modifier || 0)}</TableCell>
-                            <TableCell className="text-right">
-                              <div className="flex justify-end gap-2">
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={() => handleOpenOilDialog(oil)}
-                                  title="Editar"
-                                >
-                                  <Edit className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={() => handleDeleteOil(oil.id)}
-                                  title="Eliminar"
-                                >
-                                  <Trash2 className="h-4 w-4 text-red-600" />
-                                </Button>
-                              </div>
-                            </TableCell>
+                  <>
+                    {/* Desktop Table View */}
+                    <div className="hidden lg:block overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>ID</TableHead>
+                            <TableHead>Nombre</TableHead>
+                            <TableHead>Emoji</TableHead>
+                            <TableHead>Descripción</TableHead>
+                            <TableHead className="text-right">Modificador Precio</TableHead>
+                            <TableHead className="text-right">Acciones</TableHead>
                           </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </div>
+                        </TableHeader>
+                        <TableBody>
+                          {filteredOils.map((oil) => (
+                            <TableRow key={oil.id}>
+                              <TableCell className="font-mono text-sm">{oil.id}</TableCell>
+                              <TableCell className="font-medium">{oil.name}</TableCell>
+                              <TableCell>{oil.emoji || '-'}</TableCell>
+                              <TableCell className="max-w-xs truncate">{oil.description || '-'}</TableCell>
+                              <TableCell className="text-right">{formatCurrency(oil.price_modifier || 0)}</TableCell>
+                              <TableCell className="text-right">
+                                <div className="flex justify-end gap-2">
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => handleOpenOilDialog(oil)}
+                                    title="Editar"
+                                  >
+                                    <Edit className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => handleDeleteOil(oil.id)}
+                                    title="Eliminar"
+                                  >
+                                    <Trash2 className="h-4 w-4 text-red-600" />
+                                  </Button>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
+
+                    {/* Mobile Card View */}
+                    <div className="lg:hidden space-y-3">
+                      {filteredOils.map((oil) => (
+                        <Card key={oil.id} className="border-l-4 border-l-[#7d8768]">
+                          <CardContent className="p-4">
+                            <div className="space-y-3">
+                              <div className="flex items-start justify-between gap-3">
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    {oil.emoji && <span className="text-lg">{oil.emoji}</span>}
+                                    <h3 className="font-semibold text-sm text-gray-900">{oil.name}</h3>
+                                  </div>
+                                  <code className="text-xs bg-gray-100 px-2 py-0.5 rounded block w-fit">{oil.id}</code>
+                                  {oil.description && (
+                                    <p className="text-xs text-gray-600 mt-2 line-clamp-2">{oil.description}</p>
+                                  )}
+                                </div>
+                                <div className="flex gap-1 flex-shrink-0">
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8"
+                                    onClick={() => handleOpenOilDialog(oil)}
+                                    title="Editar"
+                                  >
+                                    <Edit className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8 text-red-600"
+                                    onClick={() => handleDeleteOil(oil.id)}
+                                    title="Eliminar"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              </div>
+                              <div className="pt-2 border-t">
+                                <span className="text-xs text-muted-foreground">Modificador Precio:</span>
+                                <p className="font-semibold text-sm">{formatCurrency(oil.price_modifier || 0)}</p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </>
                 )}
               </CardContent>
             </Card>
@@ -457,16 +511,16 @@ const AdminCustomIngredients: React.FC = () => {
           {/* Tab: Extractos Botánicos */}
           <TabsContent value="extracts" className="space-y-4">
             <Card>
-              <CardHeader>
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                  <CardTitle>Extractos Botánicos</CardTitle>
+              <CardHeader className="p-4 md:p-6">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
+                  <CardTitle className="text-lg md:text-xl">Extractos Botánicos</CardTitle>
                   <Button onClick={() => handleOpenExtractDialog()} className="w-full md:w-auto">
                     <Plus className="h-4 w-4 mr-2" />
                     Agregar Extracto
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-4 md:p-6">
                 <div className="relative mb-4">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
@@ -485,49 +539,97 @@ const AdminCustomIngredients: React.FC = () => {
                     <p className="text-gray-500">No se encontraron extractos botánicos.</p>
                   </div>
                 ) : (
-                  <div className="overflow-x-auto">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>ID</TableHead>
-                          <TableHead>Nombre</TableHead>
-                          <TableHead>Emoji</TableHead>
-                          <TableHead className="text-right">Modificador Precio</TableHead>
-                          <TableHead className="text-right">Acciones</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {filteredExtracts.map((extract) => (
-                          <TableRow key={extract.id}>
-                            <TableCell className="font-mono text-sm">{extract.id}</TableCell>
-                            <TableCell className="font-medium">{extract.name}</TableCell>
-                            <TableCell>{extract.emoji || '-'}</TableCell>
-                            <TableCell className="text-right">{formatCurrency(extract.price_modifier || 0)}</TableCell>
-                            <TableCell className="text-right">
-                              <div className="flex justify-end gap-2">
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={() => handleOpenExtractDialog(extract)}
-                                  title="Editar"
-                                >
-                                  <Edit className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={() => handleDeleteExtract(extract.id)}
-                                  title="Eliminar"
-                                >
-                                  <Trash2 className="h-4 w-4 text-red-600" />
-                                </Button>
-                              </div>
-                            </TableCell>
+                  <>
+                    {/* Desktop Table View */}
+                    <div className="hidden lg:block overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>ID</TableHead>
+                            <TableHead>Nombre</TableHead>
+                            <TableHead>Emoji</TableHead>
+                            <TableHead className="text-right">Modificador Precio</TableHead>
+                            <TableHead className="text-right">Acciones</TableHead>
                           </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </div>
+                        </TableHeader>
+                        <TableBody>
+                          {filteredExtracts.map((extract) => (
+                            <TableRow key={extract.id}>
+                              <TableCell className="font-mono text-sm">{extract.id}</TableCell>
+                              <TableCell className="font-medium">{extract.name}</TableCell>
+                              <TableCell>{extract.emoji || '-'}</TableCell>
+                              <TableCell className="text-right">{formatCurrency(extract.price_modifier || 0)}</TableCell>
+                              <TableCell className="text-right">
+                                <div className="flex justify-end gap-2">
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => handleOpenExtractDialog(extract)}
+                                    title="Editar"
+                                  >
+                                    <Edit className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => handleDeleteExtract(extract.id)}
+                                    title="Eliminar"
+                                  >
+                                    <Trash2 className="h-4 w-4 text-red-600" />
+                                  </Button>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
+
+                    {/* Mobile Card View */}
+                    <div className="lg:hidden space-y-3">
+                      {filteredExtracts.map((extract) => (
+                        <Card key={extract.id} className="border-l-4 border-l-[#7d8768]">
+                          <CardContent className="p-4">
+                            <div className="space-y-3">
+                              <div className="flex items-start justify-between gap-3">
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    {extract.emoji && <span className="text-lg">{extract.emoji}</span>}
+                                    <h3 className="font-semibold text-sm text-gray-900">{extract.name}</h3>
+                                  </div>
+                                  <code className="text-xs bg-gray-100 px-2 py-0.5 rounded block w-fit">{extract.id}</code>
+                                </div>
+                                <div className="flex gap-1 flex-shrink-0">
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8"
+                                    onClick={() => handleOpenExtractDialog(extract)}
+                                    title="Editar"
+                                  >
+                                    <Edit className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8 text-red-600"
+                                    onClick={() => handleDeleteExtract(extract.id)}
+                                    title="Eliminar"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              </div>
+                              <div className="pt-2 border-t">
+                                <span className="text-xs text-muted-foreground">Modificador Precio:</span>
+                                <p className="font-semibold text-sm">{formatCurrency(extract.price_modifier || 0)}</p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </>
                 )}
               </CardContent>
             </Card>
@@ -536,16 +638,16 @@ const AdminCustomIngredients: React.FC = () => {
           {/* Tab: Funciones Activas */}
           <TabsContent value="functions" className="space-y-4">
             <Card>
-              <CardHeader>
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                  <CardTitle>Funciones Activas</CardTitle>
+              <CardHeader className="p-4 md:p-6">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
+                  <CardTitle className="text-lg md:text-xl">Funciones Activas</CardTitle>
                   <Button onClick={() => handleOpenFunctionDialog()} className="w-full md:w-auto">
                     <Plus className="h-4 w-4 mr-2" />
                     Agregar Función
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-4 md:p-6">
                 <div className="relative mb-4">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
@@ -564,59 +666,116 @@ const AdminCustomIngredients: React.FC = () => {
                     <p className="text-gray-500">No se encontraron funciones activas.</p>
                   </div>
                 ) : (
-                  <div className="overflow-x-auto">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>ID</TableHead>
-                          <TableHead>Nombre</TableHead>
-                          <TableHead>Emoji</TableHead>
-                          <TableHead>Ingredientes</TableHead>
-                          <TableHead className="text-right">Modificador Precio</TableHead>
-                          <TableHead className="text-right">Acciones</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {filteredFunctions.map((func) => (
-                          <TableRow key={func.id}>
-                            <TableCell className="font-mono text-sm">{func.id}</TableCell>
-                            <TableCell className="font-medium">{func.name}</TableCell>
-                            <TableCell>{func.emoji || '-'}</TableCell>
-                            <TableCell>
-                              <div className="flex flex-wrap gap-1">
-                                {func.ingredients.map((ingredient, idx) => (
-                                  <Badge key={idx} variant="outline" className="text-xs">
-                                    {ingredient}
-                                  </Badge>
-                                ))}
-                              </div>
-                            </TableCell>
-                            <TableCell className="text-right">{formatCurrency(func.price_modifier || 0)}</TableCell>
-                            <TableCell className="text-right">
-                              <div className="flex justify-end gap-2">
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={() => handleOpenFunctionDialog(func)}
-                                  title="Editar"
-                                >
-                                  <Edit className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={() => handleDeleteFunction(func.id)}
-                                  title="Eliminar"
-                                >
-                                  <Trash2 className="h-4 w-4 text-red-600" />
-                                </Button>
-                              </div>
-                            </TableCell>
+                  <>
+                    {/* Desktop Table View */}
+                    <div className="hidden lg:block overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>ID</TableHead>
+                            <TableHead>Nombre</TableHead>
+                            <TableHead>Emoji</TableHead>
+                            <TableHead>Ingredientes</TableHead>
+                            <TableHead className="text-right">Modificador Precio</TableHead>
+                            <TableHead className="text-right">Acciones</TableHead>
                           </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </div>
+                        </TableHeader>
+                        <TableBody>
+                          {filteredFunctions.map((func) => (
+                            <TableRow key={func.id}>
+                              <TableCell className="font-mono text-sm">{func.id}</TableCell>
+                              <TableCell className="font-medium">{func.name}</TableCell>
+                              <TableCell>{func.emoji || '-'}</TableCell>
+                              <TableCell>
+                                <div className="flex flex-wrap gap-1">
+                                  {func.ingredients.map((ingredient, idx) => (
+                                    <Badge key={idx} variant="outline" className="text-xs">
+                                      {ingredient}
+                                    </Badge>
+                                  ))}
+                                </div>
+                              </TableCell>
+                              <TableCell className="text-right">{formatCurrency(func.price_modifier || 0)}</TableCell>
+                              <TableCell className="text-right">
+                                <div className="flex justify-end gap-2">
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => handleOpenFunctionDialog(func)}
+                                    title="Editar"
+                                  >
+                                    <Edit className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => handleDeleteFunction(func.id)}
+                                    title="Eliminar"
+                                  >
+                                    <Trash2 className="h-4 w-4 text-red-600" />
+                                  </Button>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
+
+                    {/* Mobile Card View */}
+                    <div className="lg:hidden space-y-3">
+                      {filteredFunctions.map((func) => (
+                        <Card key={func.id} className="border-l-4 border-l-[#7d8768]">
+                          <CardContent className="p-4">
+                            <div className="space-y-3">
+                              <div className="flex items-start justify-between gap-3">
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    {func.emoji && <span className="text-lg">{func.emoji}</span>}
+                                    <h3 className="font-semibold text-sm text-gray-900">{func.name}</h3>
+                                  </div>
+                                  <code className="text-xs bg-gray-100 px-2 py-0.5 rounded block w-fit mb-2">{func.id}</code>
+                                  {func.ingredients.length > 0 && (
+                                    <div className="flex flex-wrap gap-1">
+                                      {func.ingredients.map((ingredient, idx) => (
+                                        <Badge key={idx} variant="outline" className="text-[10px]">
+                                          {ingredient}
+                                        </Badge>
+                                      ))}
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="flex gap-1 flex-shrink-0">
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8"
+                                    onClick={() => handleOpenFunctionDialog(func)}
+                                    title="Editar"
+                                  >
+                                    <Edit className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8 text-red-600"
+                                    onClick={() => handleDeleteFunction(func.id)}
+                                    title="Eliminar"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              </div>
+                              <div className="pt-2 border-t">
+                                <span className="text-xs text-muted-foreground">Modificador Precio:</span>
+                                <p className="font-semibold text-sm">{formatCurrency(func.price_modifier || 0)}</p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </>
                 )}
               </CardContent>
             </Card>
@@ -625,7 +784,7 @@ const AdminCustomIngredients: React.FC = () => {
 
         {/* Diálogo de Aceite Base */}
         <Dialog open={oilDialogOpen} onOpenChange={setOilDialogOpen}>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl w-[95vw] md:w-full max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{editingOil ? 'Editar Aceite Base' : 'Nuevo Aceite Base'}</DialogTitle>
               <DialogDescription>
@@ -710,7 +869,7 @@ const AdminCustomIngredients: React.FC = () => {
 
         {/* Diálogo de Extracto Botánico */}
         <Dialog open={extractDialogOpen} onOpenChange={setExtractDialogOpen}>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl w-[95vw] md:w-full max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{editingExtract ? 'Editar Extracto Botánico' : 'Nuevo Extracto Botánico'}</DialogTitle>
               <DialogDescription>
@@ -784,7 +943,7 @@ const AdminCustomIngredients: React.FC = () => {
 
         {/* Diálogo de Función Activa */}
         <Dialog open={functionDialogOpen} onOpenChange={setFunctionDialogOpen}>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-2xl w-[95vw] md:w-full max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{editingFunction ? 'Editar Función Activa' : 'Nueva Función Activa'}</DialogTitle>
               <DialogDescription>

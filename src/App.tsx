@@ -27,6 +27,7 @@ import AdminOrders from "./pages/AdminOrders";
 import AdminRevenue from "./pages/AdminRevenue";
 import AdminCosts from "./pages/AdminCosts";
 import AdminCustomers from "./pages/AdminCustomers";
+import AdminDistributors from "./pages/AdminDistributors";
 import AdminEmployees from "./pages/AdminEmployees";
 import AdminAnalytics from "./pages/AdminAnalytics";
 import AdminOperationalAnalytics from "./pages/AdminOperationalAnalytics";
@@ -35,6 +36,8 @@ import AdminCustomIngredients from "./pages/AdminCustomIngredients";
 import AdminBlog from "./pages/AdminBlog";
 import AdminProduction from "./pages/AdminProduction";
 import AdminInventory from "./pages/AdminInventory";
+import AdminFinishedProductsInventory from "./pages/AdminFinishedProductsInventory";
+import AdminDistributorInventory from "./pages/AdminDistributorInventory";
 import AdminSettings from "./pages/AdminSettings";
 import AdminRecipes from "./pages/AdminRecipes";
 import AdminProductCreate from "./pages/AdminProductCreate";
@@ -48,6 +51,7 @@ import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
+import Rewards from "./pages/Rewards";
 
 const queryClient = new QueryClient();
 
@@ -122,6 +126,7 @@ const App = () => (
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/rewards" element={<Rewards />} />
                 <Route path="/custom" element={<Custom />} />
                 <Route path="/custom-cream" element={<CustomCreamBuilder />} />
                 <Route path="/login" element={<Login />} />
@@ -225,6 +230,14 @@ const App = () => (
                   }
                 />
                 <Route
+                  path="/admin/distributors"
+                  element={
+                    <AdminRoute>
+                      <AdminDistributors />
+                    </AdminRoute>
+                  }
+                />
+                <Route
                   path="/admin/employees"
                   element={
                     <AdminRoute>
@@ -293,6 +306,22 @@ const App = () => (
                   element={
                     <AdminRoute>
                       <AdminInventory />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/admin/finished-products-inventory"
+                  element={
+                    <AdminRoute>
+                      <AdminFinishedProductsInventory />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/admin/distributor-inventory"
+                  element={
+                    <AdminRoute>
+                      <AdminDistributorInventory />
                     </AdminRoute>
                   }
                 />

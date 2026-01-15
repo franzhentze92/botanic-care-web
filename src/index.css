@@ -3,9 +3,14 @@
 @import "tailwindcss/utilities";
 
 /* Import brand fonts */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap');
+/* TITULARES - Editorial New style (using EB Garamond as elegant serif alternative) */
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&display=swap');
+/* SUBTÍTULO 1 - Audrey style (using Cormorant Garamond as elegant serif) */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap');
+/* SUBTÍTULO 2 - Gilda Display */
+@import url('https://fonts.googleapis.com/css2?family=Gilda+Display&display=swap');
+/* CUERPO DE TEXTO - Be Vietnam Pro */
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap');
 
 @layer base {
   :root {
@@ -70,7 +75,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   }
 }
 
@@ -147,16 +152,29 @@
 }
 
 /* Brand font classes */
+/* TITULARES - Editorial New style */
 .font-editorial-new {
-  font-family: 'Playfair Display', serif;
+  font-family: 'EB Garamond', serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
 }
 
+/* SUBTÍTULO 1 - Audrey style */
 .font-audrey {
   font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
 }
 
+/* SUBTÍTULO 2 - Gilda Display */
 .font-gilda-display {
-  font-family: 'Libre Baskerville', serif;
+  font-family: 'Gilda Display', serif;
+  font-weight: 400;
+}
+
+/* CUERPO DE TEXTO - Be Vietnam Pro (already set in body) */
+.font-body {
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-weight: 400;
 }
 
 /* Floating animations for hero section */

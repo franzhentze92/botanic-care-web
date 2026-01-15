@@ -8,12 +8,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Edit, Save, X, Loader2, ArrowLeft, X as XIcon, Plus } from 'lucide-react';
-import Layout from '@/components/Layout';
+import AdminLayout from '@/components/AdminLayout';
 import { useAdminProducts, useUpdateProduct, CreateProductData } from '@/hooks/useAdminProducts';
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
 import { MultiSelectNutrients } from '@/components/MultiSelectNutrients';
 import { useProductNutrients } from '@/hooks/useNutrients';
+import { useProductCategories } from '@/hooks/useProductCategories';
 
 const AdminProductEdit: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,6 +23,7 @@ const AdminProductEdit: React.FC = () => {
   const { data: products = [], isLoading } = useAdminProducts();
   const productId = id ? parseInt(id) : 0;
   const { data: editingProductNutrients = [] } = useProductNutrients(productId);
+  const { data: productCategories = [], isLoading: isLoadingCategories } = useProductCategories();
 
   const product = products.find(p => p.id === productId);
 
@@ -51,17 +53,17 @@ const AdminProductEdit: React.FC = () => {
     sku: '',
   });
 
-  const categories = [
-    { value: 'skin-care', label: 'Cuidado de la Piel' },
-    { value: 'body-care', label: 'Cuidado Corporal' },
-    { value: 'baby-care', label: 'Cuidado del Bebé' },
-    { value: 'home-care', label: 'Cuidado del Hogar' }
-  ];
+  // Map product categories from database to select format
+  const categories = productCategories.map(cat => ({
+    value: cat.id,
+    label: cat.name
+  }));
 
   const badges = [
     { value: 'MÁS VENDIDO', label: 'Más Vendido' },
     { value: 'NUEVO', label: 'Nuevo' },
-    { value: 'OFERTA', label: 'Oferta' }
+    { value: 'OFERTA', label: 'Oferta' },
+    { value: 'TEMPORADA', label: 'Temporada' }
   ];
 
   // Cargar datos del producto cuando esté disponible
@@ -247,17 +249,17 @@ const AdminProductEdit: React.FC = () => {
 
   if (isLoading) {
     return (
-      <Layout>
+      <AdminLayout>
         <div className="min-h-screen flex items-center justify-center">
           <Loader2 className="h-12 w-12 animate-spin text-[#7d8768]" />
         </div>
-      </Layout>
+      </AdminLayout>
     );
   }
 
   if (!product) {
     return (
-      <Layout>
+      <AdminLayout>
         <div className="min-h-screen flex items-center justify-center">
           <Card className="max-w-md">
             <CardContent className="p-6 text-center">
@@ -268,13 +270,13 @@ const AdminProductEdit: React.FC = () => {
             </CardContent>
           </Card>
         </div>
-      </Layout>
+      </AdminLayout>
     );
   }
 
   return (
-    <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-[#7d8768]/10 via-[#9d627b]/10 to-[#7a7539]/10 py-12">
+    <AdminLayout>
+      <div className="min-h-screen bg-[#7d8768]/5 py-12">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-6">
             <Button
@@ -286,7 +288,7 @@ const AdminProductEdit: React.FC = () => {
               Volver a la lista
             </Button>
             <h1 className="text-4xl font-bold text-gray-900 mb-2 font-editorial-new">
-              Editar <span className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] bg-clip-text text-transparent">Producto</span>
+              Editar <span className="text-[#7d8768]">Producto</span>
             </h1>
             <p className="text-lg text-gray-600 font-audrey">
               Modifica la información del producto
@@ -344,18 +346,24 @@ const AdminProductEdit: React.FC = () => {
 
                   <div>
                     <Label htmlFor="category" className="text-gray-700 font-medium">Categoría</Label>
-                    <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category: value})}>
-                      <SelectTrigger className="mt-1">
-                        <SelectValue placeholder="Seleccionar categoría" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {categories.map((category) => (
-                          <SelectItem key={category.value} value={category.value}>
-                            {category.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    {isLoadingCategories ? (
+                      <div className="mt-1 text-sm text-gray-500">Cargando categorías...</div>
+                    ) : categories.length > 0 ? (
+                      <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category: value})}>
+                        <SelectTrigger className="mt-1">
+                          <SelectValue placeholder="Seleccionar categoría" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {categories.map((category) => (
+                            <SelectItem key={category.value} value={category.value}>
+                              {category.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <div className="mt-1 text-sm text-red-500">No hay categorías disponibles. Por favor crea una categoría primero.</div>
+                    )}
                   </div>
 
                   <div>
@@ -552,7 +560,7 @@ const AdminProductEdit: React.FC = () => {
                           <Badge
                             key={index}
                             variant="secondary"
-                            className="bg-gradient-to-r from-[#9d627b] to-[#7a7539] text-white border-0 px-3 py-1 text-sm flex items-center gap-2"
+                            className="bg-[#8e421e] text-white border-0 px-3 py-1 text-sm flex items-center gap-2"
                           >
                             {benefit}
                             <button
@@ -578,7 +586,7 @@ const AdminProductEdit: React.FC = () => {
                 <Button 
                   onClick={handleSubmit}
                   disabled={updateProductMutation.isPending}
-                  className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] hover:from-[#7a7539] hover:to-[#9d627b] text-white px-6 py-2"
+                  className="bg-[#7d8768] hover:bg-[#6d7660] text-white px-6 py-2"
                 >
                   {updateProductMutation.isPending ? (
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -600,7 +608,7 @@ const AdminProductEdit: React.FC = () => {
           </Card>
         </div>
       </div>
-    </Layout>
+    </AdminLayout>
   );
 };
 

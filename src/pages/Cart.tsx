@@ -25,9 +25,10 @@ import {
 } from 'lucide-react';
 import Layout from '@/components/Layout';
 import { useCart } from '@/contexts/CartContext';
-import { useCreateOrder, useUserProfile, useAddresses, useCreateAddress, useCreatePaymentMethod } from '@/hooks/useDashboard';
+import { useCreateOrder, useUserProfile, useAddresses, useCreateAddress, usePaymentMethods, useCreatePaymentMethod, useUpdateAddress, useUpdatePaymentMethod } from '@/hooks/useDashboard';
 import { useAuth } from '@/contexts/AuthContext';
 import { useStoreSettings } from '@/hooks/useStoreSettings';
+import { useQueryClient } from '@tanstack/react-query';
 
 const Cart: React.FC = () => {
   const { state, removeFromCart, updateQuantity, clearCart, getCartTotal, getCartItemCount } = useCart();
@@ -36,8 +37,12 @@ const Cart: React.FC = () => {
   const createOrderMutation = useCreateOrder();
   const { data: userProfile } = useUserProfile();
   const { data: addresses = [] } = useAddresses();
+  const { data: paymentMethods = [] } = usePaymentMethods();
   const createAddressMutation = useCreateAddress();
   const createPaymentMethodMutation = useCreatePaymentMethod();
+  const updateAddressMutation = useUpdateAddress();
+  const updatePaymentMethodMutation = useUpdatePaymentMethod();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   
@@ -128,20 +133,43 @@ const Cart: React.FC = () => {
     const subtotal = getCartTotal();
     
     try {
-      // Crear la dirección de envío
-      const address = await createAddressMutation.mutateAsync({
-        type: 'home',
-        name: `${shippingInfo.firstName} ${shippingInfo.lastName}`,
-        street: shippingInfo.address,
-        city: shippingInfo.city,
-        state: shippingInfo.state,
-        zip_code: shippingInfo.zipCode,
-        country: shippingInfo.country,
-        phone: shippingInfo.phone,
-        is_default: true,
-      });
+      // Verificar si ya existe una dirección con los mismos datos
+      const addressName = `${shippingInfo.firstName} ${shippingInfo.lastName}`;
+      const existingAddress = addresses.find(addr => 
+        addr.street.toLowerCase().trim() === shippingInfo.address.toLowerCase().trim() &&
+        addr.city.toLowerCase().trim() === shippingInfo.city.toLowerCase().trim() &&
+        addr.state.toLowerCase().trim() === shippingInfo.state.toLowerCase().trim() &&
+        addr.zip_code.trim() === shippingInfo.zipCode.trim() &&
+        addr.country.toLowerCase().trim() === shippingInfo.country.toLowerCase().trim()
+      );
 
-      // Crear el método de pago
+      let address;
+      if (existingAddress) {
+        // Usar la dirección existente
+        address = existingAddress;
+        // Si no es la predeterminada, actualizarla para que lo sea
+        if (!existingAddress.is_default) {
+          await updateAddressMutation.mutateAsync({
+            id: existingAddress.id,
+            is_default: true,
+          });
+        }
+      } else {
+        // Crear nueva dirección solo si no existe
+        address = await createAddressMutation.mutateAsync({
+          type: 'home',
+          name: addressName,
+          street: shippingInfo.address,
+          city: shippingInfo.city,
+          state: shippingInfo.state,
+          zip_code: shippingInfo.zipCode,
+          country: shippingInfo.country,
+          phone: shippingInfo.phone,
+          is_default: true,
+        });
+      }
+
+      // Verificar si ya existe un método de pago del mismo tipo
       let paymentMethodType: 'card' | 'paypal' | 'cash_on_delivery' = 'cash_on_delivery';
       if (paymentMethod === 'credit-card') {
         paymentMethodType = 'card';
@@ -149,10 +177,30 @@ const Cart: React.FC = () => {
         paymentMethodType = 'paypal';
       }
 
-      const paymentMethodData = await createPaymentMethodMutation.mutateAsync({
-        type: paymentMethodType,
-        is_default: true,
-      });
+      // Para cash_on_delivery, siempre buscar o crear uno genérico
+      // Para card y paypal, buscar uno existente del mismo tipo
+      const existingPaymentMethod = paymentMethods.find(pm => 
+        pm.type === paymentMethodType
+      );
+
+      let paymentMethodData;
+      if (existingPaymentMethod) {
+        // Usar el método de pago existente
+        paymentMethodData = existingPaymentMethod;
+        // Si no es el predeterminado, actualizarlo para que lo sea
+        if (!existingPaymentMethod.is_default) {
+          await updatePaymentMethodMutation.mutateAsync({
+            id: existingPaymentMethod.id,
+            is_default: true,
+          });
+        }
+      } else {
+        // Crear nuevo método de pago solo si no existe
+        paymentMethodData = await createPaymentMethodMutation.mutateAsync({
+          type: paymentMethodType,
+          is_default: true,
+        });
+      }
 
       // Crear la orden en la base de datos
       await createOrderMutation.mutateAsync({
@@ -187,8 +235,8 @@ const Cart: React.FC = () => {
         {
           description: (
             <div className="space-y-1">
-              <p className="font-semibold">Gracias por tu compra. Recibirás un email de confirmación.</p>
-              <p className="text-sm opacity-90">Total de la compra: <span className="font-bold">Q. {orderTotal.toFixed(2)}</span> ({itemCount} productos)</p>
+              <p className="font-semibold font-body">Gracias por tu compra. Recibirás un email de confirmación.</p>
+              <p className="text-sm opacity-90 font-body">Total de la compra: <span className="font-bold">Q. {orderTotal.toFixed(2)}</span> ({itemCount} productos)</p>
             </div>
           ),
           icon: <CheckCircle className="h-6 w-6 text-green-500" />,
@@ -229,8 +277,8 @@ const Cart: React.FC = () => {
           <div className="text-center">
             <div className="text-6xl mb-6">🛒</div>
             <h1 className="text-3xl font-bold text-gray-900 mb-4 font-editorial-new">Tu carrito está vacío</h1>
-            <p className="text-gray-600 mb-8 font-audrey">Agrega algunos productos para comenzar tu compra</p>
-            <Button asChild className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] hover:from-[#7a7539] hover:to-[#9d627b] text-white">
+            <p className="text-gray-600 mb-8 font-body">Agrega algunos productos para comenzar tu compra</p>
+            <Button asChild className="bg-[#7d8768] hover:bg-[#6d7660] text-white font-body">
               <Link to="/shop">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Continuar Comprando
@@ -250,7 +298,7 @@ const Cart: React.FC = () => {
           <>
             <div className="flex items-center justify-between mb-8">
               <h1 className="text-3xl font-bold text-gray-900 font-editorial-new">Carrito de Compras</h1>
-              <Button variant="outline" onClick={clearCart} className="text-red-600 hover:text-red-700">
+              <Button variant="outline" onClick={clearCart} className="text-red-600 hover:text-red-700 font-body">
                 <Trash2 className="h-4 w-4 mr-2" />
                 Vaciar Carrito
               </Button>
@@ -259,9 +307,9 @@ const Cart: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Cart Items */}
               <div className="lg:col-span-2">
-                <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-xl">
+                <Card className="bg-white border border-gray-200 shadow-xl">
                   <CardHeader>
-                    <CardTitle className="flex items-center">
+                    <CardTitle className="flex items-center font-editorial-new">
                       <ShoppingCart className="h-5 w-5 mr-2 text-[#7d8768]" />
                       Productos ({getCartItemCount()})
                     </CardTitle>
@@ -275,13 +323,13 @@ const Cart: React.FC = () => {
                           className="w-20 h-20 object-cover rounded-lg"
                         />
                         <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900">{item.product.name}</h3>
-                          <p className="text-sm text-gray-600">SKU: {item.product.sku}</p>
-                          <p className="text-sm text-gray-600">Tamaño: {item.product.size}</p>
+                          <h3 className="font-semibold text-gray-900 font-gilda-display">{item.product.name}</h3>
+                          <p className="text-sm text-gray-600 font-body">SKU: {item.product.sku}</p>
+                          <p className="text-sm text-gray-600 font-body">Tamaño: {item.product.size}</p>
                           <div className="flex items-center space-x-2 mt-2">
-                            <span className="font-bold text-[#7d8768]">Q. {item.product.price}</span>
+                            <span className="font-bold text-[#7d8768] font-body">Q. {item.product.price}</span>
                             {item.product.originalPrice && (
-                                                              <span className="text-sm text-gray-500 line-through">
+                                                              <span className="text-sm text-gray-500 line-through font-body">
                                   Q. {item.product.originalPrice}
                                 </span>
                             )}
@@ -293,28 +341,30 @@ const Cart: React.FC = () => {
                             size="sm"
                             onClick={() => handleQuantityChange(item.product.id, item.quantity - 1)}
                             disabled={item.quantity <= 1}
+                            className="font-body"
                           >
                             <Minus className="h-4 w-4" />
                           </Button>
-                          <span className="w-12 text-center font-semibold">{item.quantity}</span>
+                          <span className="w-12 text-center font-semibold font-body">{item.quantity}</span>
                           <Button
                             variant="outline"
                             size="sm"
                             onClick={() => handleQuantityChange(item.product.id, item.quantity + 1)}
                             disabled={item.quantity >= 10}
+                            className="font-body"
                           >
                             <Plus className="h-4 w-4" />
                           </Button>
                         </div>
                         <div className="text-right">
-                          <div className="font-bold text-gray-900">
+                          <div className="font-bold text-gray-900 font-body">
                             Q. {(item.product.price * item.quantity).toFixed(2)}
                           </div>
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => removeFromCart(item.product.id)}
-                            className="text-red-600 hover:text-red-700 mt-1"
+                            className="text-red-600 hover:text-red-700 mt-1 font-body"
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
@@ -327,28 +377,28 @@ const Cart: React.FC = () => {
 
               {/* Order Summary */}
               <div className="lg:col-span-1">
-                <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-xl sticky top-24">
+                <Card className="bg-white border border-gray-200 shadow-xl sticky top-24">
                   <CardHeader>
-                    <CardTitle>Resumen del Pedido</CardTitle>
+                    <CardTitle className="font-editorial-new">Resumen del Pedido</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
-                      <div className="flex justify-between">
+                      <div className="flex justify-between font-body">
                         <span>Subtotal ({getCartItemCount()} items)</span>
                         <span>Q. {getCartTotal().toFixed(2)}</span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between font-body">
                         <span>Envío</span>
                         <span className={shippingCost === 0 ? 'text-green-600' : ''}>
                           {shippingCost === 0 ? 'Gratis' : `Q. ${shippingCost.toFixed(2)}`}
                         </span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between font-body">
                         <span>IVA (16%)</span>
                         <span>Q. {tax.toFixed(2)}</span>
                       </div>
                       <div className="border-t pt-2">
-                        <div className="flex justify-between font-bold text-lg">
+                        <div className="flex justify-between font-bold text-lg font-body">
                           <span>Total</span>
                           <span>Q. {total.toFixed(2)}</span>
                         </div>
@@ -357,7 +407,7 @@ const Cart: React.FC = () => {
 
                     {shippingCost > 0 && (
                       <div className="bg-[#7d8768]/10 p-3 rounded-lg">
-                        <p className="text-sm text-[#7d8768]">
+                        <p className="text-sm text-[#7d8768] font-body">
                           Agrega Q. {(freeShippingThreshold - getCartTotal()).toFixed(2)} más para envío gratis
                         </p>
                       </div>
@@ -365,12 +415,12 @@ const Cart: React.FC = () => {
 
                     <Button 
                       onClick={handleCheckout}
-                      className="w-full bg-gradient-to-r from-[#7d8768] to-[#9d627b] hover:from-[#7a7539] hover:to-[#9d627b] text-white py-3"
+                      className="w-full bg-[#7d8768] hover:bg-[#6d7660] text-white py-3 font-body"
                     >
                       Proceder al Checkout
                     </Button>
 
-                    <Button variant="outline" asChild className="w-full">
+                    <Button variant="outline" asChild className="w-full font-body">
                       <Link to="/shop">
                         <ArrowLeft className="h-4 w-4 mr-2" />
                         Continuar Comprando
@@ -386,7 +436,7 @@ const Cart: React.FC = () => {
           <>
             <div className="flex items-center justify-between mb-8">
               <h1 className="text-3xl font-bold text-gray-900 font-editorial-new">Checkout</h1>
-              <Button variant="outline" onClick={handleBackToCart}>
+              <Button variant="outline" onClick={handleBackToCart} className="font-body">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Volver al Carrito
               </Button>
@@ -396,9 +446,9 @@ const Cart: React.FC = () => {
               {/* Checkout Form */}
               <div className="space-y-6">
                 {/* Shipping Information */}
-                <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-xl">
+                <Card className="bg-white border border-gray-200 shadow-xl">
                   <CardHeader>
-                    <CardTitle className="flex items-center">
+                    <CardTitle className="flex items-center font-editorial-new">
                       <Truck className="h-5 w-5 mr-2 text-[#7d8768]" />
                       Información de Envío
                     </CardTitle>
@@ -406,70 +456,78 @@ const Cart: React.FC = () => {
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1 font-body">Nombre</label>
                         <Input
                           value={shippingInfo.firstName}
                           onChange={(e) => setShippingInfo({...shippingInfo, firstName: e.target.value})}
                           placeholder="Nombre"
+                          className="font-body"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Apellido</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1 font-body">Apellido</label>
                         <Input
                           value={shippingInfo.lastName}
                           onChange={(e) => setShippingInfo({...shippingInfo, lastName: e.target.value})}
                           placeholder="Apellido"
+                          className="font-body"
                         />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1 font-body">Email</label>
                       <Input
                         type="email"
                         value={shippingInfo.email}
                         onChange={(e) => setShippingInfo({...shippingInfo, email: e.target.value})}
                         placeholder="tu@email.com"
+                        className="font-body"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1 font-body">Teléfono</label>
                       <Input
                         value={shippingInfo.phone}
                         onChange={(e) => setShippingInfo({...shippingInfo, phone: e.target.value})}
                         placeholder="+52 55 1234 5678"
+                        className="font-body"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Dirección</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1 font-body">Dirección</label>
                       <Input
                         value={shippingInfo.address}
                         onChange={(e) => setShippingInfo({...shippingInfo, address: e.target.value})}
                         placeholder="Calle y número"
+                        className="font-body"
                       />
                     </div>
                     <div className="grid grid-cols-3 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Ciudad</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1 font-body">Ciudad</label>
                         <Input
                           value={shippingInfo.city}
                           onChange={(e) => setShippingInfo({...shippingInfo, city: e.target.value})}
                           placeholder="Ciudad"
+                          className="font-body"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1 font-body">Estado</label>
                         <Input
                           value={shippingInfo.state}
                           onChange={(e) => setShippingInfo({...shippingInfo, state: e.target.value})}
                           placeholder="Estado"
+                          className="font-body"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">CP</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1 font-body">CP</label>
                         <Input
                           value={shippingInfo.zipCode}
                           onChange={(e) => setShippingInfo({...shippingInfo, zipCode: e.target.value})}
                           placeholder="12345"
+                          className="font-body"
                         />
                       </div>
                     </div>
@@ -477,9 +535,9 @@ const Cart: React.FC = () => {
                 </Card>
 
                 {/* Payment Method */}
-                <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-xl">
+                <Card className="bg-white border border-gray-200 shadow-xl">
                   <CardHeader>
-                    <CardTitle className="flex items-center">
+                    <CardTitle className="flex items-center font-editorial-new">
                       <CreditCard className="h-5 w-5 mr-2 text-[#7d8768]" />
                       Método de Pago
                     </CardTitle>
@@ -487,38 +545,38 @@ const Cart: React.FC = () => {
                   <CardContent className="space-y-4">
                     <div className="space-y-3">
                       <div className={`flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-colors ${
-                        paymentMethod === 'journey-pay' ? 'border-pink-500 bg-pink-50' : 'border-gray-200'
+                        paymentMethod === 'journey-pay' ? 'border-[#7d8768] bg-[#7d8768]/10' : 'border-gray-200'
                       }`} onClick={() => setPaymentMethod('journey-pay')}>
                         <div className="flex items-center space-x-3">
                           <Zap className="h-6 w-6 text-[#7d8768]" />
                           <div>
-                            <div className="font-medium text-gray-900">Journey to Pay</div>
-                            <div className="text-sm text-gray-600">Paga en cuotas sin intereses</div>
+                            <div className="font-medium text-gray-900 font-body">Journey to Pay</div>
+                            <div className="text-sm text-gray-600 font-body">Paga en cuotas sin intereses</div>
                           </div>
                         </div>
-                        <Badge className="bg-[#7d8768]/20 text-[#7d8768] border-0">Recomendado</Badge>
+                        <Badge className="bg-[#7d8768]/20 text-[#7d8768] border-0 font-body">Recomendado</Badge>
                       </div>
 
                       <div className={`flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-colors ${
-                        paymentMethod === 'credit-card' ? 'border-pink-500 bg-pink-50' : 'border-gray-200'
+                        paymentMethod === 'credit-card' ? 'border-[#7d8768] bg-[#7d8768]/10' : 'border-gray-200'
                       }`} onClick={() => setPaymentMethod('credit-card')}>
                         <div className="flex items-center space-x-3">
-                          <CreditCard className="h-6 w-6 text-[#9d627b]" />
+                          <CreditCard className="h-6 w-6 text-[#8e421e]" />
                           <div>
-                            <div className="font-medium text-gray-900">Tarjeta de Crédito/Débito</div>
-                            <div className="text-sm text-gray-600">Visa, Mastercard, American Express</div>
+                            <div className="font-medium text-gray-900 font-body">Tarjeta de Crédito/Débito</div>
+                            <div className="text-sm text-gray-600 font-body">Visa, Mastercard, American Express</div>
                           </div>
                         </div>
                       </div>
 
                       <div className={`flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-colors ${
-                        paymentMethod === 'paypal' ? 'border-pink-500 bg-pink-50' : 'border-gray-200'
+                        paymentMethod === 'paypal' ? 'border-[#7d8768] bg-[#7d8768]/10' : 'border-gray-200'
                       }`} onClick={() => setPaymentMethod('paypal')}>
                         <div className="flex items-center space-x-3">
-                          <Shield className="h-6 w-6 text-[#7a7539]" />
+                          <Shield className="h-6 w-6 text-[#b9a035]" />
                           <div>
-                            <div className="font-medium text-gray-900">PayPal</div>
-                            <div className="text-sm text-gray-600">Pago seguro y rápido</div>
+                            <div className="font-medium text-gray-900 font-body">PayPal</div>
+                            <div className="text-sm text-gray-600 font-body">Pago seguro y rápido</div>
                           </div>
                         </div>
                       </div>
@@ -529,9 +587,9 @@ const Cart: React.FC = () => {
 
               {/* Order Summary */}
               <div className="space-y-6">
-                <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-xl">
+                <Card className="bg-white border border-gray-200 shadow-xl">
                   <CardHeader>
-                    <CardTitle>Resumen del Pedido</CardTitle>
+                    <CardTitle className="font-editorial-new">Resumen del Pedido</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     {state.items.map((item) => (
@@ -586,7 +644,7 @@ const Cart: React.FC = () => {
 
                     <Button 
                       onClick={handlePlaceOrder}
-                      className="w-full bg-gradient-to-r from-[#7d8768] to-[#9d627b] hover:from-[#7a7539] hover:to-[#9d627b] text-white py-3"
+                      className="w-full bg-[#7d8768] hover:bg-[#6d7660] text-white py-3 font-body"
                     >
                       <Lock className="h-4 w-4 mr-2" />
                       Realizar Pedido - Q. {total.toFixed(2)}

@@ -21,6 +21,7 @@ import {
   Shield, 
   Star,
   Eye,
+  EyeOff,
   Download,
   Calendar,
   Truck,
@@ -34,7 +35,11 @@ import {
   Search,
   Loader2,
   X,
-  FileText
+  FileText,
+  Lock,
+  Sprout,
+  Award,
+  Gift
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -70,10 +75,22 @@ const Dashboard: React.FC = () => {
   // Estados para modales
   const [isAddressDialogOpen, setIsAddressDialogOpen] = useState(false);
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
+  const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
   const [editingAddress, setEditingAddress] = useState<Address | null>(null);
   const [editingPayment, setEditingPayment] = useState<PaymentMethod | null>(null);
   const [deleteAddressId, setDeleteAddressId] = useState<number | null>(null);
   const [deletePaymentId, setDeletePaymentId] = useState<number | null>(null);
+  
+  // Estados para cambio de contraseña
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
 
   // Hooks de datos
   const { data: orders = [], isLoading: ordersLoading } = useOrders();
@@ -295,10 +312,76 @@ const Dashboard: React.FC = () => {
     });
   };
 
+  // Handler para cambiar contraseña
+  const handleChangePassword = async () => {
+    if (!passwordForm.newPassword || !passwordForm.confirmPassword) {
+      toast.error('Por favor completa todos los campos');
+      return;
+    }
+
+    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+      toast.error('Las contraseñas no coinciden');
+      return;
+    }
+
+    if (passwordForm.newPassword.length < 6) {
+      toast.error('La contraseña debe tener al menos 6 caracteres');
+      return;
+    }
+
+    setIsChangingPassword(true);
+
+    try {
+      // Actualizar la contraseña usando Supabase Auth
+      const { error } = await supabase.auth.updateUser({
+        password: passwordForm.newPassword
+      });
+
+      if (error) {
+        toast.error('Error al cambiar la contraseña', {
+          description: error.message,
+        });
+        return;
+      }
+
+      toast.success('Contraseña actualizada exitosamente');
+      setIsPasswordDialogOpen(false);
+      setPasswordForm({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+      });
+    } catch (error: any) {
+      toast.error('Error al cambiar la contraseña', {
+        description: error.message || 'Ocurrió un error inesperado',
+      });
+    } finally {
+      setIsChangingPassword(false);
+    }
+  };
+
   const filteredOrders = orders.filter(order => 
     order.order_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
     order.items.some(item => item.product_name.toLowerCase().includes(searchTerm.toLowerCase()))
   );
+
+  // Calcular puntos del usuario
+  // Cada Q.10 gastado = 1 punto (solo órdenes no canceladas)
+  const userPoints = React.useMemo(() => {
+    const completedOrders = orders.filter(order => order.status !== 'cancelled');
+    const totalSpent = completedOrders.reduce((sum, order) => sum + order.total, 0);
+    return Math.floor(totalSpent / 10);
+  }, [orders]);
+
+  // Determinar nivel del usuario según puntos
+  const getUserTier = (points: number) => {
+    if (points >= 1000) return { name: 'Platino', color: 'bg-[#313522]', textColor: 'text-[#313522]' };
+    if (points >= 500) return { name: 'Oro', color: 'bg-[#b9a035]', textColor: 'text-[#b9a035]' };
+    if (points >= 100) return { name: 'Plata', color: 'bg-[#8e421e]', textColor: 'text-[#8e421e]' };
+    return { name: 'Nuevo', color: 'bg-[#7d8768]', textColor: 'text-[#7d8768]' };
+  };
+
+  const userTier = getUserTier(userPoints);
 
   // Obtener nombre del usuario
   const userName = userProfile 
@@ -321,39 +404,39 @@ const Dashboard: React.FC = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-[#7d8768]/10 via-[#9d627b]/10 to-[#7a7539]/10">
+      <div className="min-h-screen bg-white">
         <div className="container mx-auto px-4 py-8">
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-2 font-editorial-new">Mi Cuenta</h1>
-            <p className="text-gray-600 font-audrey">Gestiona tus pedidos, direcciones y preferencias</p>
+            <p className="text-gray-600 font-body">Gestiona tus pedidos, direcciones y preferencias</p>
           </div>
 
           {/* Dashboard Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             {/* Sidebar */}
             <div className="lg:col-span-1">
-              <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
+              <Card className="bg-white border border-gray-200 shadow-lg">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 font-editorial-new">
                     <User className="h-5 w-5 text-[#7d8768]" />
                     {userName}
                   </CardTitle>
-                  <CardDescription>Cliente desde {userSince}</CardDescription>
+                  <CardDescription className="font-body">Cliente desde {userSince}</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between p-3 rounded-lg bg-gradient-to-r from-[#7d8768]/10 to-[#9d627b]/10">
-                      <span className="text-sm font-medium">Pedidos Totales</span>
-                      <Badge variant="secondary">{orders.length}</Badge>
+                    <div className="flex items-center justify-between p-3 rounded-lg bg-[#7d8768]/10">
+                      <span className="text-sm font-medium font-body">Pedidos Totales</span>
+                      <Badge variant="secondary" className="font-body">{orders.length}</Badge>
                     </div>
-                    <div className="flex items-center justify-between p-3 rounded-lg bg-gradient-to-r from-[#9d627b]/10 to-[#7a7539]/10">
-                      <span className="text-sm font-medium">Direcciones</span>
-                      <Badge variant="secondary">{addresses.length}</Badge>
+                    <div className="flex items-center justify-between p-3 rounded-lg bg-[#8e421e]/10">
+                      <span className="text-sm font-medium font-body">Direcciones</span>
+                      <Badge variant="secondary" className="font-body">{addresses.length}</Badge>
                     </div>
-                    <div className="flex items-center justify-between p-3 rounded-lg bg-gradient-to-r from-[#7a7539]/10 to-[#7d8768]/10">
-                      <span className="text-sm font-medium">Métodos de Pago</span>
-                      <Badge variant="secondary">{paymentMethods.length}</Badge>
+                    <div className="flex items-center justify-between p-3 rounded-lg bg-[#b9a035]/10">
+                      <span className="text-sm font-medium font-body">Métodos de Pago</span>
+                      <Badge variant="secondary" className="font-body">{paymentMethods.length}</Badge>
                     </div>
                   </div>
                 </CardContent>
@@ -362,29 +445,26 @@ const Dashboard: React.FC = () => {
 
             {/* Main Content */}
             <div className="lg:col-span-3">
-              <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
+              <Card className="bg-white border border-gray-200 shadow-lg">
                 <CardContent className="p-6">
                   <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                    <TabsList className="grid w-full grid-cols-5">
-                      <TabsTrigger value="orders" className="flex items-center gap-2">
-                        <Package className="h-4 w-4" />
-                        Pedidos
+                    <TabsList className="grid w-full grid-cols-4">
+                      <TabsTrigger value="orders" className="flex items-center gap-1 md:gap-2 font-body text-xs md:text-sm">
+                        <Package className="h-3 w-3 md:h-4 md:w-4" />
+                        <span className="truncate">Pedidos</span>
                       </TabsTrigger>
-                      <TabsTrigger value="invoices" className="flex items-center gap-2">
-                        <FileText className="h-4 w-4" />
-                        Facturación
+                      <TabsTrigger value="addresses-payments" className="flex items-center gap-1 md:gap-2 font-body text-xs md:text-sm">
+                        <MapPin className="h-3 w-3 md:h-4 md:w-4" />
+                        <span className="truncate hidden sm:inline">Direcciones y Pagos</span>
+                        <span className="truncate sm:hidden">Direcciones</span>
                       </TabsTrigger>
-                      <TabsTrigger value="addresses" className="flex items-center gap-2">
-                        <MapPin className="h-4 w-4" />
-                        Direcciones
+                      <TabsTrigger value="points" className="flex items-center gap-1 md:gap-2 font-body text-xs md:text-sm">
+                        <Sprout className="h-3 w-3 md:h-4 md:w-4" />
+                        <span className="truncate">Puntos</span>
                       </TabsTrigger>
-                      <TabsTrigger value="payments" className="flex items-center gap-2">
-                        <CreditCard className="h-4 w-4" />
-                        Pagos
-                      </TabsTrigger>
-                      <TabsTrigger value="settings" className="flex items-center gap-2">
-                        <Settings className="h-4 w-4" />
-                        Configuración
+                      <TabsTrigger value="settings" className="flex items-center gap-1 md:gap-2 font-body text-xs md:text-sm">
+                        <Settings className="h-3 w-3 md:h-4 md:w-4" />
+                        <span className="truncate">Ajustes</span>
                       </TabsTrigger>
                     </TabsList>
 
@@ -639,408 +719,406 @@ const Dashboard: React.FC = () => {
                       )}
                     </TabsContent>
 
-                    {/* Invoices Tab */}
-                    <TabsContent value="invoices" className="space-y-6">
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-xl font-semibold font-editorial-new">Mis Facturas</h3>
-                        <div className="relative">
-                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                          <Input
-                            placeholder="Buscar facturas..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="pl-10 w-64"
-                          />
-                        </div>
-                      </div>
-
-                      {filteredOrders.length === 0 ? (
-                        <div className="text-center py-12">
-                          <FileText className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                          <h3 className="text-lg font-medium text-gray-900 mb-2">
-                            {searchTerm ? 'No se encontraron facturas' : 'No tienes facturas aún'}
-                          </h3>
-                          <p className="text-gray-600">
-                            {searchTerm 
-                              ? 'Intenta con otro término de búsqueda'
-                              : 'Las facturas aparecerán aquí después de realizar una compra'}
-                          </p>
-                        </div>
-                      ) : (
-                        <div className="space-y-4">
-                          {filteredOrders.map((order) => (
-                            <Card key={order.id} className="border-0 shadow-md hover:shadow-lg transition-shadow">
-                              <CardHeader>
-                                <div className="flex items-center justify-between">
-                                  <div>
-                                    <CardTitle className="text-lg font-gilda-display">Factura {order.order_number}</CardTitle>
-                                    <CardDescription className="font-audrey">
-                                      <Calendar className="inline h-4 w-4 mr-1" />
-                                      {new Date(order.created_at).toLocaleDateString('es-ES', { 
-                                        year: 'numeric', 
-                                        month: 'long', 
-                                        day: 'numeric' 
-                                      })}
-                                    </CardDescription>
-                                  </div>
-                                  <div className="text-right">
-                                    <div className="text-xl font-bold text-gray-900 font-editorial-new">Q. {order.total.toFixed(2)}</div>
-                                    <Badge className={`mt-2 ${getStatusColor(order.status)} border-0`}>
-                                      {getStatusIcon(order.status)}
-                                      <span className="ml-1">{getStatusText(order.status)}</span>
-                                    </Badge>
-                                  </div>
-                                </div>
-                              </CardHeader>
-                              <CardContent>
-                                <div className="flex items-center justify-between">
-                                  <div className="text-sm text-gray-600 font-audrey">
-                                    {order.items.length} producto{order.items.length !== 1 ? 's' : ''}
-                                  </div>
-                                  <div className="flex gap-2">
-                                    <Button 
-                                      variant="outline" 
-                                      size="sm"
-                                      onClick={() => navigate(`/dashboard/invoices/${order.id}`)}
-                                      className="border-[#7d8768] text-[#7d8768] hover:bg-[#7d8768]/10"
-                                    >
-                                      <Eye className="h-4 w-4 mr-2" />
-                                      Ver Factura
-                                    </Button>
-                                    <Button 
-                                      variant="outline" 
-                                      size="sm"
-                                      onClick={() => navigate(`/dashboard/invoices/${order.id}`)}
-                                      className="border-[#7d8768] text-[#7d8768] hover:bg-[#7d8768]/10"
-                                    >
-                                      <Download className="h-4 w-4 mr-2" />
-                                      Descargar PDF
-                                    </Button>
-                                  </div>
-                                </div>
-                              </CardContent>
-                            </Card>
-                          ))}
-                        </div>
-                      )}
-                    </TabsContent>
-
-                    {/* Addresses Tab */}
-                    <TabsContent value="addresses" className="space-y-6">
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-xl font-semibold font-editorial-new">Mis Direcciones</h3>
-                        <Button 
-                          onClick={handleAddAddress}
-                          className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] hover:from-[#7a7539] hover:to-[#9d627b] text-white"
-                        >
-                          <Plus className="h-4 w-4 mr-2" />
-                          Agregar Dirección
-                        </Button>
-                      </div>
-
-                      {addresses.length === 0 ? (
-                        <div className="text-center py-12">
-                          <MapPin className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                          <h3 className="text-lg font-medium text-gray-900 mb-2">No tienes direcciones guardadas</h3>
-                          <p className="text-gray-600 mb-4">Agrega una dirección para facilitar tus compras</p>
+                    {/* Addresses and Payments Tab */}
+                    <TabsContent value="addresses-payments" className="space-y-8">
+                      {/* Addresses Section */}
+                      <div className="space-y-6">
+                        <div className="flex items-center justify-between">
+                          <h3 className="text-xl font-semibold font-editorial-new">Mis Direcciones</h3>
                           <Button 
                             onClick={handleAddAddress}
-                            className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] hover:from-[#7a7539] hover:to-[#9d627b] text-white"
+                            className="bg-[#7d8768] hover:bg-[#6d7660] text-white font-body"
                           >
                             <Plus className="h-4 w-4 mr-2" />
-                            Agregar Primera Dirección
+                            Agregar Dirección
                           </Button>
                         </div>
-                      ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {addresses.map((address) => (
-                            <Card key={address.id} className="border-0 shadow-md hover:shadow-lg transition-shadow">
-                              <CardHeader>
-                                <div className="flex items-center justify-between">
-                                  <div className="flex items-center gap-2">
-                                    <Badge variant={address.type === 'home' ? 'default' : 'secondary'}>
-                                      {address.type === 'home' ? 'Casa' : address.type === 'work' ? 'Trabajo' : 'Otro'}
-                                    </Badge>
-                                    {address.is_default && (
-                                      <Badge variant="outline" className="text-green-600 border-green-600">
-                                        Predeterminada
-                                      </Badge>
-                                    )}
-                                  </div>
-                                  <div className="flex space-x-2">
-                                    <Button 
-                                      variant="ghost" 
-                                      size="sm"
-                                      onClick={() => handleEditAddress(address)}
-                                    >
-                                      <Edit className="h-4 w-4" />
-                                    </Button>
-                                    <Button 
-                                      variant="ghost" 
-                                      size="sm" 
-                                      className="text-red-600 hover:text-red-700"
-                                      onClick={() => setDeleteAddressId(address.id)}
-                                    >
-                                      <Trash2 className="h-4 w-4" />
-                                    </Button>
-                                  </div>
-                                </div>
-                              </CardHeader>
-                              <CardContent>
-                                <div className="space-y-2">
-                                  <p className="font-medium font-gilda-display">{address.name}</p>
-                                  <p className="text-gray-600 font-audrey">{address.street}</p>
-                                  <p className="text-gray-600 font-audrey">
-                                    {address.city}, {address.state} {address.zip_code}
-                                  </p>
-                                  <p className="text-gray-600 font-audrey">{address.country}</p>
-                                  {address.phone && (
-                                    <p className="text-gray-600 font-audrey">Tel: {address.phone}</p>
-                                  )}
-                                </div>
-                              </CardContent>
-                            </Card>
-                          ))}
-                        </div>
-                      )}
 
-                      {/* Address Dialog */}
-                      <Dialog open={isAddressDialogOpen} onOpenChange={setIsAddressDialogOpen}>
-                        <DialogContent className="max-w-2xl">
-                          <DialogHeader>
-                            <DialogTitle>
-                              {editingAddress ? 'Editar Dirección' : 'Agregar Dirección'}
-                            </DialogTitle>
-                          </DialogHeader>
-                          <div className="space-y-4">
-                            <div>
-                              <Label htmlFor="addressType">Tipo de Dirección *</Label>
-                              <Select 
-                                value={addressForm.type} 
-                                onValueChange={(value: 'home' | 'work' | 'other') => 
-                                  setAddressForm({...addressForm, type: value})
-                                }
-                              >
-                                <SelectTrigger>
-                                  <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="home">Casa</SelectItem>
-                                  <SelectItem value="work">Trabajo</SelectItem>
-                                  <SelectItem value="other">Otro</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
-                            <div>
-                              <Label htmlFor="addressName">Nombre de la Dirección *</Label>
-                              <Input
-                                id="addressName"
-                                value={addressForm.name}
-                                onChange={(e) => setAddressForm({...addressForm, name: e.target.value})}
-                                placeholder="Ej: Casa Principal"
-                              />
-                            </div>
-                            <div>
-                              <Label htmlFor="street">Calle y Número *</Label>
-                              <Input
-                                id="street"
-                                value={addressForm.street}
-                                onChange={(e) => setAddressForm({...addressForm, street: e.target.value})}
-                                placeholder="Calle y número"
-                              />
-                            </div>
-                            <div className="grid grid-cols-2 gap-4">
-                              <div>
-                                <Label htmlFor="city">Ciudad *</Label>
-                                <Input
-                                  id="city"
-                                  value={addressForm.city}
-                                  onChange={(e) => setAddressForm({...addressForm, city: e.target.value})}
-                                  placeholder="Ciudad"
-                                />
-                              </div>
-                              <div>
-                                <Label htmlFor="state">Departamento/Estado *</Label>
-                                <Input
-                                  id="state"
-                                  value={addressForm.state}
-                                  onChange={(e) => setAddressForm({...addressForm, state: e.target.value})}
-                                  placeholder="Departamento/Estado"
-                                />
-                              </div>
-                            </div>
-                            <div className="grid grid-cols-2 gap-4">
-                              <div>
-                                <Label htmlFor="zipCode">Código Postal *</Label>
-                                <Input
-                                  id="zipCode"
-                                  value={addressForm.zip_code}
-                                  onChange={(e) => setAddressForm({...addressForm, zip_code: e.target.value})}
-                                  placeholder="Código Postal"
-                                />
-                              </div>
-                              <div>
-                                <Label htmlFor="country">País *</Label>
-                                <Input
-                                  id="country"
-                                  value={addressForm.country}
-                                  onChange={(e) => setAddressForm({...addressForm, country: e.target.value})}
-                                  placeholder="País"
-                                />
-                              </div>
-                            </div>
-                            <div>
-                              <Label htmlFor="phone">Teléfono</Label>
-                              <Input
-                                id="phone"
-                                value={addressForm.phone || ''}
-                                onChange={(e) => setAddressForm({...addressForm, phone: e.target.value})}
-                                placeholder="Teléfono de contacto"
-                              />
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <input
-                                type="checkbox"
-                                id="isDefaultAddress"
-                                checked={addressForm.is_default}
-                                onChange={(e) => setAddressForm({...addressForm, is_default: e.target.checked})}
-                                className="rounded"
-                              />
-                              <Label htmlFor="isDefaultAddress">Establecer como dirección predeterminada</Label>
-                            </div>
-                            <div className="flex gap-4 pt-4">
-                              <Button
-                                onClick={handleSaveAddress}
-                                disabled={createAddressMutation.isPending || updateAddressMutation.isPending}
-                                className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] hover:from-[#7a7539] hover:to-[#9d627b] text-white"
-                              >
-                                {createAddressMutation.isPending || updateAddressMutation.isPending ? (
-                                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                ) : null}
-                                {editingAddress ? 'Guardar Cambios' : 'Agregar Dirección'}
-                              </Button>
-                              <Button
-                                variant="outline"
-                                onClick={() => {
-                                  setIsAddressDialogOpen(false);
-                                  setEditingAddress(null);
-                                }}
-                              >
-                                Cancelar
-                              </Button>
-                            </div>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
-
-                      {/* Delete Address Confirmation */}
-                      <Dialog open={!!deleteAddressId} onOpenChange={(open) => !open && setDeleteAddressId(null)}>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Confirmar Eliminación</DialogTitle>
-                          </DialogHeader>
-                          <p className="text-gray-600">
-                            ¿Estás seguro de que quieres eliminar esta dirección?
-                          </p>
-                          <div className="flex gap-4 pt-4">
-                            <Button
-                              onClick={() => deleteAddressId && handleDeleteAddress(deleteAddressId)}
-                              disabled={deleteAddressMutation.isPending}
-                              className="bg-red-600 hover:bg-red-700 text-white"
+                        {addresses.length === 0 ? (
+                          <div className="text-center py-12">
+                            <MapPin className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                            <h3 className="text-lg font-medium text-gray-900 mb-2">No tienes direcciones guardadas</h3>
+                            <p className="text-gray-600 mb-4">Agrega una dirección para facilitar tus compras</p>
+                            <Button 
+                              onClick={handleAddAddress}
+                              className="bg-[#7d8768] hover:bg-[#6d7660] text-white font-body"
                             >
-                              {deleteAddressMutation.isPending ? (
-                                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                              ) : null}
-                              Eliminar
-                            </Button>
-                            <Button variant="outline" onClick={() => setDeleteAddressId(null)}>
-                              Cancelar
+                              <Plus className="h-4 w-4 mr-2" />
+                              Agregar Primera Dirección
                             </Button>
                           </div>
-                        </DialogContent>
-                      </Dialog>
-                    </TabsContent>
-
-                    {/* Payments Tab */}
-                    <TabsContent value="payments" className="space-y-6">
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-xl font-semibold font-editorial-new">Métodos de Pago</h3>
-                        <Button 
-                          onClick={handleAddPayment}
-                          className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] hover:from-[#7a7539] hover:to-[#9d627b] text-white"
-                        >
-                          <Plus className="h-4 w-4 mr-2" />
-                          Agregar Método
-                        </Button>
-                      </div>
-
-                      {paymentMethods.length === 0 ? (
-                        <div className="text-center py-12">
-                          <CreditCard className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                          <h3 className="text-lg font-medium text-gray-900 mb-2">No tienes métodos de pago guardados</h3>
-                          <p className="text-gray-600 mb-4">Agrega un método de pago para facilitar tus compras</p>
-                          <Button 
-                            onClick={handleAddPayment}
-                            className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] hover:from-[#7a7539] hover:to-[#9d627b] text-white"
-                          >
-                            <Plus className="h-4 w-4 mr-2" />
-                            Agregar Método de Pago
-                          </Button>
-                        </div>
-                      ) : (
-                        <div className="space-y-4">
-                          {paymentMethods.map((method) => (
-                            <Card key={method.id} className="border-0 shadow-md hover:shadow-lg transition-shadow">
-                              <CardContent className="p-6">
-                                <div className="flex items-center justify-between">
-                                  <div className="flex items-center space-x-4">
-                                    <div className="p-3 bg-gradient-to-r from-[#7d8768]/20 to-[#9d627b]/20 rounded-lg">
-                                      <CreditCard className="h-6 w-6 text-[#7d8768]" />
-                                    </div>
-                                    <div>
-                                      <h4 className="font-medium">
-                                        {method.type === 'card' 
-                                          ? `${method.card_brand} •••• ${method.last4}`
-                                          : method.type === 'paypal'
-                                          ? `PayPal - ${method.paypal_email}`
-                                          : 'Efectivo contra entrega'
-                                        }
-                                      </h4>
-                                      {method.type === 'card' && method.expiry_month && method.expiry_year && (
-                                        <p className="text-sm text-gray-600">
-                                          Expira: {method.expiry_month}/{method.expiry_year}
-                                        </p>
-                                      )}
-                                      {method.is_default && (
-                                        <Badge variant="outline" className="text-green-600 border-green-600 mt-1">
-                                          Predeterminado
+                        ) : (
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {addresses.map((address) => (
+                              <Card key={address.id} className="border-0 shadow-md hover:shadow-lg transition-shadow">
+                                <CardHeader>
+                                  <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                      <Badge variant={address.type === 'home' ? 'default' : 'secondary'}>
+                                        {address.type === 'home' ? 'Casa' : address.type === 'work' ? 'Trabajo' : 'Otro'}
+                                      </Badge>
+                                      {address.is_default && (
+                                        <Badge variant="outline" className="text-green-600 border-green-600">
+                                          Predeterminada
                                         </Badge>
                                       )}
                                     </div>
+                                    <div className="flex space-x-2">
+                                      <Button 
+                                        variant="ghost" 
+                                        size="sm"
+                                        onClick={() => handleEditAddress(address)}
+                                      >
+                                        <Edit className="h-4 w-4" />
+                                      </Button>
+                                      <Button 
+                                        variant="ghost" 
+                                        size="sm" 
+                                        className="text-red-600 hover:text-red-700"
+                                        onClick={() => setDeleteAddressId(address.id)}
+                                      >
+                                        <Trash2 className="h-4 w-4" />
+                                      </Button>
+                                    </div>
                                   </div>
-                                  <div className="flex space-x-2">
-                                    <Button 
-                                      variant="ghost" 
-                                      size="sm"
-                                      onClick={() => handleEditPayment(method)}
-                                    >
-                                      <Edit className="h-4 w-4" />
-                                    </Button>
-                                    <Button 
-                                      variant="ghost" 
-                                      size="sm" 
-                                      className="text-red-600 hover:text-red-700"
-                                      onClick={() => setDeletePaymentId(method.id)}
-                                    >
-                                      <Trash2 className="h-4 w-4" />
-                                    </Button>
+                                </CardHeader>
+                                <CardContent>
+                                  <div className="space-y-2">
+                                    <p className="font-medium font-gilda-display">{address.name}</p>
+                                    <p className="text-gray-600 font-body">{address.street}</p>
+                                    <p className="text-gray-600 font-body">
+                                      {address.city}, {address.state} {address.zip_code}
+                                    </p>
+                                    <p className="text-gray-600 font-body">{address.country}</p>
+                                    {address.phone && (
+                                      <p className="text-gray-600 font-body">Tel: {address.phone}</p>
+                                    )}
                                   </div>
+                                </CardContent>
+                              </Card>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Address Dialog */}
+                        <Dialog open={isAddressDialogOpen} onOpenChange={setIsAddressDialogOpen}>
+                          <DialogContent className="max-w-2xl">
+                            <DialogHeader>
+                              <DialogTitle>
+                                {editingAddress ? 'Editar Dirección' : 'Agregar Dirección'}
+                              </DialogTitle>
+                            </DialogHeader>
+                            <div className="space-y-4">
+                              <div>
+                                <Label htmlFor="addressType">Tipo de Dirección *</Label>
+                                <Select 
+                                  value={addressForm.type} 
+                                  onValueChange={(value: 'home' | 'work' | 'other') => 
+                                    setAddressForm({...addressForm, type: value})
+                                  }
+                                >
+                                  <SelectTrigger>
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="home">Casa</SelectItem>
+                                    <SelectItem value="work">Trabajo</SelectItem>
+                                    <SelectItem value="other">Otro</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div>
+                                <Label htmlFor="addressName">Nombre de la Dirección *</Label>
+                                <Input
+                                  id="addressName"
+                                  value={addressForm.name}
+                                  onChange={(e) => setAddressForm({...addressForm, name: e.target.value})}
+                                  placeholder="Ej: Casa Principal"
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="street">Calle y Número *</Label>
+                                <Input
+                                  id="street"
+                                  value={addressForm.street}
+                                  onChange={(e) => setAddressForm({...addressForm, street: e.target.value})}
+                                  placeholder="Calle y número"
+                                />
+                              </div>
+                              <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                  <Label htmlFor="city">Ciudad *</Label>
+                                  <Input
+                                    id="city"
+                                    value={addressForm.city}
+                                    onChange={(e) => setAddressForm({...addressForm, city: e.target.value})}
+                                    placeholder="Ciudad"
+                                  />
                                 </div>
-                              </CardContent>
-                            </Card>
-                          ))}
+                                <div>
+                                  <Label htmlFor="state">Departamento/Estado *</Label>
+                                  <Input
+                                    id="state"
+                                    value={addressForm.state}
+                                    onChange={(e) => setAddressForm({...addressForm, state: e.target.value})}
+                                    placeholder="Departamento/Estado"
+                                  />
+                                </div>
+                              </div>
+                              <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                  <Label htmlFor="zipCode">Código Postal *</Label>
+                                  <Input
+                                    id="zipCode"
+                                    value={addressForm.zip_code}
+                                    onChange={(e) => setAddressForm({...addressForm, zip_code: e.target.value})}
+                                    placeholder="Código Postal"
+                                  />
+                                </div>
+                                <div>
+                                  <Label htmlFor="country">País *</Label>
+                                  <Input
+                                    id="country"
+                                    value={addressForm.country}
+                                    onChange={(e) => setAddressForm({...addressForm, country: e.target.value})}
+                                    placeholder="País"
+                                  />
+                                </div>
+                              </div>
+                              <div>
+                                <Label htmlFor="phone">Teléfono</Label>
+                                <Input
+                                  id="phone"
+                                  value={addressForm.phone || ''}
+                                  onChange={(e) => setAddressForm({...addressForm, phone: e.target.value})}
+                                  placeholder="Teléfono de contacto"
+                                />
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <input
+                                  type="checkbox"
+                                  id="isDefaultAddress"
+                                  checked={addressForm.is_default}
+                                  onChange={(e) => setAddressForm({...addressForm, is_default: e.target.checked})}
+                                  className="rounded"
+                                />
+                                <Label htmlFor="isDefaultAddress">Establecer como dirección predeterminada</Label>
+                              </div>
+                              <div className="flex gap-4 pt-4">
+                                <Button
+                                  onClick={handleSaveAddress}
+                                  disabled={createAddressMutation.isPending || updateAddressMutation.isPending}
+                                  className="bg-[#7d8768] hover:bg-[#6d7660] text-white font-body"
+                                >
+                                  {createAddressMutation.isPending || updateAddressMutation.isPending ? (
+                                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                  ) : null}
+                                  {editingAddress ? 'Guardar Cambios' : 'Agregar Dirección'}
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  onClick={() => {
+                                    setIsAddressDialogOpen(false);
+                                    setEditingAddress(null);
+                                  }}
+                                >
+                                  Cancelar
+                                </Button>
+                              </div>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+
+                        {/* Delete Address Confirmation */}
+                        <Dialog open={!!deleteAddressId} onOpenChange={(open) => !open && setDeleteAddressId(null)}>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Confirmar Eliminación</DialogTitle>
+                            </DialogHeader>
+                            <p className="text-gray-600">
+                              ¿Estás seguro de que quieres eliminar esta dirección?
+                            </p>
+                            <div className="flex gap-4 pt-4">
+                              <Button
+                                onClick={() => deleteAddressId && handleDeleteAddress(deleteAddressId)}
+                                disabled={deleteAddressMutation.isPending}
+                                className="bg-red-600 hover:bg-red-700 text-white"
+                              >
+                                {deleteAddressMutation.isPending ? (
+                                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                ) : null}
+                                Eliminar
+                              </Button>
+                              <Button variant="outline" onClick={() => setDeleteAddressId(null)}>
+                                Cancelar
+                              </Button>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+
+                      {/* Separator */}
+                      <Separator />
+
+                      {/* Payments Section */}
+                      <div className="space-y-6">
+                        <div className="flex items-center justify-between">
+                          <h3 className="text-xl font-semibold font-editorial-new">Métodos de Pago</h3>
+                          <Button 
+                            onClick={handleAddPayment}
+                            className="bg-[#7d8768] hover:bg-[#6d7660] text-white font-body"
+                          >
+                            <Plus className="h-4 w-4 mr-2" />
+                            Agregar Método
+                          </Button>
                         </div>
-                      )}
+
+                        {paymentMethods.length === 0 ? (
+                          <div className="text-center py-12">
+                            <CreditCard className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                            <h3 className="text-lg font-medium text-gray-900 mb-2">No tienes métodos de pago guardados</h3>
+                            <p className="text-gray-600 mb-4">Agrega un método de pago para facilitar tus compras</p>
+                            <Button 
+                              onClick={handleAddPayment}
+                              className="bg-[#7d8768] hover:bg-[#6d7660] text-white font-body"
+                            >
+                              <Plus className="h-4 w-4 mr-2" />
+                              Agregar Método de Pago
+                            </Button>
+                          </div>
+                        ) : (
+                          <div className="space-y-4">
+                            {paymentMethods.map((method) => (
+                              <Card key={method.id} className="border-0 shadow-md hover:shadow-lg transition-shadow">
+                                <CardContent className="p-6">
+                                  <div className="flex items-center justify-between">
+                                    <div className="flex items-center space-x-4">
+                                      <div className="p-3 bg-[#7d8768]/20 rounded-lg">
+                                        <CreditCard className="h-6 w-6 text-[#7d8768]" />
+                                      </div>
+                                      <div>
+                                        <h4 className="font-medium">
+                                          {method.type === 'card' 
+                                            ? `${method.card_brand} •••• ${method.last4}`
+                                            : method.type === 'paypal'
+                                            ? `PayPal - ${method.paypal_email}`
+                                            : 'Efectivo contra entrega'
+                                          }
+                                        </h4>
+                                        {method.type === 'card' && method.expiry_month && method.expiry_year && (
+                                          <p className="text-sm text-gray-600">
+                                            Expira: {method.expiry_month}/{method.expiry_year}
+                                          </p>
+                                        )}
+                                        {method.is_default && (
+                                          <Badge variant="outline" className="text-green-600 border-green-600 mt-1">
+                                            Predeterminado
+                                          </Badge>
+                                        )}
+                                      </div>
+                                    </div>
+                                    <div className="flex space-x-2">
+                                      <Button 
+                                        variant="ghost" 
+                                        size="sm"
+                                        onClick={() => handleEditPayment(method)}
+                                      >
+                                        <Edit className="h-4 w-4" />
+                                      </Button>
+                                      <Button 
+                                        variant="ghost" 
+                                        size="sm" 
+                                        className="text-red-600 hover:text-red-700"
+                                        onClick={() => setDeletePaymentId(method.id)}
+                                      >
+                                        <Trash2 className="h-4 w-4" />
+                                      </Button>
+                                    </div>
+                                  </div>
+                                </CardContent>
+                              </Card>
+                            ))}
+                          </div>
+                        )}
+
+                        <div className="flex items-center justify-between">
+                          <h3 className="text-xl font-semibold font-editorial-new">Métodos de Pago</h3>
+                          <Button 
+                            onClick={handleAddPayment}
+                            className="bg-[#7d8768] hover:bg-[#6d7660] text-white font-body"
+                          >
+                            <Plus className="h-4 w-4 mr-2" />
+                            Agregar Método
+                          </Button>
+                        </div>
+
+                        {paymentMethods.length === 0 ? (
+                          <div className="text-center py-12">
+                            <CreditCard className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                            <h3 className="text-lg font-medium text-gray-900 mb-2">No tienes métodos de pago guardados</h3>
+                            <p className="text-gray-600 mb-4">Agrega un método de pago para facilitar tus compras</p>
+                            <Button 
+                              onClick={handleAddPayment}
+                              className="bg-[#7d8768] hover:bg-[#6d7660] text-white font-body"
+                            >
+                              <Plus className="h-4 w-4 mr-2" />
+                              Agregar Método de Pago
+                            </Button>
+                          </div>
+                        ) : (
+                          <div className="space-y-4">
+                            {paymentMethods.map((method) => (
+                              <Card key={method.id} className="border-0 shadow-md hover:shadow-lg transition-shadow">
+                                <CardContent className="p-6">
+                                  <div className="flex items-center justify-between">
+                                    <div className="flex items-center space-x-4">
+                                      <div className="p-3 bg-[#7d8768]/20 rounded-lg">
+                                        <CreditCard className="h-6 w-6 text-[#7d8768]" />
+                                      </div>
+                                      <div>
+                                        <h4 className="font-medium">
+                                          {method.type === 'card' 
+                                            ? `${method.card_brand} •••• ${method.last4}`
+                                            : method.type === 'paypal'
+                                            ? `PayPal - ${method.paypal_email}`
+                                            : 'Efectivo contra entrega'
+                                          }
+                                        </h4>
+                                        {method.type === 'card' && method.expiry_month && method.expiry_year && (
+                                          <p className="text-sm text-gray-600">
+                                            Expira: {method.expiry_month}/{method.expiry_year}
+                                          </p>
+                                        )}
+                                        {method.is_default && (
+                                          <Badge variant="outline" className="text-green-600 border-green-600 mt-1">
+                                            Predeterminado
+                                          </Badge>
+                                        )}
+                                      </div>
+                                    </div>
+                                    <div className="flex space-x-2">
+                                      <Button 
+                                        variant="ghost" 
+                                        size="sm"
+                                        onClick={() => handleEditPayment(method)}
+                                      >
+                                        <Edit className="h-4 w-4" />
+                                      </Button>
+                                      <Button 
+                                        variant="ghost" 
+                                        size="sm" 
+                                        className="text-red-600 hover:text-red-700"
+                                        onClick={() => setDeletePaymentId(method.id)}
+                                      >
+                                        <Trash2 className="h-4 w-4" />
+                                      </Button>
+                                    </div>
+                                  </div>
+                                </CardContent>
+                              </Card>
+                            ))}
+                          </div>
+                        )}
 
                       {/* Payment Method Dialog */}
                       <Dialog open={isPaymentDialogOpen} onOpenChange={setIsPaymentDialogOpen}>
@@ -1167,7 +1245,7 @@ const Dashboard: React.FC = () => {
                               <Button
                                 onClick={handleSavePayment}
                                 disabled={createPaymentMutation.isPending || updatePaymentMutation.isPending}
-                                className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] hover:from-[#7a7539] hover:to-[#9d627b] text-white"
+                                className="bg-[#7d8768] hover:bg-[#6d7660] text-white font-body"
                               >
                                 {createPaymentMutation.isPending || updatePaymentMutation.isPending ? (
                                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -1214,11 +1292,168 @@ const Dashboard: React.FC = () => {
                           </div>
                         </DialogContent>
                       </Dialog>
+                      </div>
+                    </TabsContent>
+
+                    {/* Points Tab */}
+                    <TabsContent value="points" className="space-y-6">
+                      <div>
+                        <h3 className="text-xl font-semibold font-editorial-new mb-6">Mis Puntos</h3>
+                        
+                        {/* Points Summary Card */}
+                        <Card className="bg-white border border-gray-200 shadow-lg mb-6">
+                          <CardContent className="p-6">
+                            <div className="flex items-center justify-between mb-6">
+                              <div>
+                                <p className="text-sm text-gray-600 font-body mb-2">Puntos Disponibles</p>
+                                <p className="text-4xl font-bold text-gray-900 font-editorial-new">{userPoints}</p>
+                              </div>
+                              <div className={`${userTier.color} text-white rounded-full p-4`}>
+                                <Sprout className="h-8 w-8" />
+                              </div>
+                            </div>
+                            
+                            <div className="border-t border-gray-200 pt-4">
+                              <div className="flex items-center justify-between mb-4">
+                                <span className="text-sm text-gray-600 font-body">Nivel Actual</span>
+                                <Badge className={`${userTier.color} text-white font-body`}>
+                                  {userTier.name}
+                                </Badge>
+                              </div>
+                              <div className="bg-gray-100 rounded-full h-3 mb-2">
+                                <div 
+                                  className={`${userTier.color} h-3 rounded-full transition-all duration-300`}
+                                  style={{ 
+                                    width: `${Math.min(100, userPoints >= 1000 ? 100 : userPoints >= 500 ? ((userPoints - 500) / 500) * 100 : userPoints >= 100 ? ((userPoints - 100) / 400) * 100 : (userPoints / 100) * 100)}%` 
+                                  }}
+                                ></div>
+                              </div>
+                              <p className="text-xs text-gray-500 font-body">
+                                {userPoints >= 1000 
+                                  ? `Nivel Platino - ¡Felicidades!`
+                                  : userPoints >= 500
+                                  ? `${1000 - userPoints} puntos para alcanzar Platino`
+                                  : userPoints >= 100
+                                  ? `${500 - userPoints} puntos para alcanzar Oro`
+                                  : `${100 - userPoints} puntos para alcanzar Plata`
+                                }
+                              </p>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        {/* Points Information */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                          <Card className="bg-white border border-gray-200 shadow-lg">
+                            <CardHeader>
+                              <CardTitle className="text-lg font-editorial-new flex items-center gap-2">
+                                <Gift className="h-5 w-5 text-[#7d8768]" />
+                                Cómo Funciona
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="space-y-3">
+                                <div className="flex items-start gap-3">
+                                  <CheckCircle className="h-5 w-5 text-[#7d8768] mt-0.5 flex-shrink-0" />
+                                  <div>
+                                    <p className="text-sm font-body text-gray-700">
+                                      <strong className="font-semibold">Por cada Q.10 gastado</strong>, obtienes <strong className="font-semibold">1 punto</strong>
+                                    </p>
+                                  </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                  <CheckCircle className="h-5 w-5 text-[#7d8768] mt-0.5 flex-shrink-0" />
+                                  <div>
+                                    <p className="text-sm font-body text-gray-700">
+                                      <strong className="font-semibold">100 puntos = Q.50 de descuento</strong>
+                                    </p>
+                                  </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                  <CheckCircle className="h-5 w-5 text-[#7d8768] mt-0.5 flex-shrink-0" />
+                                  <div>
+                                    <p className="text-sm font-body text-gray-700">
+                                      Puedes canjear tus puntos en cualquier momento durante el checkout
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+
+                          <Card className="bg-white border border-gray-200 shadow-lg">
+                            <CardHeader>
+                              <CardTitle className="text-lg font-editorial-new flex items-center gap-2">
+                                <Award className="h-5 w-5 text-[#8e421e]" />
+                                Resumen de Puntos
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="space-y-4">
+                                {orders.filter(order => order.status !== 'cancelled').length === 0 ? (
+                                  <div className="text-center py-4">
+                                    <Sprout className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+                                    <p className="text-sm text-gray-600 font-body">
+                                      Aún no has realizado compras. ¡Comienza a comprar para ganar puntos!
+                                    </p>
+                                  </div>
+                                ) : (
+                                  <>
+                                    <div className="flex items-center justify-between p-3 bg-[#7d8768]/5 rounded-lg">
+                                      <div>
+                                        <p className="text-sm font-semibold text-gray-900 font-body">Total de Compra</p>
+                                        <p className="text-xs text-gray-600 font-body">
+                                          {orders.filter(order => order.status !== 'cancelled').length} {orders.filter(order => order.status !== 'cancelled').length === 1 ? 'pedido' : 'pedidos'} completados
+                                        </p>
+                                      </div>
+                                      <div className="text-right">
+                                        <p className="text-base font-bold text-gray-900 font-editorial-new">
+                                          Q. {orders.filter(order => order.status !== 'cancelled').reduce((sum, order) => sum + order.total, 0).toFixed(2)}
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <div className="flex items-center justify-between p-3 bg-[#b9a035]/5 rounded-lg">
+                                      <div>
+                                        <p className="text-sm font-semibold text-gray-900 font-body">Puntos Totales</p>
+                                        <p className="text-xs text-gray-600 font-body">
+                                          {userPoints} puntos acumulados
+                                        </p>
+                                      </div>
+                                      <div className="text-right">
+                                        <p className="text-base font-bold text-[#7d8768] font-editorial-new">
+                                          {userPoints}
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <div className="bg-[#8e421e]/5 rounded-lg p-3 border border-[#8e421e]/20">
+                                      <p className="text-xs text-gray-700 font-body">
+                                        <strong className="font-semibold">Valor de tus puntos:</strong> Puedes canjear {Math.floor(userPoints / 100)} × 100 puntos por un descuento total de <strong className="font-semibold">Q. {((Math.floor(userPoints / 100)) * 50).toFixed(2)}</strong>
+                                      </p>
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </div>
+
+                        {/* Link to Rewards Page */}
+                        <div className="mt-6 text-center">
+                          <Button
+                            variant="outline"
+                            className="border-2 border-[#7d8768] text-[#7d8768] hover:bg-[#7d8768] hover:text-white font-body"
+                            onClick={() => navigate('/rewards')}
+                          >
+                            <Gift className="h-4 w-4 mr-2" />
+                            Ver Más Información sobre Rewards
+                          </Button>
+                        </div>
+                      </div>
                     </TabsContent>
 
                     {/* Settings Tab */}
                     <TabsContent value="settings" className="space-y-6">
-                                              <h3 className="text-xl font-semibold font-editorial-new">Configuración de Cuenta</h3>
+                                              <h3 className="text-xl font-semibold font-editorial-new">Ajustes de Cuenta</h3>
 
                       <div className="space-y-6">
                         {/* Profile Information */}
@@ -1273,7 +1508,7 @@ const Dashboard: React.FC = () => {
                             <Button 
                               onClick={handleSaveProfile}
                               disabled={updateProfileMutation.isPending}
-                              className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] hover:from-[#7a7539] hover:to-[#9d627b] text-white"
+                              className="bg-[#7d8768] hover:bg-[#6d7660] text-white font-body"
                             >
                               {updateProfileMutation.isPending ? (
                                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -1283,116 +1518,127 @@ const Dashboard: React.FC = () => {
                           </CardContent>
                         </Card>
 
-                        {/* Preferences */}
-                        <Card className="border-0 shadow-md">
-                          <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                              <Bell className="h-5 w-5 text-[#7d8768]" />
-                              Preferencias
-                            </CardTitle>
-                          </CardHeader>
-                          <CardContent className="space-y-4">
-                            <div className="space-y-4">
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <h4 className="font-medium font-gilda-display">Notificaciones por Email</h4>
-                                  <p className="text-sm text-gray-600 font-audrey">Recibe actualizaciones sobre tus pedidos</p>
-                                </div>
-                                <Button 
-                                  variant={profileForm.email_notifications ? "default" : "outline"}
-                                  size="sm"
-                                  onClick={() => {
-                                    setProfileForm({...profileForm, email_notifications: !profileForm.email_notifications});
-                                  }}
-                                  className={profileForm.email_notifications ? "bg-[#7d8768] text-white" : ""}
-                                >
-                                  {profileForm.email_notifications ? 'Activado' : 'Desactivado'}
-                                </Button>
-                              </div>
-                              <Separator />
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <h4 className="font-medium font-gilda-display">Newsletter</h4>
-                                  <p className="text-sm text-gray-600 font-audrey">Ofertas especiales y nuevos productos</p>
-                                </div>
-                                <Button 
-                                  variant={profileForm.newsletter ? "default" : "outline"}
-                                  size="sm"
-                                  onClick={() => {
-                                    setProfileForm({...profileForm, newsletter: !profileForm.newsletter});
-                                  }}
-                                  className={profileForm.newsletter ? "bg-[#7d8768] text-white" : ""}
-                                >
-                                  {profileForm.newsletter ? 'Suscrito' : 'No Suscrito'}
-                                </Button>
-                              </div>
-                              <Separator />
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <h4 className="font-medium font-gilda-display">Idioma</h4>
-                                  <p className="text-sm text-gray-600 font-audrey">
-                                    {profileForm.language === 'es' ? 'Español' : 'English'}
-                                  </p>
-                                </div>
-                                <Select 
-                                  value={profileForm.language}
-                                  onValueChange={(value: 'es' | 'en') => {
-                                    setProfileForm({...profileForm, language: value});
-                                  }}
-                                >
-                                  <SelectTrigger className="w-32">
-                                    <SelectValue />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="es">Español</SelectItem>
-                                    <SelectItem value="en">English</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </div>
-                              <div className="pt-4">
-                                <Button 
-                                  onClick={handleSaveProfile}
-                                  disabled={updateProfileMutation.isPending}
-                                  className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] hover:from-[#7a7539] hover:to-[#9d627b] text-white"
-                                >
-                                  {updateProfileMutation.isPending ? (
-                                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                  ) : null}
-                                  Guardar Preferencias
-                                </Button>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-
                         {/* Security */}
                         <Card className="border-0 shadow-md">
                           <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
+                            <CardTitle className="flex items-center gap-2 font-editorial-new">
                               <Shield className="h-5 w-5 text-[#7d8768]" />
                               Seguridad
                             </CardTitle>
                           </CardHeader>
                           <CardContent className="space-y-4">
-                            <div className="space-y-4">
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <h4 className="font-medium">Cambiar Contraseña</h4>
-                                  <p className="text-sm text-gray-600">Actualiza tu contraseña regularmente</p>
-                                </div>
-                                <Button variant="outline" size="sm">Cambiar</Button>
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <h4 className="font-medium font-gilda-display">Cambiar Contraseña</h4>
+                                <p className="text-sm text-gray-600 font-body">Actualiza tu contraseña regularmente</p>
                               </div>
-                              <Separator />
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <h4 className="font-medium">Autenticación de Dos Factores</h4>
-                                  <p className="text-sm text-gray-600">Añade una capa extra de seguridad</p>
-                                </div>
-                                <Button variant="outline" size="sm">Configurar</Button>
-                              </div>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => setIsPasswordDialogOpen(true)}
+                                className="font-body"
+                              >
+                                Cambiar
+                              </Button>
                             </div>
                           </CardContent>
                         </Card>
+
+                        {/* Password Change Dialog */}
+                        <Dialog open={isPasswordDialogOpen} onOpenChange={setIsPasswordDialogOpen}>
+                          <DialogContent className="max-w-md">
+                            <DialogHeader>
+                              <DialogTitle className="font-editorial-new">Cambiar Contraseña</DialogTitle>
+                            </DialogHeader>
+                            <div className="space-y-4">
+                              <div>
+                                <Label htmlFor="newPassword" className="font-body">Nueva Contraseña *</Label>
+                                <div className="relative">
+                                  <Input
+                                    id="newPassword"
+                                    type={showNewPassword ? 'text' : 'password'}
+                                    value={passwordForm.newPassword}
+                                    onChange={(e) => setPasswordForm({...passwordForm, newPassword: e.target.value})}
+                                    placeholder="Ingresa tu nueva contraseña"
+                                    className="font-body pr-10"
+                                  />
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                                    onClick={() => setShowNewPassword(!showNewPassword)}
+                                  >
+                                    {showNewPassword ? (
+                                      <EyeOff className="h-4 w-4 text-gray-400" />
+                                    ) : (
+                                      <Eye className="h-4 w-4 text-gray-400" />
+                                    )}
+                                  </Button>
+                                </div>
+                              </div>
+                              <div>
+                                <Label htmlFor="confirmPassword" className="font-body">Confirmar Nueva Contraseña *</Label>
+                                <div className="relative">
+                                  <Input
+                                    id="confirmPassword"
+                                    type={showConfirmPassword ? 'text' : 'password'}
+                                    value={passwordForm.confirmPassword}
+                                    onChange={(e) => setPasswordForm({...passwordForm, confirmPassword: e.target.value})}
+                                    placeholder="Confirma tu nueva contraseña"
+                                    className="font-body pr-10"
+                                  />
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                  >
+                                    {showConfirmPassword ? (
+                                      <EyeOff className="h-4 w-4 text-gray-400" />
+                                    ) : (
+                                      <Eye className="h-4 w-4 text-gray-400" />
+                                    )}
+                                  </Button>
+                                </div>
+                              </div>
+                              <div className="flex gap-4 pt-4">
+                                <Button
+                                  onClick={handleChangePassword}
+                                  disabled={isChangingPassword}
+                                  className="bg-[#7d8768] hover:bg-[#6d7660] text-white font-body"
+                                >
+                                  {isChangingPassword ? (
+                                    <>
+                                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                      Cambiando...
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Lock className="h-4 w-4 mr-2" />
+                                      Cambiar Contraseña
+                                    </>
+                                  )}
+                                </Button>
+                                <Button 
+                                  variant="outline" 
+                                  onClick={() => {
+                                    setIsPasswordDialogOpen(false);
+                                    setPasswordForm({
+                                      currentPassword: '',
+                                      newPassword: '',
+                                      confirmPassword: '',
+                                    });
+                                  }}
+                                  className="font-body"
+                                >
+                                  Cancelar
+                                </Button>
+                              </div>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
                       </div>
                     </TabsContent>
                   </Tabs>

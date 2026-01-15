@@ -22,8 +22,8 @@ const BlogPost = () => {
   if (isLoading) {
     return (
       <Layout>
-        <div className="min-h-screen bg-gradient-to-b from-[#fafaf9] via-white to-[#fafaf9] py-12">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-white py-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center py-24">
               <div className="relative inline-block mb-6">
                 <div className="absolute inset-0 animate-ping rounded-full bg-[#7d8768]/20"></div>
@@ -41,13 +41,13 @@ const BlogPost = () => {
   if (error || !post) {
     return (
       <Layout>
-        <div className="min-h-screen bg-gradient-to-b from-[#fafaf9] via-white to-[#fafaf9] py-12">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Card className="p-12 md:p-16 text-center border-2 border-red-100 bg-gradient-to-br from-red-50/50 to-white shadow-lg">
+        <div className="min-h-screen bg-white py-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <Card className="p-12 md:p-16 text-center border-2 border-red-100 bg-white shadow-lg">
               <h1 className="text-3xl font-bold text-gray-900 mb-4 font-editorial-new">Artículo no encontrado</h1>
-              <p className="text-gray-600 mb-8 font-audrey">El artículo que buscas no existe o ha sido eliminado.</p>
+              <p className="text-gray-600 mb-8 font-body">El artículo que buscas no existe o ha sido eliminado.</p>
               <Link to="/blog">
-                <Button className="bg-gradient-to-r from-[#7d8768] to-[#8d756e] hover:from-[#6d7660] hover:to-[#7d655e] text-white shadow-md">
+                <Button className="bg-[#7d8768] hover:bg-[#6d7660] text-white shadow-md font-body">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Volver al Blog
                 </Button>
@@ -59,31 +59,31 @@ const BlogPost = () => {
     );
   }
 
-  const htmlContent = marked(post.content || '');
+  const htmlContent = marked(post.content || '') as string;
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-b from-[#fafaf9] via-white to-[#fafaf9]">
+      <div className="min-h-screen bg-white">
         {/* Back Navigation */}
-        <div className="bg-white border-b border-gray-100 sticky top-16 z-40 backdrop-blur-sm bg-white/80">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="bg-white border-b border-gray-100 sticky top-16 z-40">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <Link to="/blog">
               <Button 
                 variant="ghost" 
                 className="text-gray-600 hover:text-[#7d8768] hover:bg-[#7d8768]/5 transition-colors group"
               >
                 <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
-                <span className="font-audrey">Volver al Blog</span>
+                <span className="font-body">Volver al Blog</span>
               </Button>
             </Link>
           </div>
         </div>
 
         {/* Article Content */}
-        <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <article className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Hero Image Section - Contained */}
           {post.featured_image && (
-            <div className="relative mb-12 rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 shadow-xl">
+            <div className="relative mb-12 rounded-2xl overflow-hidden bg-gray-100 shadow-xl">
               <img
                 src={post.featured_image}
                 alt={post.title}
@@ -107,7 +107,7 @@ const BlogPost = () => {
             {/* Category badge - only show if no featured image */}
             {!post.featured_image && post.category && (
               <div className="mb-6">
-                <Badge className="bg-gradient-to-r from-[#7d8768] to-[#8d756e] text-white border-0 shadow-md px-4 py-1.5 font-medium">
+                <Badge className="bg-[#7d8768] text-white border-0 shadow-md px-4 py-1.5 font-medium font-body">
                   {post.category}
                 </Badge>
               </div>
@@ -120,7 +120,7 @@ const BlogPost = () => {
             {/* Article Meta - Reading Time Only */}
             {post.content && (
               <div className="flex flex-wrap items-center gap-6 mb-8 pb-8 border-b border-gray-200">
-                <div className="flex items-center gap-2 text-gray-600 font-audrey">
+                <div className="flex items-center gap-2 text-gray-600 font-body">
                   <Clock className="h-4 w-4 text-[#7d8768]" />
                   <span>{formatReadingTime(post.content)}</span>
                 </div>
@@ -134,7 +134,7 @@ const BlogPost = () => {
                   <Badge 
                     key={index} 
                     variant="outline" 
-                    className="border-gray-300 text-gray-700 hover:border-[#7d8768] hover:text-[#7d8768] hover:bg-[#7d8768]/5 transition-colors font-audrey"
+                    className="border-gray-300 text-gray-700 hover:border-[#7d8768] hover:text-[#7d8768] hover:bg-[#7d8768]/5 transition-colors font-body"
                   >
                     <Leaf className="h-3 w-3 mr-1.5" />
                     #{tag}
@@ -145,7 +145,7 @@ const BlogPost = () => {
           </header>
 
           {/* Article Body */}
-          <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+          <Card className="border border-gray-200 shadow-lg bg-white">
             <div className="p-8 md:p-12 lg:p-16">
               <div
                 className="prose prose-lg prose-slate max-w-none 
@@ -153,12 +153,12 @@ const BlogPost = () => {
                   prose-h1:text-4xl prose-h1:mb-6 prose-h1:mt-8
                   prose-h2:text-3xl prose-h2:mb-5 prose-h2:mt-8
                   prose-h3:text-2xl prose-h3:mb-4 prose-h3:mt-6
-                  prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-6 prose-p:font-audrey prose-p:text-base md:prose-p:text-lg
+                  prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-6 prose-p:font-body prose-p:text-base md:prose-p:text-lg prose-p:text-justify
                   prose-strong:text-gray-900 prose-strong:font-semibold
                   prose-a:text-[#7d8768] prose-a:no-underline prose-a:font-medium hover:prose-a:underline prose-a:transition-all
                   prose-ul:list-disc prose-ul:pl-6 prose-ul:mb-6
                   prose-ol:list-decimal prose-ol:pl-6 prose-ol:mb-6
-                  prose-li:text-gray-700 prose-li:mb-2 prose-li:font-audrey
+                  prose-li:text-gray-700 prose-li:mb-2 prose-li:font-body
                   prose-blockquote:border-l-4 prose-blockquote:border-[#7d8768] prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:text-gray-600 prose-blockquote:bg-[#7d8768]/5 prose-blockquote:py-2 prose-blockquote:my-6
                   prose-img:rounded-xl prose-img:shadow-lg prose-img:my-8
                   prose-code:text-[#7d8768] prose-code:bg-[#7d8768]/10 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
@@ -177,7 +177,7 @@ const BlogPost = () => {
                 className="border-2 border-[#7d8768] text-[#7d8768] hover:bg-[#7d8768] hover:text-white transition-all shadow-sm px-8"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                <span className="font-audrey">Ver más artículos</span>
+                <span className="font-body">Ver más artículos</span>
               </Button>
             </Link>
           </div>

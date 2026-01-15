@@ -9,7 +9,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { 
-  Plus,
   Edit,
   Trash2,
   Eye,
@@ -246,11 +245,6 @@ const AdminCustomers: React.FC = () => {
         <AdminPageHeader
           title="Gestión de Clientes"
           description="Gestiona la información y el historial de tus clientes"
-          actionButton={{
-            label: "Nuevo Cliente",
-            onClick: () => handleOpenDialog(),
-            icon: Plus
-          }}
         />
         {/* KPIs Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -302,13 +296,7 @@ const AdminCustomers: React.FC = () => {
         {/* Filtros y Búsqueda */}
         <Card>
           <CardHeader>
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <CardTitle>Filtros y Búsqueda</CardTitle>
-              <Button onClick={() => handleOpenDialog()} className="w-full md:w-auto">
-                <Plus className="h-4 w-4 mr-2" />
-                Agregar Cliente
-              </Button>
-            </div>
+            <CardTitle>Filtros y Búsqueda</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="relative">

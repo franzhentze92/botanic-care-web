@@ -37,6 +37,10 @@ import {
   Clock as ClockIcon,
   DollarSign,
   Activity,
+  Factory,
+  Warehouse,
+  Store,
+  AlertTriangle,
 } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -80,6 +84,28 @@ const AdminOperationalAnalytics: React.FC = () => {
       ordersByStatus: [],
       ordersByDayOfWeek: [],
       ordersByHour: [],
+      production: {
+        totalBatches: 0,
+        batchesByStatus: [],
+        batchesByMonth: [],
+        batchesByProduct: [],
+        averageBatchSize: 0,
+      },
+      inventory: {
+        totalItems: 0,
+        lowStockItems: 0,
+        totalValue: 0,
+        itemsByCategory: [],
+        stockMovements: [],
+      },
+      distributors: {
+        totalDistributors: 0,
+        totalShipments: 0,
+        totalReturns: 0,
+        shipmentsByMonth: [],
+        stockByDistributor: [],
+        topProductsByDistributor: [],
+      },
     };
   }, [analytics]);
 
@@ -344,6 +370,25 @@ const AdminOperationalAnalytics: React.FC = () => {
               </ChartContainer>
             </CardContent>
           </Card>
+
+          {/* Gráfico de Barras - Pedidos por Hora del Día */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Pedidos por Hora del Día</CardTitle>
+              <CardDescription>Distribución horaria de pedidos</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ChartContainer config={chartConfig} className="h-[300px]">
+                <BarChart data={hourData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="hora" angle={-45} textAnchor="end" height={100} />
+                  <YAxis />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <Bar dataKey="pedidos" fill={chartConfig.Pedidos.color} />
+                </BarChart>
+              </ChartContainer>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Productos Más Vendidos */}
@@ -388,24 +433,471 @@ const AdminOperationalAnalytics: React.FC = () => {
           </CardContent>
         </Card>
 
-        {/* Gráfico de Barras - Pedidos por Hora del Día */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Pedidos por Hora del Día</CardTitle>
-            <CardDescription>Distribución horaria de pedidos</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={chartConfig} className="h-[300px]">
-              <BarChart data={hourData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="hora" />
-                <YAxis />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Bar dataKey="pedidos" fill={chartConfig.Pedidos.color} />
-              </BarChart>
-            </ChartContainer>
-          </CardContent>
-        </Card>
+        {/* ==================== SECCIÓN DE PRODUCCIÓN ==================== */}
+        <div className="space-y-6">
+          <div className="flex items-center gap-2">
+            <Factory className="h-6 w-6 text-purple-600" />
+            <h2 className="text-2xl font-bold">Análisis de Producción</h2>
+          </div>
+
+          {/* KPIs de Producción */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total de Batches</CardTitle>
+                <Factory className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{analyticsData.production.totalBatches}</div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Tamaño promedio: {analyticsData.production.averageBatchSize.toFixed(0)} unidades
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Batches Completados</CardTitle>
+                <Package className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-emerald-600">
+                  {analyticsData.production.batchesByStatus.find(s => s.status === 'completado')?.count || 0}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {analyticsData.production.batchesByStatus.find(s => s.status === 'completado')?.quantity || 0} unidades
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">En Producción</CardTitle>
+                <Activity className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-blue-600">
+                  {analyticsData.production.batchesByStatus.find(s => s.status === 'en_produccion')?.count || 0}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Batches activos
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Gráficos de Producción */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Batches por Estado */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Batches por Estado</CardTitle>
+                <CardDescription>Distribución de batches según estado</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ChartContainer config={chartConfig} className="h-[300px]">
+                  <PieChart>
+                    <Pie
+                      data={analyticsData.production.batchesByStatus}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({ status, count }) => `${status}: ${count}`}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="count"
+                    >
+                      {analyticsData.production.batchesByStatus.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ))}
+                    </Pie>
+                    <ChartTooltip content={<ChartTooltipContent />} />
+                  </PieChart>
+                </ChartContainer>
+              </CardContent>
+            </Card>
+
+            {/* Batches por Mes */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Producción por Mes</CardTitle>
+                <CardDescription>Evolución mensual de batches y cantidad producida</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ChartContainer config={chartConfig} className="h-[300px]">
+                  <BarChart data={analyticsData.production.batchesByMonth.map(item => ({
+                    mes: format(parseISO(item.month + '-01'), 'MMM yyyy', { locale: es }),
+                    Batches: item.batches,
+                    Cantidad: item.quantity,
+                  }))}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="mes" />
+                    <YAxis />
+                    <ChartTooltip content={<ChartTooltipContent />} />
+                    <ChartLegend content={<ChartLegendContent />} />
+                    <Bar dataKey="Batches" fill={chartConfig.Pedidos.color} />
+                    <Bar dataKey="Cantidad" fill={chartConfig.Ingresos.color} />
+                  </BarChart>
+                </ChartContainer>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Top Productos por Producción - Ancho Completo */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Top Productos por Cantidad */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Top Productos por Cantidad</CardTitle>
+                <CardDescription>Productos con más unidades producidas</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {analyticsData.production.batchesByProduct.length === 0 ? (
+                  <div className="flex items-center justify-center h-64">
+                    <p className="text-gray-500">No hay datos de producción en este período</p>
+                  </div>
+                ) : (
+                  <ChartContainer config={chartConfig} className="h-[300px]">
+                    <BarChart data={analyticsData.production.batchesByProduct.slice(0, 5).map(item => ({
+                      producto: item.product_name.length > 20 ? item.product_name.substring(0, 20) + '...' : item.product_name,
+                      cantidad: item.total_quantity,
+                    }))}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="producto" angle={-45} textAnchor="end" height={100} />
+                      <YAxis />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Bar dataKey="cantidad" fill={chartConfig.Ingresos.color} />
+                    </BarChart>
+                  </ChartContainer>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Top Productos por Batches */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Top Productos por Batches</CardTitle>
+                <CardDescription>Productos con más batches producidos</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {analyticsData.production.batchesByProduct.length === 0 ? (
+                  <div className="flex items-center justify-center h-64">
+                    <p className="text-gray-500">No hay datos de producción en este período</p>
+                  </div>
+                ) : (
+                  <ChartContainer config={chartConfig} className="h-[300px]">
+                    <BarChart data={analyticsData.production.batchesByProduct
+                      .sort((a, b) => b.batches - a.batches)
+                      .slice(0, 5)
+                      .map(item => ({
+                        producto: item.product_name.length > 20 ? item.product_name.substring(0, 20) + '...' : item.product_name,
+                        batches: item.batches,
+                      }))}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="producto" angle={-45} textAnchor="end" height={100} />
+                      <YAxis />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Bar dataKey="batches" fill={chartConfig.Pedidos.color} />
+                    </BarChart>
+                  </ChartContainer>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* ==================== SECCIÓN DE INVENTARIO ==================== */}
+        <div className="space-y-6">
+          <div className="flex items-center gap-2">
+            <Warehouse className="h-6 w-6 text-blue-600" />
+            <h2 className="text-2xl font-bold">Análisis de Inventario</h2>
+          </div>
+
+          {/* KPIs de Inventario */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total de Items</CardTitle>
+                <Package className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{analyticsData.inventory.totalItems}</div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Items en inventario
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Stock Bajo</CardTitle>
+                <AlertTriangle className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className={`text-2xl font-bold ${analyticsData.inventory.lowStockItems > 0 ? 'text-red-600' : 'text-green-600'}`}>
+                  {analyticsData.inventory.lowStockItems}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Items que requieren atención
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Valor Total</CardTitle>
+                <DollarSign className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{formatCurrency(analyticsData.inventory.totalValue)}</div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Valor del inventario
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Items por Categoría */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Items por Categoría</CardTitle>
+                <CardDescription>Distribución de items de inventario por categoría</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {analyticsData.inventory.itemsByCategory.length === 0 ? (
+                  <div className="flex items-center justify-center h-64">
+                    <p className="text-gray-500">No hay datos de inventario disponibles</p>
+                  </div>
+                ) : (
+                  <ChartContainer config={chartConfig} className="h-[300px]">
+                    <BarChart data={analyticsData.inventory.itemsByCategory}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="category" angle={-45} textAnchor="end" height={100} />
+                      <YAxis />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Bar dataKey="count" fill={chartConfig.Pedidos.color} />
+                    </BarChart>
+                  </ChartContainer>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Gráfico de pastel - Distribución por categoría */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Distribución de Categorías</CardTitle>
+                <CardDescription>Porcentaje de items por categoría</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {analyticsData.inventory.itemsByCategory.length === 0 ? (
+                  <div className="flex items-center justify-center h-64">
+                    <p className="text-gray-500">No hay datos de inventario disponibles</p>
+                  </div>
+                ) : (
+                  <ChartContainer config={chartConfig} className="h-[300px]">
+                    <PieChart>
+                      <Pie
+                        data={analyticsData.inventory.itemsByCategory}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={({ category, count }) => `${category}: ${count}`}
+                        outerRadius={80}
+                        fill="#8884d8"
+                        dataKey="count"
+                      >
+                        {analyticsData.inventory.itemsByCategory.map((entry, index) => (
+                          <Cell
+                            key={`cell-${index}`}
+                            fill={COLORS[index % COLORS.length]}
+                          />
+                        ))}
+                      </Pie>
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                    </PieChart>
+                  </ChartContainer>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* ==================== SECCIÓN DE DISTRIBUIDORES ==================== */}
+        <div className="space-y-6">
+          <div className="flex items-center gap-2">
+            <Store className="h-6 w-6 text-emerald-600" />
+            <h2 className="text-2xl font-bold">Análisis de Distribuidores</h2>
+          </div>
+
+          {/* KPIs de Distribuidores */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Distribuidores</CardTitle>
+                <Store className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{analyticsData.distributors.totalDistributors}</div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Distribuidores activos
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Envíos</CardTitle>
+                <Package className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-blue-600">{analyticsData.distributors.totalShipments}</div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Envíos registrados
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Devoluciones</CardTitle>
+                <XCircle className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-orange-600">{analyticsData.distributors.totalReturns}</div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Devoluciones registradas
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Gráficos de Distribuidores */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Envíos por Mes */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Envíos por Mes</CardTitle>
+                <CardDescription>Evolución mensual de envíos a distribuidores</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {analyticsData.distributors.shipmentsByMonth.length === 0 ? (
+                  <div className="flex items-center justify-center h-64">
+                    <p className="text-gray-500">No hay datos de envíos en este período</p>
+                  </div>
+                ) : (
+                  <ChartContainer config={chartConfig} className="h-[300px]">
+                    <BarChart data={analyticsData.distributors.shipmentsByMonth.map(item => ({
+                      mes: format(parseISO(item.month + '-01'), 'MMM yyyy', { locale: es }),
+                      Envíos: item.shipments,
+                      Cantidad: item.quantity,
+                    }))}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="mes" />
+                      <YAxis />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <ChartLegend content={<ChartLegendContent />} />
+                      <Bar dataKey="Envíos" fill={chartConfig.Pedidos.color} />
+                      <Bar dataKey="Cantidad" fill={chartConfig.Ingresos.color} />
+                    </BarChart>
+                  </ChartContainer>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Stock por Distribuidor */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Stock por Distribuidor</CardTitle>
+                <CardDescription>Stock actual por distribuidor</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {analyticsData.distributors.stockByDistributor.length === 0 ? (
+                  <div className="flex items-center justify-center h-64">
+                    <p className="text-gray-500">No hay datos de stock de distribuidores</p>
+                  </div>
+                ) : (
+                  <ChartContainer config={chartConfig} className="h-[300px]">
+                    <BarChart data={analyticsData.distributors.stockByDistributor.slice(0, 10).map(item => ({
+                      distribuidor: item.distributor_name.length > 15 ? item.distributor_name.substring(0, 15) + '...' : item.distributor_name,
+                      stock: item.total_stock,
+                    }))}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="distribuidor" angle={-45} textAnchor="end" height={100} />
+                      <YAxis />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Bar dataKey="stock" fill={chartConfig.Ingresos.color} />
+                    </BarChart>
+                  </ChartContainer>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Top Productos por Distribuidor */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Top Productos Enviados</CardTitle>
+                <CardDescription>Productos más enviados a distribuidores</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {analyticsData.distributors.topProductsByDistributor.length === 0 ? (
+                  <div className="flex items-center justify-center h-64">
+                    <p className="text-gray-500">No hay datos de productos por distribuidor</p>
+                  </div>
+                ) : (
+                  <ChartContainer config={chartConfig} className="h-[300px]">
+                    <BarChart data={analyticsData.distributors.topProductsByDistributor.slice(0, 5).map(item => ({
+                      producto: item.product_name.length > 20 ? item.product_name.substring(0, 20) + '...' : item.product_name,
+                      Enviados: item.total_sent,
+                    }))}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="producto" angle={-45} textAnchor="end" height={100} />
+                      <YAxis />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Bar dataKey="Enviados" fill={chartConfig.Pedidos.color} />
+                    </BarChart>
+                  </ChartContainer>
+                )}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Top Productos Devueltos</CardTitle>
+                <CardDescription>Productos más devueltos por distribuidores</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {analyticsData.distributors.topProductsByDistributor.length === 0 ? (
+                  <div className="flex items-center justify-center h-64">
+                    <p className="text-gray-500">No hay datos de productos por distribuidor</p>
+                  </div>
+                ) : (
+                  <ChartContainer config={chartConfig} className="h-[300px]">
+                    <BarChart data={analyticsData.distributors.topProductsByDistributor
+                      .filter(item => item.total_returned > 0)
+                      .sort((a, b) => b.total_returned - a.total_returned)
+                      .slice(0, 5)
+                      .map(item => ({
+                        producto: item.product_name.length > 20 ? item.product_name.substring(0, 20) + '...' : item.product_name,
+                        Devueltos: item.total_returned,
+                      }))}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="producto" angle={-45} textAnchor="end" height={100} />
+                      <YAxis />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Bar dataKey="Devueltos" fill="#ef4444" />
+                    </BarChart>
+                  </ChartContainer>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
     </AdminLayout>
   );

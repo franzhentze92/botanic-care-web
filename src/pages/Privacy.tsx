@@ -6,23 +6,23 @@ import { Shield } from 'lucide-react';
 const Privacy: React.FC = () => {
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <Card className="bg-white border border-gray-200 shadow-lg">
+      <div className="max-w-[1600px] mx-auto px-8 sm:px-12 lg:px-16 xl:px-20 py-12">
+        <Card className="bg-white border border-gray-200 shadow-lg w-full">
           <CardHeader className="text-center pb-8">
             <div className="flex justify-center mb-4">
-              <div className="w-16 h-16 bg-gradient-to-r from-[#7d8768] to-[#9d627b] rounded-full flex items-center justify-center">
+              <div className="w-16 h-16 bg-[#7d8768] rounded-full flex items-center justify-center">
                 <Shield className="h-8 w-8 text-white" />
               </div>
             </div>
             <CardTitle className="text-4xl font-bold text-gray-900 font-editorial-new">
               Política de Privacidad
             </CardTitle>
-            <p className="text-gray-600 mt-2 font-audrey">
+            <p className="text-gray-600 mt-2 font-body">
               Última actualización: {new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
             </p>
           </CardHeader>
           <CardContent className="prose prose-lg max-w-none">
-            <div className="space-y-6 text-gray-700 font-audrey">
+            <div className="space-y-6 text-gray-700 font-body">
               <section>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 font-gilda-display">1. Información que Recopilamos</h2>
                 <p>

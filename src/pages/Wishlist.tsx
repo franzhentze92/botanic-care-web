@@ -27,8 +27,8 @@ const Wishlist: React.FC = () => {
           <div className="text-center">
             <div className="text-6xl mb-6">💝</div>
             <h1 className="text-3xl font-bold text-gray-900 mb-4 font-editorial-new">Tu lista de deseos está vacía</h1>
-            <p className="text-gray-600 mb-8 font-audrey">Guarda tus productos favoritos para comprarlos más tarde</p>
-            <Button asChild className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] hover:from-[#7a7539] hover:to-[#9d627b] text-white">
+            <p className="text-gray-600 mb-8 font-body">Guarda tus productos favoritos para comprarlos más tarde</p>
+            <Button asChild className="bg-[#7d8768] hover:bg-[#6d7660] text-white font-body">
               <Link to="/shop">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Explorar Productos
@@ -47,13 +47,13 @@ const Wishlist: React.FC = () => {
           <h1 className="text-3xl font-bold text-gray-900 font-editorial-new">Lista de Deseos</h1>
           <div className="flex items-center space-x-2">
             <Heart className="h-5 w-5 text-[#7d8768]" />
-            <span className="text-gray-600 font-audrey">({state.wishlist.length} productos)</span>
+            <span className="text-gray-600 font-body">({state.wishlist.length} productos)</span>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {state.wishlist.map((item) => (
-            <Card key={item.product.id} className="group hover:shadow-xl transition-all duration-300 bg-white/80 backdrop-blur-sm border-0 flex flex-col h-full">
+            <Card key={item.product.id} className="group hover:shadow-xl transition-all duration-300 bg-white border border-gray-200 flex flex-col h-full">
               <CardContent className="p-6 flex flex-col flex-grow">
                 <div className="relative flex flex-col flex-grow">
                   {/* Product Image */}
@@ -67,7 +67,7 @@ const Wishlist: React.FC = () => {
                       <Button
                         variant="secondary"
                         size="sm"
-                        className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 text-gray-900 hover:bg-white"
+                        className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 text-gray-900 hover:bg-white font-body"
                         asChild
                       >
                         <Link to={`/shop/product/${item.product.id}`}>
@@ -85,23 +85,23 @@ const Wishlist: React.FC = () => {
 
                   <div className="flex items-center justify-center mb-4">
                     <div className="flex items-center space-x-2">
-                      <span className="text-lg font-bold text-[#7d8768]">Q. {item.product.price}</span>
+                      <span className="text-lg font-bold text-[#7d8768] font-body">Q. {item.product.price}</span>
                       {item.product.originalPrice && (
-                        <span className="text-sm text-gray-500 line-through">
+                        <span className="text-sm text-gray-500 line-through font-body">
                           Q. {item.product.originalPrice}
                         </span>
                       )}
                     </div>
                   </div>
 
-                  <p className="text-gray-600 text-sm text-center mb-4">
+                  <p className="text-gray-600 text-sm text-center mb-4 font-body">
                     SKU: {item.product.sku} • Tamaño: {item.product.size}
                   </p>
 
                   {/* Action Buttons - Empujados hacia abajo con mt-auto */}
                   <div className="space-y-2 mt-auto">
                     <Button 
-                      className="w-full bg-gradient-to-r from-[#7d8768] to-[#9d627b] hover:from-[#7a7539] hover:to-[#9d627b] text-white"
+                      className="w-full bg-[#7d8768] hover:bg-[#6d7660] text-white font-body"
                       onClick={() => handleAddToCart(item.product)}
                     >
                       <ShoppingCart className="h-4 w-4 mr-2" />
@@ -109,7 +109,7 @@ const Wishlist: React.FC = () => {
                     </Button>
                     <Button 
                       variant="outline" 
-                      className="w-full border-red-300 text-red-600 hover:bg-red-50"
+                      className="w-full border-red-300 text-red-600 hover:bg-red-50 font-body"
                       onClick={() => removeFromWishlist(item.product.id)}
                     >
                       <Trash2 className="h-4 w-4 mr-2" />
@@ -125,13 +125,13 @@ const Wishlist: React.FC = () => {
         {/* Bottom Actions */}
         <div className="mt-12 text-center">
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild variant="outline" className="border-[#7d8768] text-[#7d8768] hover:bg-[#7d8768]/10">
+            <Button asChild variant="outline" className="border-[#7d8768] text-[#7d8768] hover:bg-[#7d8768]/10 font-body">
               <Link to="/shop">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Continuar Comprando
               </Link>
             </Button>
-            <Button asChild className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] hover:from-[#7a7539] hover:to-[#9d627b] text-white">
+            <Button asChild className="bg-[#7d8768] hover:bg-[#6d7660] text-white font-body">
               <Link to="/cart">
                 <ShoppingCart className="h-4 w-4 mr-2" />
                 Ver Carrito

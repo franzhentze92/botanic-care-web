@@ -37,6 +37,7 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { toast } from 'sonner';
 import { supabase } from '@/lib/supabase';
+import { useProductCategories } from '@/hooks/useProductCategories';
 
 const AdminBlog = () => {
   const { user } = useAuth();
@@ -55,6 +56,7 @@ const AdminBlog = () => {
   const createMutation = useCreateBlogPost();
   const updateMutation = useUpdateBlogPost();
   const deleteMutation = useDeleteBlogPost();
+  const { data: productCategories = [], isLoading: isLoadingCategories } = useProductCategories();
 
   // Form state
   const [formData, setFormData] = useState<CreateBlogPostData>({
@@ -258,8 +260,8 @@ const AdminBlog = () => {
     }
   };
 
-  // Get unique categories from posts
-  const categories = [...new Set(posts?.map((p) => p.category).filter(Boolean) || [])];
+  // Use product categories from database
+  const categories = productCategories.map(cat => cat.name).sort();
 
   if (!user) {
     return (
@@ -351,12 +353,22 @@ const AdminBlog = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="category">Categoría</Label>
-                    <Input
-                      id="category"
-                      value={formData.category}
-                      onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                      placeholder="Ej: Cuidado Facial"
-                    />
+                    <Select
+                      value={formData.category || undefined}
+                      onValueChange={(value) => setFormData({ ...formData, category: value === 'none' ? null : value })}
+                    >
+                      <SelectTrigger id="category">
+                        <SelectValue placeholder="Seleccionar categoría" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">Sin categoría</SelectItem>
+                        {categories.map((category) => (
+                          <SelectItem key={category} value={category}>
+                            {category}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div>
@@ -678,9 +690,6 @@ const AdminBlog = () => {
                     <tr key={post.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">{post.title}</div>
-                        {post.excerpt && (
-                          <div className="text-sm text-gray-500 line-clamp-1">{post.excerpt}</div>
-                        )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {post.category ? (

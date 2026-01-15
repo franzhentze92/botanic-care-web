@@ -115,14 +115,14 @@ const OrderDetail: React.FC = () => {
   if (isLoading) {
     return (
       <Layout>
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#fafaf9] via-white to-[#fafaf9]">
+        <div className="min-h-screen flex items-center justify-center bg-white">
           <div className="text-center">
             <div className="relative inline-block mb-6">
               <div className="absolute inset-0 animate-ping rounded-full bg-[#7d8768]/20"></div>
               <div className="relative inline-block animate-spin rounded-full h-16 w-16 border-4 border-[#7d8768]/20 border-t-[#7d8768]"></div>
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-2 font-editorial-new">Cargando pedido...</h3>
-            <p className="text-gray-600 font-audrey">Por favor espera</p>
+            <p className="text-gray-600 font-body">Por favor espera</p>
           </div>
         </div>
       </Layout>
@@ -132,8 +132,8 @@ const OrderDetail: React.FC = () => {
   if (!order) {
     return (
       <Layout>
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#fafaf9] via-white to-[#fafaf9]">
-          <Card className="max-w-md border-2 border-red-100 bg-gradient-to-br from-red-50/50 to-white shadow-xl">
+        <div className="min-h-screen flex items-center justify-center bg-white">
+          <Card className="max-w-md border-2 border-red-100 bg-white shadow-xl">
             <CardContent className="p-12 text-center">
               <div className="text-red-500 mb-6">
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100">
@@ -141,10 +141,10 @@ const OrderDetail: React.FC = () => {
                 </div>
               </div>
               <h2 className="text-2xl font-bold text-gray-900 mb-3 font-editorial-new">Pedido no encontrado</h2>
-              <p className="text-gray-600 mb-8 font-audrey">El pedido que buscas no existe o no tienes permisos para verlo.</p>
+              <p className="text-gray-600 mb-8 font-body">El pedido que buscas no existe o no tienes permisos para verlo.</p>
               <Button 
                 onClick={() => navigate('/dashboard')} 
-                className="bg-gradient-to-r from-[#7d8768] to-[#8d756e] hover:from-[#6d7660] hover:to-[#7d655e] text-white shadow-md"
+                className="bg-[#7d8768] hover:bg-[#6d7660] text-white shadow-md font-body"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Volver al Dashboard
@@ -158,20 +158,14 @@ const OrderDetail: React.FC = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-b from-[#fafaf9] via-white to-[#fafaf9]">
-        {/* Hero Section - Enhanced */}
-        <section className="relative bg-gradient-to-br from-[#7d8768] via-[#8d756e] to-[#7a7539] text-white py-16 md:py-20 overflow-hidden">
-          {/* Background decorative elements */}
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute -top-40 -right-40 w-96 h-96 bg-white/8 rounded-full blur-3xl animate-pulse"></div>
-            <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-white/8 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-          </div>
-          
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="min-h-screen bg-white">
+        {/* Hero Section */}
+        <section className="relative bg-[#7d8768] text-white py-16 md:py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <Button
               variant="ghost"
               onClick={() => navigate('/dashboard')}
-              className="mb-8 text-white hover:bg-white/10 hover:text-white border border-white/20 backdrop-blur-sm"
+              className="mb-8 text-white hover:bg-white/10 hover:text-white border border-white/20 font-body"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Volver al Dashboard
@@ -188,8 +182,8 @@ const OrderDetail: React.FC = () => {
           </div>
         </section>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 mb-20 relative z-20">
-          <Card className="border border-gray-200/60 shadow-2xl bg-white/95 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 mb-20">
+          <Card className="border border-gray-200 shadow-2xl bg-white">
             <CardContent className="p-6 lg:p-12">
               {/* Order Header */}
               <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 pb-6 border-b border-gray-200">
@@ -198,7 +192,7 @@ const OrderDetail: React.FC = () => {
                     <Package className="h-5 w-5 text-[#7d8768]" />
                     <h2 className="text-2xl font-bold text-gray-900 font-editorial-new">Pedido {order.order_number}</h2>
                   </div>
-                  <div className="flex items-center gap-4 text-sm text-gray-600 font-audrey">
+                  <div className="flex items-center gap-4 text-sm text-gray-600 font-body">
                     <div className="flex items-center gap-2">
                       <Calendar className="h-4 w-4" />
                       <span>
@@ -208,13 +202,13 @@ const OrderDetail: React.FC = () => {
                   </div>
                 </div>
                 <div className="mt-4 md:mt-0 flex flex-col items-end gap-3">
-                  <Badge className={`px-4 py-2 text-sm font-semibold border ${getStatusColor(order.status)}`}>
+                  <Badge className={`px-4 py-2 text-sm font-semibold border font-body ${getStatusColor(order.status)}`}>
                     <Clock className="h-4 w-4 mr-2" />
                     {getStatusLabel(order.status)}
                   </Badge>
                   <div className="text-right">
-                    <p className="text-sm text-gray-600 font-audrey">Total</p>
-                    <p className="text-3xl font-bold text-[#7d8768] font-audrey">Q. {order.total.toFixed(2)}</p>
+                    <p className="text-sm text-gray-600 font-body">Total</p>
+                    <p className="text-3xl font-bold text-[#7d8768] font-body">Q. {order.total.toFixed(2)}</p>
                   </div>
                 </div>
               </div>
@@ -227,7 +221,7 @@ const OrderDetail: React.FC = () => {
                     <Card key={item.id} className="border border-gray-200/60 hover:shadow-md transition-all">
                       <CardContent className="p-6">
                         <div className="flex gap-4">
-                          <div className="w-20 h-20 rounded-lg overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 flex-shrink-0">
+                          <div className="w-20 h-20 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
                             {item.product_image_url ? (
                               <img 
                                 src={item.product_image_url} 
@@ -246,16 +240,16 @@ const OrderDetail: React.FC = () => {
                           <div className="flex-1 min-w-0">
                             <h4 className="font-bold text-lg text-gray-900 mb-2 font-editorial-new">{item.product_name}</h4>
                             {item.is_custom_cream && (
-                              <Badge className="mb-2 bg-gradient-to-r from-[#7d8768] to-[#8d756e] text-white border-0 text-xs">
+                              <Badge className="mb-2 bg-[#7d8768] text-white border-0 text-xs font-body">
                                 Crema Personalizada
                               </Badge>
                             )}
                             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                              <div className="flex items-center gap-4 text-sm text-gray-600 font-audrey">
+                              <div className="flex items-center gap-4 text-sm text-gray-600 font-body">
                                 <span>Cantidad: <strong>{item.quantity}</strong></span>
                                 <span>Precio unitario: <strong>Q. {item.unit_price.toFixed(2)}</strong></span>
                               </div>
-                              <p className="text-lg font-bold text-[#7d8768] font-audrey">
+                              <p className="text-lg font-bold text-[#7d8768] font-body">
                                 Total: Q. {item.total_price.toFixed(2)}
                               </p>
                             </div>
@@ -275,7 +269,7 @@ const OrderDetail: React.FC = () => {
                       <CreditCard className="h-5 w-5 text-[#7d8768]" />
                       Resumen del Pedido
                     </h3>
-                    <div className="space-y-3 font-audrey">
+                    <div className="space-y-3 font-body">
                       <div className="flex justify-between text-gray-700">
                         <span>Subtotal:</span>
                         <span className="font-semibold">Q. {order.subtotal.toFixed(2)}</span>
@@ -304,7 +298,7 @@ const OrderDetail: React.FC = () => {
                       <Truck className="h-5 w-5 text-[#7d8768]" />
                       Información de Envío
                     </h3>
-                    <div className="space-y-3 font-audrey">
+                    <div className="space-y-3 font-body">
                       {order.estimated_delivery ? (
                         <div>
                           <p className="text-sm text-gray-600 mb-1">Entrega Estimada</p>
@@ -336,7 +330,7 @@ const OrderDetail: React.FC = () => {
                       Dirección de Envío
                     </h3>
                     {shippingAddress ? (
-                      <div className="space-y-2 font-audrey text-gray-700">
+                      <div className="space-y-2 font-body text-gray-700">
                         <p className="font-semibold text-gray-900">{shippingAddress.name}</p>
                         <p>{shippingAddress.street}</p>
                         <p>{shippingAddress.city}, {shippingAddress.state} {shippingAddress.zip_code}</p>
@@ -348,7 +342,7 @@ const OrderDetail: React.FC = () => {
                         )}
                       </div>
                     ) : (
-                      <p className="text-gray-600 font-audrey">No hay dirección de envío registrada para este pedido</p>
+                      <p className="text-gray-600 font-body">No hay dirección de envío registrada para este pedido</p>
                     )}
                   </CardContent>
                 </Card>
@@ -361,7 +355,7 @@ const OrderDetail: React.FC = () => {
                       Método de Pago
                     </h3>
                     {paymentMethod ? (
-                      <div className="space-y-2 font-audrey text-gray-700">
+                      <div className="space-y-2 font-body text-gray-700">
                         {paymentMethod.type === 'card' && (
                           <>
                             <p className="font-semibold text-gray-900">
@@ -391,7 +385,7 @@ const OrderDetail: React.FC = () => {
                         )}
                       </div>
                     ) : (
-                      <p className="text-gray-600 font-audrey">No hay método de pago registrado para este pedido</p>
+                      <p className="text-gray-600 font-body">No hay método de pago registrado para este pedido</p>
                     )}
                   </CardContent>
                 </Card>
@@ -401,7 +395,7 @@ const OrderDetail: React.FC = () => {
               <div className="flex flex-wrap gap-4 pt-6 border-t border-gray-200">
                 <Button
                   onClick={() => navigate(`/dashboard/invoices/${order.id}`)}
-                  className="bg-gradient-to-r from-[#7d8768] to-[#8d756e] hover:from-[#6d7660] hover:to-[#7d655e] text-white shadow-md hover:shadow-lg"
+                  className="bg-[#7d8768] hover:bg-[#6d7660] text-white shadow-md hover:shadow-lg font-body"
                 >
                   <Download className="h-4 w-4 mr-2" />
                   Ver Factura

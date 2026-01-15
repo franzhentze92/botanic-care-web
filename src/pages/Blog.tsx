@@ -49,9 +49,9 @@ const Blog = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-b from-[#fafaf9] via-white to-[#fafaf9]">
+      <div className="min-h-screen bg-white">
         {/* Hero Section */}
-        <section className="relative bg-gradient-to-br from-[#7d8768] via-[#8d756e] to-[#7a7539] text-white py-24 md:py-32 overflow-hidden">
+        <section className="relative bg-[#7d8768] text-white py-24 md:py-32 overflow-hidden">
           {/* Background decorative elements - enhanced */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 -right-40 w-96 h-96 bg-white/8 rounded-full blur-3xl animate-pulse"></div>
@@ -70,7 +70,7 @@ const Blog = () => {
                 <div className="flex items-center gap-2 px-5 py-2.5 bg-white/15 backdrop-blur-sm rounded-full border border-white/20 shadow-lg">
                   <Leaf className="h-5 w-5 text-white/95" />
                   <Sparkles className="h-4 w-4 text-white/80" />
-                  <span className="text-sm font-medium tracking-wide font-audrey">Blog de Cuidado Natural</span>
+                  <span className="text-sm font-medium tracking-wide font-gilda-display">Blog de Cuidado Natural</span>
                 </div>
               </div>
               <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-8 font-editorial-new leading-tight tracking-tight animate-slide-in">
@@ -79,7 +79,7 @@ const Blog = () => {
               <p className="text-xl md:text-2xl lg:text-3xl text-white/95 max-w-3xl mx-auto leading-relaxed font-audrey font-light mb-8">
                 Descubre consejos, tendencias y todo sobre cuidado natural de la piel
               </p>
-              <div className="flex items-center justify-center gap-4 text-white/80 text-sm font-audrey">
+              <div className="flex items-center justify-center gap-4 text-white/80 text-sm font-body">
                 <div className="flex items-center gap-2">
                   <BookOpen className="h-4 w-4" />
                   <span>Ingredientes 100% Naturales</span>
@@ -117,9 +117,9 @@ const Blog = () => {
                 <Button
                   variant={selectedCategory === 'all' ? 'default' : 'outline'}
                   onClick={() => setSelectedCategory('all')}
-                  className={`rounded-full transition-all duration-300 font-medium ${
+                  className={`rounded-full transition-all duration-300 font-medium font-body ${
                     selectedCategory === 'all'
-                      ? 'bg-gradient-to-r from-[#7d8768] to-[#8d756e] text-white hover:from-[#6d7660] hover:to-[#7d655e] shadow-lg shadow-[#7d8768]/20 border-0'
+                      ? 'bg-[#7d8768] text-white hover:bg-[#6d7660] shadow-lg shadow-[#7d8768]/20 border-0'
                       : 'border-2 border-gray-200 bg-white hover:border-[#7d8768] hover:text-[#7d8768] hover:bg-[#7d8768]/5 shadow-sm'
                   }`}
                 >
@@ -130,9 +130,9 @@ const Blog = () => {
                     key={category}
                     variant={selectedCategory === category ? 'default' : 'outline'}
                     onClick={() => setSelectedCategory(category)}
-                    className={`rounded-full transition-all duration-300 font-medium ${
+                    className={`rounded-full transition-all duration-300 font-medium font-body ${
                       selectedCategory === category
-                        ? 'bg-gradient-to-r from-[#7d8768] to-[#8d756e] text-white hover:from-[#6d7660] hover:to-[#7d655e] shadow-lg shadow-[#7d8768]/20 border-0'
+                        ? 'bg-[#7d8768] text-white hover:bg-[#6d7660] shadow-lg shadow-[#7d8768]/20 border-0'
                         : 'border-2 border-gray-200 bg-white hover:border-[#7d8768] hover:text-[#7d8768] hover:bg-[#7d8768]/5 shadow-sm'
                     }`}
                   >
@@ -147,7 +147,7 @@ const Blog = () => {
           {!isLoading && !error && featuredPost && selectedCategory === 'all' && !searchQuery && (
             <section className="mb-20">
               <div className="flex items-center gap-3 mb-8">
-                <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#7d8768]/10 to-[#8d756e]/10 rounded-full border border-[#7d8768]/20">
+                <div className="flex items-center gap-2 px-4 py-2 bg-[#7d8768]/10 rounded-full border border-[#7d8768]/20">
                   <Sparkles className="h-5 w-5 text-[#7d8768]" />
                   <h2 className="text-2xl font-bold text-gray-900 font-editorial-new">Artículo Destacado</h2>
                 </div>
@@ -176,9 +176,9 @@ const Blog = () => {
                         )}
                       </div>
                     )}
-                    <CardContent className="p-8 md:p-12 lg:p-16 flex flex-col justify-center bg-gradient-to-br from-white to-gray-50/50">
+                    <CardContent className="p-8 md:p-12 lg:p-16 flex flex-col justify-center bg-white">
                       {!featuredPost.featured_image && featuredPost.category && (
-                        <Badge className="mb-6 w-fit bg-gradient-to-r from-[#7d8768] to-[#8d756e] text-white border-0 shadow-md px-4 py-1.5 font-medium">
+                        <Badge className="mb-6 w-fit bg-[#7d8768] text-white border-0 shadow-md px-4 py-1.5 font-medium font-body">
                           {featuredPost.category}
                         </Badge>
                       )}
@@ -186,11 +186,11 @@ const Blog = () => {
                         {featuredPost.title}
                       </h2>
                       {featuredPost.excerpt && (
-                        <p className="text-gray-600 mb-8 text-lg leading-relaxed line-clamp-3 font-audrey">
+                        <p className="text-gray-600 mb-8 text-lg leading-relaxed line-clamp-3 font-body">
                           {featuredPost.excerpt}
                         </p>
                       )}
-                      <div className="flex flex-wrap items-center gap-6 mb-8 text-sm text-gray-500 font-audrey">
+                      <div className="flex flex-wrap items-center gap-6 mb-8 text-sm text-gray-500 font-body">
                         {featuredPost.published_at && (
                           <div className="flex items-center gap-2">
                             <Calendar className="h-4 w-4 text-[#7d8768]" />
@@ -211,7 +211,7 @@ const Blog = () => {
                         )}
                       </div>
                       <div className="flex items-center text-[#7d8768] font-semibold group-hover:text-[#6d7660] transition-colors">
-                        <span className="font-audrey text-lg">Leer artículo completo</span>
+                        <span className="font-body text-lg">Leer artículo completo</span>
                         <ArrowRight className="h-5 w-5 ml-3 group-hover:translate-x-2 transition-transform duration-300" />
                       </div>
                     </CardContent>
@@ -225,7 +225,7 @@ const Blog = () => {
           <section>
             {!isLoading && !error && (!featuredPost || selectedCategory !== 'all' || searchQuery) && (
               <div className="flex items-center gap-3 mb-10">
-                <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#7d8768]/10 to-[#8d756e]/10 rounded-full border border-[#7d8768]/20">
+                <div className="flex items-center gap-2 px-4 py-2 bg-[#7d8768]/10 rounded-full border border-[#7d8768]/20">
                   <Leaf className="h-5 w-5 text-[#7d8768]" />
                   <h2 className="text-2xl font-bold text-gray-900 font-editorial-new">
                     {searchQuery ? 'Resultados de búsqueda' : selectedCategory !== 'all' ? selectedCategory : 'Todos los Artículos'}
@@ -240,23 +240,23 @@ const Blog = () => {
                   <div className="absolute inset-0 animate-ping rounded-full bg-[#7d8768]/20"></div>
                   <div className="relative inline-block animate-spin rounded-full h-14 w-14 border-4 border-[#7d8768]/20 border-t-[#7d8768]"></div>
                 </div>
-                <p className="text-gray-600 text-lg font-audrey">Cargando artículos...</p>
-                <p className="text-gray-400 text-sm mt-2 font-audrey">Descubre contenido sobre cuidado natural</p>
+                <p className="text-gray-600 text-lg font-body">Cargando artículos...</p>
+                <p className="text-gray-400 text-sm mt-2 font-body">Descubre contenido sobre cuidado natural</p>
               </div>
             )}
 
             {error && (
-              <Card className="p-12 md:p-16 text-center border-2 border-red-100 bg-gradient-to-br from-red-50/50 to-white shadow-lg">
+              <Card className="p-12 md:p-16 text-center border-2 border-red-100 bg-white shadow-lg">
                 <div className="text-red-500 mb-6">
                   <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100">
                     <AlertCircle className="h-8 w-8" />
                   </div>
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-3 font-editorial-new">Error al cargar los artículos</h3>
-                <p className="text-gray-600 mb-8 font-audrey max-w-md mx-auto">{error.message}</p>
+                <p className="text-gray-600 mb-8 font-body max-w-md mx-auto">{error.message}</p>
                 <Button 
                   onClick={() => window.location.reload()} 
-                  className="bg-gradient-to-r from-[#7d8768] to-[#8d756e] hover:from-[#6d7660] hover:to-[#7d655e] text-white shadow-md"
+                  className="bg-[#7d8768] hover:bg-[#6d7660] text-white shadow-md font-body"
                 >
                   Intentar de nuevo
                 </Button>
@@ -264,14 +264,14 @@ const Blog = () => {
             )}
 
             {!isLoading && !error && regularPosts.length === 0 && (
-              <Card className="p-12 md:p-16 text-center border border-gray-200/60 bg-gradient-to-br from-gray-50/50 to-white shadow-lg">
+              <Card className="p-12 md:p-16 text-center border border-gray-200/60 bg-white shadow-lg">
                 <div className="text-gray-300 mb-6">
                   <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100">
                     <Search className="h-10 w-10" />
                   </div>
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-3 font-editorial-new">No se encontraron artículos</h3>
-                <p className="text-gray-600 mb-8 font-audrey max-w-md mx-auto leading-relaxed">
+                <p className="text-gray-600 mb-8 font-body max-w-md mx-auto leading-relaxed">
                   {searchQuery 
                     ? `No hay resultados para "${searchQuery}". Intenta con otros términos o explora nuestras categorías.`
                     : selectedCategory !== 'all'
@@ -281,7 +281,7 @@ const Blog = () => {
                 {(searchQuery || selectedCategory !== 'all') && (
                   <Button 
                     variant="outline"
-                    className="border-2 border-[#7d8768] text-[#7d8768] hover:bg-[#7d8768] hover:text-white transition-all shadow-sm"
+                    className="border-2 border-[#7d8768] text-[#7d8768] hover:bg-[#7d8768] hover:text-white transition-all shadow-sm font-body"
                     onClick={() => {
                       setSearchQuery('');
                       setSelectedCategory('all');
@@ -320,9 +320,9 @@ const Blog = () => {
                           )}
                         </div>
                       )}
-                      <CardContent className="p-6 flex-1 flex flex-col bg-gradient-to-b from-white to-gray-50/30">
+                      <CardContent className="p-6 flex-1 flex flex-col bg-white">
                         {!post.featured_image && post.category && (
-                          <Badge className="mb-4 w-fit bg-gradient-to-r from-[#7d8768] to-[#8d756e] text-white border-0 shadow-sm font-medium">
+                          <Badge className="mb-4 w-fit bg-[#7d8768] text-white border-0 shadow-sm font-medium font-body">
                             {post.category}
                           </Badge>
                         )}
@@ -330,11 +330,11 @@ const Blog = () => {
                           {post.title}
                         </h2>
                         {post.excerpt && (
-                          <p className="text-gray-600 mb-5 line-clamp-3 flex-1 leading-relaxed font-audrey text-sm">
+                          <p className="text-gray-600 mb-5 line-clamp-3 flex-1 leading-relaxed font-body text-sm">
                             {post.excerpt}
                           </p>
                         )}
-                        <div className="flex flex-wrap items-center gap-4 mb-5 text-xs text-gray-500 font-audrey">
+                        <div className="flex flex-wrap items-center gap-4 mb-5 text-xs text-gray-500 font-body">
                           {post.published_at && (
                             <div className="flex items-center gap-1.5">
                               <Calendar className="h-3.5 w-3.5 text-[#7d8768]" />
@@ -355,7 +355,7 @@ const Blog = () => {
                           )}
                         </div>
                         <div className="mt-auto flex items-center text-[#7d8768] font-semibold group-hover:text-[#6d7660] transition-colors">
-                          <span className="font-audrey">Leer más</span>
+                          <span className="font-body">Leer más</span>
                           <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
                         </div>
                       </CardContent>

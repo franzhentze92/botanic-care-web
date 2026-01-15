@@ -36,16 +36,16 @@ const Login: React.FC = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#7d8768]/10 via-[#9d627b]/10 to-[#7a7539]/10 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen flex items-center justify-center bg-white py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-gray-900 mb-2 font-editorial-new">
-              Bienvenido de <span className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] bg-clip-text text-transparent">Vuelta</span>
+              Bienvenido de <span className="text-[#7d8768]">Vuelta</span>
             </h1>
             <p className="text-gray-600 font-audrey">Inicia sesión en tu cuenta</p>
           </div>
 
-          <Card className="border-0 shadow-2xl bg-white/80 backdrop-blur-sm">
+          <Card className="border border-gray-200 shadow-2xl bg-white">
             <CardHeader>
               <CardTitle className="text-2xl font-editorial-new">Iniciar Sesión</CardTitle>
               <CardDescription className="font-audrey">
@@ -80,7 +80,7 @@ const Login: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="font-gilda-display">
+                  <Label htmlFor="password" className="font-body">
                     Contraseña
                   </Label>
                   <div className="relative">
@@ -116,7 +116,7 @@ const Login: React.FC = () => {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-gradient-to-r from-[#7d8768] to-[#9d627b] hover:from-[#7a7539] hover:to-[#9d627b] text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="w-full bg-[#7d8768] hover:bg-[#6d7660] text-white font-body py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
                 >
                   {isLoading ? (
                     <>
@@ -130,11 +130,11 @@ const Login: React.FC = () => {
               </form>
 
               <div className="mt-6 text-center">
-                <p className="text-sm text-gray-600 font-audrey">
+                <p className="text-sm text-gray-600 font-body">
                   ¿No tienes una cuenta?{' '}
                   <Link
                     to="/register"
-                    className="text-[#7d8768] hover:underline font-semibold"
+                    className="text-[#7d8768] hover:underline font-body"
                   >
                     Regístrate aquí
                   </Link>

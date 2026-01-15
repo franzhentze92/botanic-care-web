@@ -17,13 +17,13 @@ const Toaster = ({ ...props }: ToasterProps) => {
       toastOptions={{
         classNames: {
           toast:
-            "group toast group-[.toaster]:bg-white group-[.toaster]:text-gray-900 group-[.toaster]:border-[#7d8768]/20 group-[.toaster]:shadow-xl group-[.toaster]:rounded-xl group-[.toaster]:backdrop-blur-sm",
-          description: "group-[.toast]:text-gray-600 group-[.toast]:font-audrey",
-          title: "group-[.toast]:font-gilda-display group-[.toast]:font-semibold",
+            "group toast group-[.toaster]:bg-white group-[.toaster]:text-gray-900 group-[.toaster]:border-[#7d8768]/20 group-[.toaster]:shadow-xl group-[.toaster]:rounded-xl",
+          description: "group-[.toast]:text-gray-600 group-[.toast]:font-body",
+          title: "group-[.toast]:font-editorial-new group-[.toast]:font-semibold",
           actionButton:
-            "group-[.toast]:bg-gradient-to-r group-[.toast]:from-[#7d8768] group-[.toast]:to-[#9d627b] group-[.toast]:text-white group-[.toast]:hover:from-[#7a7539] group-[.toast]:hover:to-[#9d627b] group-[.toast]:rounded-lg group-[.toast]:font-semibold",
+            "group-[.toast]:bg-[#7d8768] group-[.toast]:text-white group-[.toast]:hover:bg-[#6d7660] group-[.toast]:rounded-lg group-[.toast]:font-body group-[.toast]:font-semibold",
           cancelButton:
-            "group-[.toast]:bg-gray-100 group-[.toast]:text-gray-700 group-[.toast]:hover:bg-gray-200",
+            "group-[.toast]:bg-gray-100 group-[.toast]:text-gray-700 group-[.toast]:hover:bg-gray-200 group-[.toast]:font-body",
         },
       }}
       {...props}

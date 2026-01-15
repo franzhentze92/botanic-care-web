@@ -71,7 +71,8 @@ const About: React.FC = () => {
     {
       icon: <Sparkles className="h-8 w-8 text-white" />,
       title: 'Personalización',
-      description: 'Crea tu producto ideal con nuestro constructor personalizado adaptado a tus necesidades.'
+      description: 'Crea tu producto ideal con nuestro constructor personalizado adaptado a tus necesidades.',
+      comingSoon: true
     }
   ];
 
@@ -81,7 +82,7 @@ const About: React.FC = () => {
     <Layout>
       <div className="min-h-screen bg-gradient-to-b from-[#fafaf9] via-white to-[#fafaf9]">
         {/* Hero Section - Enhanced */}
-        <section className="relative bg-gradient-to-br from-[#7d8768] via-[#8d756e] to-[#7a7539] text-white py-24 md:py-32 overflow-hidden">
+        <section className="relative bg-[#313522] text-white py-24 md:py-32 overflow-hidden">
           {/* Background decorative elements - enhanced */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 -right-40 w-96 h-96 bg-white/8 rounded-full blur-3xl animate-pulse"></div>
@@ -97,30 +98,30 @@ const About: React.FC = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center">
               <div className="flex items-center justify-center gap-3 mb-8 animate-fade-in">
-                <div className="flex items-center gap-2 px-5 py-2.5 bg-white/15 backdrop-blur-sm rounded-full border border-white/20 shadow-lg">
+                <div className="flex items-center gap-2 px-5 py-2.5 bg-[#7d8768]/30 backdrop-blur-sm rounded-full border border-white/20 shadow-lg">
                   <Leaf className="h-5 w-5 text-white/95" />
                   <Sparkles className="h-4 w-4 text-white/80" />
-                  <span className="text-sm font-medium tracking-wide font-audrey">Nuestra Historia</span>
+                  <span className="text-sm font-medium tracking-wide font-gilda-display">Nuestra Historia</span>
                 </div>
               </div>
-              <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-8 font-editorial-new leading-tight tracking-tight animate-slide-in">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-normal mb-8 font-editorial-new leading-tight tracking-tight animate-slide-in">
                 Sobre Botanic Care
               </h1>
-              <p className="text-xl md:text-2xl lg:text-3xl text-white/95 max-w-3xl mx-auto leading-relaxed font-audrey font-light mb-8">
+              <p className="text-xl md:text-2xl lg:text-3xl text-white/95 max-w-3xl mx-auto leading-relaxed font-audrey font-normal mb-8">
                 Estamos en una misión para llevar el poder de la naturaleza a tu rutina diaria de cuidado de la piel
               </p>
-              <div className="flex items-center justify-center gap-6 text-white/80 text-sm font-audrey flex-wrap">
-                <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center gap-6 text-white/80 text-sm font-body flex-wrap">
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-[#7d8768]/30 rounded-full">
                   <Leaf className="h-4 w-4" />
                   <span>100% Natural</span>
                 </div>
                 <span className="text-white/40">•</span>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-[#313522]/30 rounded-full">
                   <Heart className="h-4 w-4" />
                   <span>Libre de Crueldad</span>
                 </div>
                 <span className="text-white/40">•</span>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-[#b9a035]/30 rounded-full">
                   <Globe className="h-4 w-4" />
                   <span>Sostenible</span>
                 </div>
@@ -134,13 +135,13 @@ const About: React.FC = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div>
-                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 font-editorial-new leading-tight">Nuestra Misión</h2>
-                <p className="text-lg text-gray-700 mb-6 leading-relaxed font-audrey">
+                <h2 className="text-4xl md:text-5xl font-normal text-gray-900 mb-8 font-editorial-new leading-tight">Nuestra Misión</h2>
+                <p className="text-lg text-gray-700 mb-6 leading-relaxed font-body text-justify">
                   En Botanic Care, creemos que todos merecen acceso a productos de cuidado de la piel seguros, efectivos 
                   y naturales. Nuestra misión es cerrar la brecha entre la belleza tradicional y el bienestar natural, 
                   creando productos que no solo funcionan sino que también respetan tu piel y el medio ambiente.
                 </p>
-                <p className="text-lg text-gray-700 mb-10 leading-relaxed font-audrey">
+                <p className="text-lg text-gray-700 mb-10 leading-relaxed font-body text-justify">
                   Comenzamos con una pregunta simple: "¿Por qué el cuidado de la piel no puede ser tanto efectivo 
                   como completamente natural?" Esta pregunta nos llevó en un viaje para descubrir 
                   los ingredientes a base de plantas más poderosos y crear formulaciones que 
@@ -148,40 +149,40 @@ const About: React.FC = () => {
                 </p>
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                   <Link to="/shop">
-                    <Button className="bg-gradient-to-r from-[#7d8768] to-[#8d756e] hover:from-[#6d7660] hover:to-[#7d655e] text-white shadow-lg hover:shadow-xl transition-all">
-                      <span className="font-audrey">Comprar Nuestros Productos</span>
+                    <Button className="bg-[#7d8768] hover:bg-[#6d7660] text-white shadow-lg hover:shadow-xl transition-all">
+                      <span className="font-gilda-display">Comprar Nuestros Productos</span>
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
                   <Link to="/blog">
                     <Button variant="outline" className="border-2 border-[#7d8768] text-[#7d8768] hover:bg-[#7d8768] hover:text-white transition-all shadow-sm">
-                      <span className="font-audrey">Leer Nuestro Blog</span>
+                      <span className="font-gilda-display">Leer Nuestro Blog</span>
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
                 </div>
               </div>
               <div className="relative">
-                <Card className="border border-gray-200/60 shadow-xl bg-gradient-to-br from-[#7d8768]/5 via-[#8d756e]/5 to-[#7a7539]/5 backdrop-blur-sm">
+                <Card className="border border-gray-200/60 shadow-xl bg-[#7d8768]/5 backdrop-blur-sm">
                   <CardContent className="p-10">
                     <div className="text-6xl mb-6 text-center">🌿</div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-6 font-editorial-new text-center">Por Qué Hacemos Lo Que Hacemos</h3>
+                    <h3 className="text-2xl font-normal text-gray-900 mb-6 font-gilda-display text-center">Por Qué Hacemos Lo Que Hacemos</h3>
                     <ul className="space-y-4">
                       <li className="flex items-start gap-4">
                         <CheckCircle className="h-6 w-6 text-[#7d8768] flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700 font-audrey leading-relaxed">Tu piel merece lo mejor que la naturaleza tiene para ofrecer</span>
+                        <span className="text-gray-700 font-body leading-relaxed">Tu piel merece lo mejor que la naturaleza tiene para ofrecer</span>
                       </li>
                       <li className="flex items-start gap-4">
-                        <CheckCircle className="h-6 w-6 text-[#8d756e] flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700 font-audrey leading-relaxed">El medio ambiente no debería sufrir por la belleza</span>
+                        <CheckCircle className="h-6 w-6 text-[#313522] flex-shrink-0 mt-0.5" />
+                        <span className="text-gray-700 font-body leading-relaxed">El medio ambiente no debería sufrir por la belleza</span>
                       </li>
                       <li className="flex items-start gap-4">
-                        <CheckCircle className="h-6 w-6 text-[#7a7539] flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700 font-audrey leading-relaxed">Todos deberían tener acceso al cuidado de la piel natural</span>
+                        <CheckCircle className="h-6 w-6 text-[#8e421e] flex-shrink-0 mt-0.5" />
+                        <span className="text-gray-700 font-body leading-relaxed">Todos deberían tener acceso al cuidado de la piel natural</span>
                       </li>
                       <li className="flex items-start gap-4">
-                        <CheckCircle className="h-6 w-6 text-[#7d8768] flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700 font-audrey leading-relaxed">La ciencia y la naturaleza pueden trabajar juntas</span>
+                        <CheckCircle className="h-6 w-6 text-[#b9a035] flex-shrink-0 mt-0.5" />
+                        <span className="text-gray-700 font-body leading-relaxed">La ciencia y la naturaleza pueden trabajar juntas</span>
                       </li>
                     </ul>
                   </CardContent>
@@ -195,7 +196,7 @@ const About: React.FC = () => {
         <section className="py-20 bg-gradient-to-b from-white via-[#fafaf9] to-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 font-editorial-new">Nuestros Valores</h2>
+              <h2 className="text-4xl md:text-5xl font-normal text-gray-900 mb-4 font-editorial-new">Nuestros Valores</h2>
               <p className="text-xl text-gray-600 font-audrey max-w-2xl mx-auto">Los principios que guían todo lo que hacemos</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -207,12 +208,17 @@ const About: React.FC = () => {
                 >
                   <CardContent className="p-8">
                     <div className="flex justify-center mb-6">
-                      <div className="w-20 h-20 bg-gradient-to-r from-[#7d8768] to-[#8d756e] rounded-2xl flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform duration-300">
+                      <div className={`w-20 h-20 rounded-2xl flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform duration-300 ${
+                        index % 4 === 0 ? 'bg-[#7d8768]' :
+                        index % 4 === 1 ? 'bg-[#313522]' :
+                        index % 4 === 2 ? 'bg-[#8e421e]' :
+                        'bg-[#b9a035]'
+                      }`}>
                         {value.icon}
                       </div>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-4 font-editorial-new">{value.title}</h3>
-                    <p className="text-gray-600 leading-relaxed font-audrey">{value.description}</p>
+                    <h3 className="text-xl font-normal text-gray-900 mb-4 font-gilda-display">{value.title}</h3>
+                    <p className="text-gray-600 leading-relaxed font-body text-center">{value.description}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -220,57 +226,65 @@ const About: React.FC = () => {
           </div>
         </section>
 
-        {/* Founder Section - Enhanced */}
+        {/* Team Section - Enhanced */}
         <section className="py-20 bg-white">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 font-editorial-new">Nuestra Fundadora</h2>
+              <h2 className="text-4xl md:text-5xl font-normal text-gray-900 mb-4 font-editorial-new">Conoce a Nuestro Equipo</h2>
               <p className="text-xl text-gray-600 font-audrey max-w-2xl mx-auto">La pasión y visión detrás de Botanic Care</p>
             </div>
             
-            <Card className="border border-gray-200/60 shadow-xl bg-white hover:shadow-2xl transition-all duration-500">
-              <CardContent className="p-8 md:p-12">
-                <div className="flex flex-col items-center text-center">
-                  {/* Founder Image */}
-                  <div className="mb-8 relative">
-                    <div className="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-[#7d8768]/20 shadow-2xl bg-gradient-to-br from-[#7d8768]/10 to-[#8d756e]/10">
-                      <img 
-                        src="/ana_cristina.png" 
-                        alt="Ana Cristina Hentze Movil - Fundadora de Botanic Care"
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="400"%3E%3Crect fill="%23f3f4f6" width="400" height="400"/%3E%3Ctext fill="%239ca3af" font-family="sans-serif" font-size="20" x="50%25" y="50%25" text-anchor="middle" dominant-baseline="middle"%3EFoto%3C/text%3E%3C/svg%3E';
-                        }}
-                      />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+              {/* Ana Cristina Hentze */}
+              <Card className="border border-gray-200/60 shadow-xl bg-white hover:shadow-2xl transition-all duration-500">
+                <CardContent className="p-8 md:p-12">
+                  <div className="flex flex-col items-center text-center">
+                    {/* Team Member Image */}
+                    <div className="mb-8 relative">
+                      <div className="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-[#7d8768]/20 shadow-2xl bg-[#7d8768]/10">
+                        <img 
+                          src="/ana_cristina.png" 
+                          alt="Ana Cristina Hentze Movil - Fundadora de Botanic Care"
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="400"%3E%3Crect fill="%23f3f4f6" width="400" height="400"/%3E%3Ctext fill="%239ca3af" font-family="sans-serif" font-size="20" x="50%25" y="50%25" text-anchor="middle" dominant-baseline="middle"%3EFoto%3C/text%3E%3C/svg%3E';
+                          }}
+                        />
+                      </div>
                     </div>
-                  </div>
 
-                  {/* Founder Info */}
-                  <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3 font-editorial-new">Ana Cristina Hentze Movil</h3>
-                  <p className="text-xl text-[#7d8768] font-semibold mb-6 font-audrey">Fundadora y Creadora</p>
-                  
-                  {/* Founder Message */}
-                  <div className="max-w-2xl mx-auto space-y-6">
-                    <p className="text-lg text-gray-700 leading-relaxed font-audrey italic">
-                      "Creé Botanic Care con un sueño simple: ofrecer productos de cuidado natural que realmente funcionen, 
-                      formulados con amor y respeto tanto por tu piel como por nuestro planeta. Cada ingrediente es elegido 
-                      cuidadosamente, cada producto es creado con pasión, y cada cliente es parte de nuestra familia."
-                    </p>
-                    <p className="text-base text-gray-600 leading-relaxed font-audrey">
-                      Con años de experiencia en formulaciones naturales y una pasión genuina por el bienestar, 
-                      Ana Cristina Hentze Movil combina ciencia y naturaleza para crear productos que nutren tu piel mientras 
-                      respetan el medio ambiente. Su visión es hacer que el cuidado natural de calidad sea 
-                      accesible para todos.
-                    </p>
+                    {/* Team Member Info */}
+                    <h3 className="text-3xl md:text-4xl font-normal text-gray-900 mb-3 font-editorial-new">Ana Cristina Hentze Movil</h3>
+                    <p className="text-xl text-[#7d8768] font-normal font-audrey">Fundadora y Creadora</p>
                   </div>
+                </CardContent>
+              </Card>
 
-                  {/* Decorative Leaf */}
-                  <div className="mt-8 text-[#7d8768] opacity-30">
-                    <Leaf className="h-12 w-12" />
+              {/* Pablo Mendez */}
+              <Card className="border border-gray-200/60 shadow-xl bg-white hover:shadow-2xl transition-all duration-500">
+                <CardContent className="p-8 md:p-12">
+                  <div className="flex flex-col items-center text-center">
+                    {/* Team Member Image */}
+                    <div className="mb-8 relative">
+                      <div className="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-[#313522]/20 shadow-2xl bg-[#313522]/10">
+                        <img 
+                          src="/pablo_mendez.jpg" 
+                          alt="Pablo Mendez - Equipo Botanic Care"
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="400"%3E%3Crect fill="%23f3f4f6" width="400" height="400"/%3E%3Ctext fill="%239ca3af" font-family="sans-serif" font-size="20" x="50%25" y="50%25" text-anchor="middle" dominant-baseline="middle"%3EFoto%3C/text%3E%3C/svg%3E';
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Team Member Info */}
+                    <h3 className="text-3xl md:text-4xl font-normal text-gray-900 mb-3 font-editorial-new">Pablo Mendez</h3>
+                    <p className="text-xl text-[#313522] font-normal font-audrey">Co-Fundador</p>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </section>
 
@@ -278,7 +292,7 @@ const About: React.FC = () => {
         <section className="py-20 bg-gradient-to-b from-white via-[#fafaf9] to-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 font-editorial-new">Nuestro Compromiso</h2>
+              <h2 className="text-4xl md:text-5xl font-normal text-gray-900 mb-4 font-editorial-new">Nuestro Compromiso</h2>
               <p className="text-xl text-gray-600 font-audrey max-w-2xl mx-auto">Lo que nos distingue y nuestra promesa para contigo</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -290,12 +304,24 @@ const About: React.FC = () => {
                 >
                   <CardContent className="p-8">
                     <div className="flex justify-center mb-6">
-                      <div className="w-16 h-16 bg-gradient-to-r from-[#7d8768] to-[#8d756e] rounded-2xl flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform duration-300">
+                      <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform duration-300 ${
+                        index % 4 === 0 ? 'bg-[#7d8768]' :
+                        index % 4 === 1 ? 'bg-[#313522]' :
+                        index % 4 === 2 ? 'bg-[#8e421e]' :
+                        'bg-[#b9a035]'
+                      }`}>
                         {commitment.icon}
                       </div>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-4 font-editorial-new text-center">{commitment.title}</h3>
-                    <p className="text-gray-600 leading-relaxed font-audrey text-center">{commitment.description}</p>
+                    <div className="flex items-center justify-center gap-2 mb-4 flex-wrap">
+                      <h3 className="text-xl font-normal text-gray-900 font-gilda-display text-center">{commitment.title}</h3>
+                      {(commitment as any).comingSoon && (
+                        <Badge className="bg-amber-100 text-amber-800 border-amber-200 text-xs font-body">
+                          Próximamente
+                        </Badge>
+                      )}
+                    </div>
+                    <p className="text-gray-600 leading-relaxed font-body text-center">{commitment.description}</p>
                   </CardContent>
                 </Card>
               ))}

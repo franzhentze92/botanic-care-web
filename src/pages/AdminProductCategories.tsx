@@ -338,7 +338,7 @@ const AdminProductCategories: React.FC = () => {
 
   return (
     <AdminLayout>
-      <div className="p-8">
+      <div className="p-4 md:p-8">
         <AdminPageHeader
           title="Categorías Productos"
           description="Gestiona las categorías de productos que se muestran en la tienda y página principal"
@@ -346,44 +346,44 @@ const AdminProductCategories: React.FC = () => {
         />
 
         {/* Estadísticas */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-6 mb-6 md:mb-8">
           <Card>
-            <CardContent className="p-6">
+            <CardContent className="p-4 md:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600 font-medium">Total Categorías</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalCategories}</p>
+                  <p className="text-xs md:text-sm text-gray-600 font-medium">Total Categorías</p>
+                  <p className="text-2xl md:text-3xl font-bold text-gray-900 mt-1 md:mt-2">{stats.totalCategories}</p>
                 </div>
-                <div className="p-3 bg-indigo-100 rounded-full">
-                  <Tag className="h-6 w-6 text-indigo-600" />
+                <div className="p-2 md:p-3 bg-indigo-100 rounded-full">
+                  <Tag className="h-5 w-5 md:h-6 md:w-6 text-indigo-600" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardContent className="p-6">
+            <CardContent className="p-4 md:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600 font-medium">Categorías Activas</p>
-                  <p className="text-3xl font-bold text-emerald-600 mt-2">{stats.activeCategories}</p>
+                  <p className="text-xs md:text-sm text-gray-600 font-medium">Categorías Activas</p>
+                  <p className="text-2xl md:text-3xl font-bold text-emerald-600 mt-1 md:mt-2">{stats.activeCategories}</p>
                 </div>
-                <div className="p-3 bg-emerald-100 rounded-full">
-                  <CheckCircle className="h-6 w-6 text-emerald-600" />
+                <div className="p-2 md:p-3 bg-emerald-100 rounded-full">
+                  <CheckCircle className="h-5 w-5 md:h-6 md:w-6 text-emerald-600" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardContent className="p-6">
+            <CardContent className="p-4 md:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600 font-medium">Categorías Inactivas</p>
-                  <p className="text-3xl font-bold text-slate-600 mt-2">{stats.inactiveCategories}</p>
+                  <p className="text-xs md:text-sm text-gray-600 font-medium">Categorías Inactivas</p>
+                  <p className="text-2xl md:text-3xl font-bold text-slate-600 mt-1 md:mt-2">{stats.inactiveCategories}</p>
                 </div>
-                <div className="p-3 bg-slate-100 rounded-full">
-                  <XCircle className="h-6 w-6 text-slate-600" />
+                <div className="p-2 md:p-3 bg-slate-100 rounded-full">
+                  <XCircle className="h-5 w-5 md:h-6 md:w-6 text-slate-600" />
                 </div>
               </div>
             </CardContent>
@@ -391,9 +391,9 @@ const AdminProductCategories: React.FC = () => {
         </div>
 
         {/* Barra de búsqueda y acciones */}
-        <Card className="mb-6">
-          <CardContent className="p-4">
-            <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
+        <Card className="mb-4 md:mb-6">
+          <CardContent className="p-3 md:p-4">
+            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 items-stretch sm:items-center justify-between">
               <div className="relative flex-1 w-full">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
@@ -403,7 +403,7 @@ const AdminProductCategories: React.FC = () => {
                   className="pl-10"
                 />
               </div>
-              <Button onClick={handleCreate} className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] hover:from-[#6d7660] hover:to-[#7d655e] text-white">
+              <Button onClick={handleCreate} className="bg-[#7d8768] hover:bg-[#6d7660] text-white w-full sm:w-auto">
                 <Plus className="h-4 w-4 mr-2" />
                 Nueva Categoría
               </Button>
@@ -440,7 +440,7 @@ const AdminProductCategories: React.FC = () => {
                 {searchQuery ? 'No se encontraron categorías con ese criterio de búsqueda' : 'Comienza creando tu primera categoría'}
               </p>
               {!searchQuery && (
-                <Button onClick={handleCreate} className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] hover:from-[#6d7660] hover:to-[#7d655e] text-white">
+                <Button onClick={handleCreate} className="bg-[#7d8768] hover:bg-[#6d7660] text-white">
                   <Plus className="h-4 w-4 mr-2" />
                   Crear Primera Categoría
                 </Button>
@@ -448,31 +448,202 @@ const AdminProductCategories: React.FC = () => {
             </CardContent>
           </Card>
         ) : (
-          <Card>
-            <CardContent className="p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-12">Orden</TableHead>
-                    <TableHead>ID / Slug</TableHead>
-                    <TableHead>Nombre</TableHead>
-                    <TableHead>Descripción</TableHead>
-                    <TableHead>Icono</TableHead>
-                    <TableHead>Estado</TableHead>
-                    <TableHead className="text-right">Acciones</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredCategories.map((category) => (
-                    <TableRow key={category.id}>
-                      <TableCell>
-                        <div className="flex flex-col gap-1">
+          <>
+            {/* Desktop Table View */}
+            <Card className="hidden lg:block">
+              <CardContent className="p-0">
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="w-12">Orden</TableHead>
+                        <TableHead>ID / Slug</TableHead>
+                        <TableHead>Nombre</TableHead>
+                        <TableHead>Descripción</TableHead>
+                        <TableHead>Icono</TableHead>
+                        <TableHead>Estado</TableHead>
+                        <TableHead className="text-right">Acciones</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredCategories.map((category) => (
+                        <TableRow key={category.id}>
+                          <TableCell>
+                            <div className="flex flex-col gap-1">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleMoveOrder(category, 'up')}
+                                disabled={categories.findIndex(c => c.id === category.id) === 0}
+                                className="h-6 w-6 p-0"
+                              >
+                                <ArrowUp className="h-3 w-3" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleMoveOrder(category, 'down')}
+                                disabled={categories.findIndex(c => c.id === category.id) === categories.length - 1}
+                                className="h-6 w-6 p-0"
+                              >
+                                <ArrowDown className="h-3 w-3" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <code className="text-xs bg-gray-100 px-2 py-1 rounded">{category.id}</code>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              {category.image_url && (
+                                <img 
+                                  src={category.image_url} 
+                                  alt={category.name}
+                                  className="w-10 h-10 rounded object-cover"
+                                  onError={(e) => {
+                                    e.currentTarget.style.display = 'none';
+                                  }}
+                                />
+                              )}
+                              <span className="font-medium">{category.name}</span>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <span className="text-sm text-gray-600 line-clamp-2">
+                              {category.description || 'Sin descripción'}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            {category.icon ? (
+                              <span className="text-2xl">{category.icon}</span>
+                            ) : (
+                              <span className="text-gray-400 text-sm">-</span>
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            <Badge 
+                              className={category.is_active 
+                                ? 'bg-emerald-100 text-emerald-800 border-emerald-300' 
+                                : 'bg-slate-100 text-slate-800 border-slate-300'
+                              }
+                            >
+                              {category.is_active ? 'Activa' : 'Inactiva'}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <div className="flex justify-end gap-2">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleEdit(category)}
+                                className="border-indigo-300 text-indigo-600 hover:bg-indigo-50"
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setDeleteConfirm(category.id)}
+                                className="border-red-300 text-red-600 hover:text-red-700 hover:bg-red-50"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Mobile Card View */}
+            <div className="lg:hidden space-y-3">
+              {filteredCategories.map((category) => (
+                <Card key={category.id} className="border-l-4 border-l-[#7d8768]">
+                  <CardContent className="p-4">
+                    <div className="space-y-3">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex items-start gap-3 flex-1 min-w-0">
+                          {category.image_url && (
+                            <img 
+                              src={category.image_url} 
+                              alt={category.name}
+                              className="w-16 h-16 rounded object-cover flex-shrink-0"
+                              onError={(e) => {
+                                e.currentTarget.style.display = 'none';
+                              }}
+                            />
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-semibold text-base text-gray-900 mb-1">{category.name}</h3>
+                            <code className="text-xs bg-gray-100 px-2 py-0.5 rounded block w-fit mb-2">{category.id}</code>
+                            {category.description && (
+                              <p className="text-sm text-gray-600 line-clamp-2">
+                                {category.description}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex gap-1 flex-shrink-0">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8"
+                            onClick={() => handleEdit(category)}
+                            title="Editar"
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-red-600"
+                            onClick={() => setDeleteConfirm(category.id)}
+                            title="Eliminar"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                        <div>
+                          <span className="text-muted-foreground text-[10px]">Icono:</span>
+                          <div className="mt-0.5">
+                            {category.icon ? (
+                              <span className="text-lg">{category.icon}</span>
+                            ) : (
+                              <span className="text-gray-400 text-xs">-</span>
+                            )}
+                          </div>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground text-[10px]">Estado:</span>
+                          <div className="mt-0.5">
+                            <Badge 
+                              className={`text-[10px] ${
+                                category.is_active 
+                                  ? 'bg-emerald-100 text-emerald-800 border-emerald-300' 
+                                  : 'bg-slate-100 text-slate-800 border-slate-300'
+                              }`}
+                            >
+                              {category.is_active ? 'Activa' : 'Inactiva'}
+                            </Badge>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 pt-2 border-t">
+                        <span className="text-xs text-muted-foreground">Orden:</span>
+                        <div className="flex gap-1">
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => handleMoveOrder(category, 'up')}
                             disabled={categories.findIndex(c => c.id === category.id) === 0}
-                            className="h-6 w-6 p-0"
+                            className="h-7 w-7 p-0"
                           >
                             <ArrowUp className="h-3 w-3" />
                           </Button>
@@ -481,83 +652,23 @@ const AdminProductCategories: React.FC = () => {
                             size="sm"
                             onClick={() => handleMoveOrder(category, 'down')}
                             disabled={categories.findIndex(c => c.id === category.id) === categories.length - 1}
-                            className="h-6 w-6 p-0"
+                            className="h-7 w-7 p-0"
                           >
                             <ArrowDown className="h-3 w-3" />
                           </Button>
                         </div>
-                      </TableCell>
-                      <TableCell>
-                        <code className="text-xs bg-gray-100 px-2 py-1 rounded">{category.id}</code>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          {category.image_url && (
-                            <img 
-                              src={category.image_url} 
-                              alt={category.name}
-                              className="w-10 h-10 rounded object-cover"
-                              onError={(e) => {
-                                e.currentTarget.style.display = 'none';
-                              }}
-                            />
-                          )}
-                          <span className="font-medium">{category.name}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <span className="text-sm text-gray-600 line-clamp-2">
-                          {category.description || 'Sin descripción'}
-                        </span>
-                      </TableCell>
-                      <TableCell>
-                        {category.icon ? (
-                          <span className="text-2xl">{category.icon}</span>
-                        ) : (
-                          <span className="text-gray-400 text-sm">-</span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <Badge 
-                          className={category.is_active 
-                            ? 'bg-emerald-100 text-emerald-800 border-emerald-300' 
-                            : 'bg-slate-100 text-slate-800 border-slate-300'
-                          }
-                        >
-                          {category.is_active ? 'Activa' : 'Inactiva'}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleEdit(category)}
-                            className="border-indigo-300 text-indigo-600 hover:bg-indigo-50"
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setDeleteConfirm(category.id)}
-                            className="border-red-300 text-red-600 hover:text-red-700 hover:bg-red-50"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </>
         )}
 
         {/* Diálogo de crear/editar */}
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto w-[95vw] md:w-full">
             <DialogHeader>
               <DialogTitle>
                 {editingCategory ? 'Editar Categoría' : 'Nueva Categoría'}
@@ -744,7 +855,7 @@ const AdminProductCategories: React.FC = () => {
               </Button>
               <Button 
                 onClick={handleSave}
-                className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] hover:from-[#6d7660] hover:to-[#7d655e] text-white"
+                className="bg-[#7d8768] hover:bg-[#6d7660] text-white"
                 disabled={createCategoryMutation.isPending || updateCategoryMutation.isPending || uploadingImage}
               >
                 {createCategoryMutation.isPending || updateCategoryMutation.isPending || uploadingImage ? (
@@ -764,7 +875,7 @@ const AdminProductCategories: React.FC = () => {
 
         {/* Diálogo de confirmación de eliminación */}
         <Dialog open={!!deleteConfirm} onOpenChange={() => setDeleteConfirm(null)}>
-          <DialogContent>
+          <DialogContent className="w-[95vw] md:w-full">
             <DialogHeader>
               <DialogTitle>¿Eliminar categoría?</DialogTitle>
               <DialogDescription>

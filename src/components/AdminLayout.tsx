@@ -25,7 +25,8 @@ import {
   ChefHat,
   Tag,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  Store
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import {
@@ -87,7 +88,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       icon: Factory,
       items: [
         { name: 'Producción', href: '/admin/production', icon: Factory },
-        { name: 'Inventario', href: '/admin/inventory', icon: Warehouse },
+        { name: 'Materia Prima BC', href: '/admin/inventory', icon: Warehouse },
+        { name: 'Inventario BC', href: '/admin/finished-products-inventory', icon: Package },
+        { name: 'Inventario Dist.', href: '/admin/distributor-inventory', icon: Store },
         { name: 'Análisis Operativo', href: '/admin/operational-analytics', icon: Activity },
       ]
     },
@@ -107,6 +110,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       icon: Users,
       items: [
         { name: 'Clientes', href: '/admin/customers', icon: Users },
+        { name: 'Distribuidores', href: '/admin/distributors', icon: Store },
         { name: 'Trabajadores', href: '/admin/employees', icon: Briefcase },
       ]
     },
@@ -290,7 +294,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                   variant="ghost"
                   className={`w-full justify-start ${!sidebarOpen && 'justify-center px-0'}`}
                 >
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#7d8768] to-[#9d627b] flex items-center justify-center text-white font-semibold">
+                  <div className="w-8 h-8 rounded-full bg-[#7d8768] flex items-center justify-center text-white font-semibold">
                     {user?.email?.charAt(0).toUpperCase() || 'A'}
                   </div>
                   {isExpanded && (
@@ -359,7 +363,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#7d8768] to-[#9d627b] flex items-center justify-center text-white text-sm font-semibold">
+                    <div className="w-8 h-8 rounded-full bg-[#7d8768] flex items-center justify-center text-white text-sm font-semibold">
                       {user?.email?.charAt(0).toUpperCase() || 'A'}
                     </div>
                   </Button>

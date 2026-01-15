@@ -361,8 +361,8 @@ const AdminInventory: React.FC = () => {
     <AdminLayout>
       <div className="p-6 space-y-6">
         <AdminPageHeader
-          title="Inventario"
-          description="Gestiona el inventario de productos internos e ingredientes"
+          title="Materia Prima BC"
+          description="Gestiona el inventario de productos internos e ingredientes (materia prima)"
           actionButton={{
             label: "Nuevo Item",
             onClick: handleOpenCreateItem,

@@ -73,25 +73,25 @@ const Home: React.FC = () => {
       icon: <Leaf className="h-8 w-8 text-white" />,
       title: '100% Natural',
       description: 'Ingredientes a base de plantas puros sin químicos dañinos',
-      gradient: 'from-[#7d8768] to-[#9d627b]'
+      color: 'bg-[#7d8768]'
     },
     {
       icon: <Shield className="h-8 w-8 text-white" />,
       title: 'Libre de Crueldad',
       description: 'Nunca probado en animales, siempre probado en humanos',
-      gradient: 'from-[#9d627b] to-[#7a7539]'
+      color: 'bg-[#313522]'
     },
     {
       icon: <Sparkles className="h-8 w-8 text-white" />,
       title: 'Formulaciones Personalizadas',
       description: 'Crea tu cuidado de la piel perfecto con nuestro constructor personalizado',
-      gradient: 'from-[#7a7539] to-[#7d8768]'
+      color: 'bg-[#8e421e]'
     },
     {
       icon: <Zap className="h-8 w-8 text-white" />,
       title: 'Resultados Rápidos',
       description: 'Ve mejoras visibles en tu piel en semanas',
-      gradient: 'from-[#7d8768] to-[#9d627b]'
+      color: 'bg-[#b9a035]'
     }
   ];
 
@@ -105,24 +105,21 @@ const Home: React.FC = () => {
   const testimonials = [
     {
       name: 'María González',
-      role: 'Cliente Frecuente',
-      content: 'Los productos de Botanic Care han transformado mi rutina de cuidado de la piel. Mi piel nunca se ha visto tan radiante y saludable. El serum de vitamina C es increíble.',
+      content: 'Los productos faciales de Botanic Care han transformado mi rutina de cuidado de la piel. Mi piel nunca se ha visto tan radiante y saludable. Los resultados son increíbles desde la primera semana.',
       rating: 5,
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face'
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=200&h=200&fit=crop&crop=face'
     },
     {
       name: 'Carlos Rodríguez',
-      role: 'Nuevo Cliente',
-      content: 'Increíble calidad y resultados visibles desde la primera semana. La crema hidratante es perfecta para mi piel sensible. Definitivamente volveré a comprar.',
+      content: 'Increíble calidad y resultados visibles desde la primera semana. Los productos faciales son perfectos para mi piel sensible. Definitivamente volveré a comprar.',
       rating: 5,
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face'
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=200&h=200&fit=crop&crop=face'
     },
     {
-      name: 'Ana Martínez',
-      role: 'Cliente VIP',
-      content: 'El constructor de cremas personalizadas es genial. Creé mi crema perfecta en minutos y los resultados son asombrosos. Mi piel se siente más suave que nunca.',
+      name: 'Sofia Ramírez',
+      content: 'Las cremas corporales han sido un cambio total. Mi piel se siente más suave, hidratada y nutrida después de cada uso. Los ingredientes naturales realmente hacen la diferencia.',
       rating: 5,
-      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face'
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=200&h=200&fit=crop&crop=face'
     }
   ];
 
@@ -151,9 +148,9 @@ const Home: React.FC = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-b from-[#fafaf9] via-white to-[#fafaf9]">
+      <div className="min-h-screen bg-white">
         {/* Hero Section - Enhanced */}
-        <section className="relative bg-gradient-to-br from-[#7d8768] via-[#8d756e] to-[#7a7539] text-white py-24 md:py-32 overflow-hidden">
+        <section className="relative bg-[#7d8768] text-white py-24 md:py-32 overflow-hidden">
           {/* Background decorative elements */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 -right-40 w-96 h-96 bg-white/8 rounded-full blur-3xl animate-pulse"></div>
@@ -164,36 +161,12 @@ const Home: React.FC = () => {
               backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
               backgroundSize: '60px 60px'
             }}></div>
-          
-          {/* Floating product images */}
-          <div className="absolute top-20 right-20 w-32 h-32 opacity-10 animate-float">
-            <img 
-              src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=128&h=128&fit=crop&crop=center" 
-              alt="Product" 
-              className="w-full h-full object-cover rounded-full shadow-lg"
-            />
           </div>
-          <div className="absolute bottom-20 left-20 w-24 h-24 opacity-10 animate-float-delayed">
-            <img 
-              src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=96&h=96&fit=crop&crop=center" 
-              alt="Product" 
-              className="w-full h-full object-cover rounded-full shadow-lg"
-            />
-          </div>
-          <div className="absolute top-1/3 left-10 w-20 h-20 opacity-10 animate-float-slow">
-            <img 
-              src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=80&h=80&fit=crop&crop=center" 
-              alt="Product" 
-              className="w-full h-full object-cover rounded-full shadow-lg"
-            />
-          </div>
-        </div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="text-left">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[600px]">
+            <div className="text-left flex flex-col justify-center">
               <div className="inline-flex items-center gap-2 mb-6 bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-full border border-white/30 shadow-lg">
-                <span className="text-2xl">🌿</span>
                 <span className="font-semibold font-audrey">Ingredientes 100% Naturales</span>
                 <CheckCircle className="h-5 w-5" />
               </div>
@@ -206,82 +179,48 @@ const Home: React.FC = () => {
               </h1>
               <p className="text-xl text-white/95 mb-10 max-w-2xl leading-relaxed font-audrey drop-shadow-md">
                 Transforma tu rutina de cuidado de la piel con nuestros productos premium a base de plantas. 
-                Desde aceites esenciales hasta formulaciones personalizadas, llevamos lo mejor de la naturaleza a tu cuidado diario.
+                Desde aceites esenciales hasta cremas y serums naturales, llevamos lo mejor de la naturaleza a tu cuidado diario.
               </p>
+              
+              <div className="flex flex-col sm:flex-row gap-6 mt-6">
+                <Button size="lg" className="bg-white text-[#7d8768] hover:bg-gray-50 px-8 py-4 text-lg font-body shadow-xl hover:shadow-2xl transition-all duration-300" asChild>
+                  <Link to="/shop">
+                    Comprar Ahora
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+              </div>
             </div>
             
             <div className="relative">
               <div className="relative z-10">
                 <img 
-                  src="/BC Brand/FOTOS-20250730T202909Z-1-001/FOTOS/IMG_7985.jpg" 
+                  src="/BC Brand/FOTOS-20250730T202909Z-1-001/FOTOS/image7.jpeg" 
                   alt="Productos Naturales de Belleza"
                   className="w-full h-96 object-cover rounded-2xl shadow-2xl"
                 />
-                <div className="absolute -bottom-6 -left-6 bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-white/20">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-gradient-to-r from-[#7d8768] to-[#9d627b] rounded-full flex items-center justify-center">
-                      <Star className="h-6 w-6 text-white" />
-                    </div>
-                    <div>
-                      <p className="font-bold text-gray-900">4.9★</p>
-                      <p className="text-sm text-gray-600">+50K clientes satisfechos</p>
-                    </div>
-                  </div>
-                </div>
                 <div className="absolute -top-6 -right-6 bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-white/20">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-gradient-to-r from-[#9d627b] to-[#7a7539] rounded-full flex items-center justify-center">
+                    <div className="w-12 h-12 bg-[#313522] rounded-full flex items-center justify-center">
                       <Leaf className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <p className="font-bold text-gray-900">100%</p>
-                      <p className="text-sm text-gray-600">Natural</p>
+                      <p className="font-bold text-gray-900 font-body">100%</p>
+                      <p className="text-sm text-gray-600 font-body">Natural</p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          
-            <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12 mt-12">
-              <Button size="lg" className="bg-white text-[#7d8768] hover:bg-gray-50 px-8 py-4 text-lg font-semibold shadow-xl hover:shadow-2xl transition-all duration-300" asChild>
-                <Link to="/shop">
-                  Comprar Ahora
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-[#7d8768] bg-transparent px-8 py-4 text-lg font-semibold shadow-xl hover:shadow-2xl transition-all duration-300" asChild>
-                <Link to="/custom-cream">
-                  Crear Crema Personalizada
-                  <Sparkles className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
             </div>
-              
-              {/* Stats Section - Enhanced */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
-                {stats.map((stat, index) => (
-                  <div key={index} className="text-center group">
-                    <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-white/20">
-                      <div className="flex justify-center mb-3">
-                        <div className="p-3 bg-white/20 backdrop-blur-sm rounded-full text-white group-hover:scale-110 transition-transform duration-300">
-                          {stat.icon}
-                        </div>
-                      </div>
-                      <div className="text-2xl md:text-3xl font-bold text-white mb-1 font-editorial-new">{stat.number}</div>
-                      <div className="text-sm text-white/90 font-medium font-audrey">{stat.label}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
             </div>
         </section>
 
         {/* Promotional Banner - Enhanced */}
-        <section className="bg-gradient-to-r from-[#7d8768]/10 via-[#9d627b]/10 to-[#7a7539]/10 py-16 md:py-20 relative overflow-hidden">
+        <section className="bg-[#7d8768]/10 py-16 md:py-20 relative overflow-hidden">
           <div className="absolute inset-0">
             <div className="absolute -top-20 -right-20 w-64 h-64 bg-[#7d8768]/5 rounded-full blur-3xl"></div>
-            <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-[#9d627b]/5 rounded-full blur-3xl"></div>
+            <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-[#7d8768]/5 rounded-full blur-3xl"></div>
           </div>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
             <div className="flex items-center justify-center mb-6">
@@ -291,8 +230,8 @@ const Home: React.FC = () => {
             </div>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 font-editorial-new text-gray-900">¡Oferta de Verano - Hasta 40% de Descuento!</h2>
             <p className="text-xl md:text-2xl text-gray-700 mb-8 font-audrey max-w-3xl mx-auto">Envío gratis en pedidos superiores a Q. {freeShippingThreshold} • Oferta por tiempo limitado</p>
-            <Button size="lg" className="bg-gradient-to-r from-[#7d8768] to-[#8d756e] hover:from-[#6d7660] hover:to-[#7d655e] text-white px-10 py-6 text-lg font-semibold shadow-xl hover:shadow-2xl transition-all duration-300" asChild>
-              <Link to="/shop">
+            <Button size="lg" className="bg-[#7d8768] hover:bg-[#6d7660] text-white px-10 py-6 text-lg font-body shadow-xl hover:shadow-2xl transition-all duration-300" asChild>
+              <Link to="/shop?sale=true">
                 Aprovechar Oferta
                 <TrendingUp className="ml-2 h-5 w-5" />
               </Link>
@@ -300,16 +239,32 @@ const Home: React.FC = () => {
           </div>
         </section>
 
+        {/* Video 1 Section */}
+        <section className="py-16 bg-white">
+          <div className="max-w-5xl lg:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="relative rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300">
+              <video
+                src="/BC Brand/videos/video1.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-auto object-cover max-h-[500px] lg:max-h-[700px]"
+              />
+            </div>
+          </div>
+        </section>
+
         {/* Categories - Enhanced */}
         <section className="py-24 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 bg-gradient-to-r from-[#7d8768]/10 to-[#9d627b]/10 rounded-full border border-[#7d8768]/20">
+              <div className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 bg-[#7d8768]/10 rounded-full border border-[#7d8768]/20">
                 <Sparkles className="h-4 w-4 text-[#7d8768]" />
                 <span className="text-sm font-medium text-[#7d8768] font-audrey">Nuestras Categorías</span>
               </div>
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 font-editorial-new">
-                Comprar por <span className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] bg-clip-text text-transparent">Categoría</span>
+                Comprar por <span className="text-[#7d8768]">Categoría</span>
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto font-audrey leading-relaxed">Encuentra exactamente lo que tu piel necesita con nuestra amplia selección de productos naturales</p>
             </div>
@@ -327,7 +282,7 @@ const Home: React.FC = () => {
                 {categories.map((category, index) => (
                   <Link key={category.name} to={category.href}>
                     <Card className="group hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer bg-white border border-gray-200/60 relative overflow-hidden h-full">
-                      <div className="absolute inset-0 bg-gradient-to-br from-[#7d8768]/5 to-[#9d627b]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <div className="absolute inset-0 bg-[#7d8768]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       <CardContent className="p-6 text-center relative z-10 flex flex-col h-full">
                       <div className="relative mb-6 mx-auto">
                         <div className="w-32 h-32 md:w-36 md:h-36 rounded-full overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 shadow-xl group-hover:shadow-2xl transition-all duration-300 ring-4 ring-white group-hover:ring-[#7d8768]/20">
@@ -341,7 +296,7 @@ const Home: React.FC = () => {
                           />
                         </div>
                         {/* Decorative gradient overlay on hover */}
-                        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#7d8768]/0 to-[#9d627b]/0 group-hover:from-[#7d8768]/10 group-hover:to-[#9d627b]/10 transition-all duration-300 pointer-events-none"></div>
+                        <div className="absolute inset-0 rounded-full bg-[#7d8768]/0 group-hover:bg-[#7d8768]/10 transition-all duration-300 pointer-events-none"></div>
                       </div>
                         <h3 className="font-bold text-gray-900 text-base group-hover:text-[#7d8768] transition-colors duration-300 font-editorial-new mb-2">{category.name}</h3>
                         <p className="text-xs text-gray-600 font-audrey leading-relaxed">{category.description}</p>
@@ -355,15 +310,15 @@ const Home: React.FC = () => {
         </section>
 
         {/* Featured Products - Enhanced */}
-        <section className="py-24 bg-gradient-to-br from-[#7d8768]/5 via-[#9d627b]/5 to-[#7a7539]/5">
+        <section className="py-24 bg-[#7d8768]/5">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 bg-gradient-to-r from-[#7d8768]/10 to-[#9d627b]/10 rounded-full border border-[#7d8768]/20">
+              <div className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 bg-[#7d8768]/10 rounded-full border border-[#7d8768]/20">
                 <Star className="h-4 w-4 text-[#7d8768]" />
                 <span className="text-sm font-medium text-[#7d8768] font-audrey">Productos Destacados</span>
               </div>
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 font-editorial-new">
-                Nuestros <span className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] bg-clip-text text-transparent">Productos</span> Más Amados
+                Nuestros <span className="text-[#7d8768]">Productos</span> Más Amados
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto font-audrey leading-relaxed">Descubre nuestros productos esenciales de cuidado natural más populares y efectivos</p>
             </div>
@@ -390,11 +345,13 @@ const Home: React.FC = () => {
                         <div className="relative overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
                           {product.badge && (
                             <Badge className={`absolute top-3 right-3 text-xs z-10 shadow-lg ${
-                              product.badge === 'OFERTA' ? 'bg-gradient-to-r from-[#7d8768] to-[#8d756e]' :
-                              product.badge === 'NUEVO' ? 'bg-gradient-to-r from-[#8d756e] to-[#7a7539]' :
-                              product.badge === 'MÁS VENDIDO' ? 'bg-gradient-to-r from-[#7a7539] to-[#7d8768]' :
-                              'bg-gradient-to-r from-[#7d8768] to-[#8d756e]'
-                            } text-white border-0 font-medium`}>
+                              product.badge === 'OFERTA' ? 'bg-red-600' :
+                              product.badge === 'NUEVO' ? 'bg-blue-600' :
+                              product.badge === 'MÁS VENDIDO' ? 'bg-green-600' :
+                              product.badge === 'TEMPORADA' ? 'bg-orange-600' :
+                              product.badge === 'PERSONALIZADA' ? 'bg-purple-600' :
+                              'bg-gray-600'
+                            } text-white border-0 font-medium font-body`}>
                               {product.badge}
                             </Badge>
                           )}
@@ -424,11 +381,11 @@ const Home: React.FC = () => {
                           </div>
                           <div className="flex gap-2 mt-auto" onClick={(e) => e.stopPropagation()}>
                             <Button 
-                              className="flex-1 bg-gradient-to-r from-[#7d8768] to-[#8d756e] hover:from-[#6d7660] hover:to-[#7d655e] text-white shadow-md hover:shadow-lg transition-all"
+                              className="flex-1 bg-[#7d8768] hover:bg-[#6d7660] text-white shadow-md hover:shadow-lg transition-all font-body"
                               onClick={() => addToCart(product, 1)}
                             >
                               <ShoppingCart className="h-4 w-4 mr-2" />
-                              <span className="font-audrey">Agregar</span>
+                              <span className="font-body">Agregar</span>
                             </Button>
                             <Button 
                               variant="outline" 
@@ -451,7 +408,7 @@ const Home: React.FC = () => {
               </div>
             )}
             <div className="text-center mt-12">
-              <Button variant="outline" size="lg" className="border-2 border-[#7d8768] text-[#7d8768] hover:bg-[#7d8768] hover:text-white px-10 py-6 text-lg font-semibold shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105" asChild>
+              <Button variant="outline" size="lg" className="border-2 border-[#7d8768] text-[#7d8768] hover:bg-[#7d8768] hover:text-white px-10 py-6 text-lg font-body shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105" asChild>
                 <Link to="/shop">
                   Ver Todos los Productos
                   <ArrowRight className="ml-2 h-5 w-5" />
@@ -469,7 +426,7 @@ const Home: React.FC = () => {
                 <Card key={index} className="text-center group border border-gray-200/60 hover:border-[#7d8768] bg-white hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                   <CardContent className="p-6">
                     <div className="flex justify-center mb-4">
-                      <div className="p-4 bg-gradient-to-br from-[#7d8768]/10 to-[#8d756e]/10 rounded-xl group-hover:from-[#7d8768] group-hover:to-[#8d756e] transition-all duration-300">
+                      <div className="p-4 bg-[#7d8768]/10 rounded-xl group-hover:bg-[#7d8768] transition-all duration-300">
                         <div className="text-[#7d8768] group-hover:text-white transition-colors duration-300">
                           {feature.icon}
                         </div>
@@ -484,16 +441,32 @@ const Home: React.FC = () => {
           </div>
         </section>
 
+        {/* Video 4 Section */}
+        <section className="py-16 bg-[#7d8768]/5">
+          <div className="max-w-5xl lg:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="relative rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300">
+              <video
+                src="/BC Brand/videos/video4.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-auto object-cover max-h-[600px] lg:max-h-[800px]"
+              />
+            </div>
+          </div>
+        </section>
+
         {/* Benefits Section - Enhanced */}
-        <section className="py-24 bg-gradient-to-br from-[#7a7539]/5 via-[#7d8768]/5 to-[#9d627b]/5">
+        <section className="py-24 bg-[#7d8768]/5">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 bg-gradient-to-r from-[#7d8768]/10 to-[#9d627b]/10 rounded-full border border-[#7d8768]/20">
+              <div className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 bg-[#7d8768]/10 rounded-full border border-[#7d8768]/20">
                 <Award className="h-4 w-4 text-[#7d8768]" />
                 <span className="text-sm font-medium text-[#7d8768] font-audrey">¿Por Qué Elegirnos?</span>
               </div>
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 font-editorial-new">
-                ¿Por Qué Elegir <span className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] bg-clip-text text-transparent">Botanic Care</span>?
+                ¿Por Qué Elegir <span className="text-[#7d8768]">Botanic Care</span>?
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto font-audrey leading-relaxed">Estamos comprometidos a traerte lo mejor de la naturaleza con productos de la más alta calidad</p>
             </div>
@@ -502,7 +475,7 @@ const Home: React.FC = () => {
                  <Card key={index} className="group text-center h-full border border-gray-200/60 hover:border-[#7d8768] bg-white hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
                    <CardContent className="p-8 h-full flex flex-col">
                      <div className="flex justify-center mb-6">
-                       <div className={`p-5 bg-gradient-to-br ${benefit.gradient} rounded-2xl text-white group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                       <div className={`p-5 ${benefit.color} rounded-2xl text-white group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                          {benefit.icon}
                        </div>
                      </div>
@@ -516,7 +489,7 @@ const Home: React.FC = () => {
         </section>
 
         {/* CTA Section - Enhanced */}
-        <section className="py-24 bg-gradient-to-br from-[#5a6351] via-[#6d7565] to-[#5a5a3d] text-white relative overflow-hidden">
+        <section className="py-24 bg-[#313522] text-white relative overflow-hidden">
           <div className="absolute inset-0">
             <div className="absolute top-8 left-8 w-4 h-4 bg-white/20 rounded-full animate-ping"></div>
             <div className="absolute bottom-8 right-8 w-3 h-3 bg-white/30 rounded-full animate-pulse"></div>
@@ -534,13 +507,7 @@ const Home: React.FC = () => {
               Únete a miles de clientes que han descubierto el poder de los ingredientes naturales
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <Button size="lg" variant="secondary" className="bg-white text-[#7d8768] hover:bg-gray-100 px-10 py-6 text-lg font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105" asChild>
-                <Link to="/custom-cream">
-                  Crear Tu Crema Personalizada
-                  <Sparkles className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-[#7d8768] bg-transparent px-10 py-6 text-lg font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105" asChild>
+              <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-[#7d8768] bg-transparent px-10 py-6 text-lg font-body shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105" asChild>
                 <Link to="/about">
                   Conoce Más Sobre Nosotros
                   <ArrowRight className="ml-2 h-5 w-5" />
@@ -551,15 +518,15 @@ const Home: React.FC = () => {
         </section>
 
         {/* Testimonials Section - Enhanced */}
-        <section className="py-24 bg-gradient-to-br from-[#9d627b]/5 via-[#7d8768]/5 to-[#7a7539]/5">
+        <section className="py-24 bg-[#7d8768]/5">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 bg-gradient-to-r from-[#7d8768]/10 to-[#9d627b]/10 rounded-full border border-[#7d8768]/20">
+              <div className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 bg-[#7d8768]/10 rounded-full border border-[#7d8768]/20">
                 <Users className="h-4 w-4 text-[#7d8768]" />
                 <span className="text-sm font-medium text-[#7d8768] font-audrey">Testimonios</span>
               </div>
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 font-editorial-new">
-                Lo Que Dicen Nuestros <span className="bg-gradient-to-r from-[#7d8768] to-[#9d627b] bg-clip-text text-transparent">Clientes</span>
+                Lo Que Dicen Nuestros <span className="text-[#7d8768]">Clientes</span>
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto font-audrey leading-relaxed">Descubre por qué miles de clientes confían en nuestros productos naturales</p>
             </div>
@@ -568,16 +535,19 @@ const Home: React.FC = () => {
                 <Card key={index} className="group border border-gray-200/60 hover:border-[#7d8768] bg-white hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
                   <CardContent className="p-8">
                     <div className="flex items-center mb-6">
-                      <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-gray-200 shadow-lg mr-4">
+                      <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-gray-200 shadow-lg mr-4 flex-shrink-0">
                         <img 
                           src={testimonial.avatar} 
                           alt={testimonial.name}
                           className="w-full h-full object-cover"
+                          onError={(e) => {
+                            // Fallback a una imagen placeholder si falla
+                            e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Crect fill="%23e5e7eb" width="100" height="100"/%3E%3Ctext fill="%239ca3af" font-family="sans-serif" font-size="40" x="50%25" y="50%25" text-anchor="middle" dominant-baseline="middle"%3E' + (testimonial.name.charAt(0).toUpperCase()) + '%3C/text%3E%3C/svg%3E';
+                          }}
                         />
                       </div>
                       <div>
                         <h4 className="font-bold text-gray-900 text-lg font-editorial-new">{testimonial.name}</h4>
-                        <p className="text-[#7d8768] font-medium font-audrey text-sm">{testimonial.role}</p>
                       </div>
                     </div>
                     <div className="flex items-center mb-4">

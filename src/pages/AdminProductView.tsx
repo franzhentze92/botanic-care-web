@@ -105,7 +105,14 @@ const AdminProductView: React.FC = () => {
                         {categories.find(c => c.value === product.category)?.label}
                       </Badge>
                       {product.badge && (
-                        <Badge className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white border-0">
+                        <Badge className={`text-white border-0 font-body ${
+                          product.badge === 'OFERTA' ? 'bg-red-600' :
+                          product.badge === 'NUEVO' ? 'bg-blue-600' :
+                          product.badge === 'MÁS VENDIDO' ? 'bg-green-600' :
+                          product.badge === 'TEMPORADA' ? 'bg-orange-600' :
+                          product.badge === 'PERSONALIZADA' ? 'bg-purple-600' :
+                          'bg-gray-600'
+                        }`}>
                           {product.badge}
                         </Badge>
                       )}

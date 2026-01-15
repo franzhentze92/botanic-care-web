@@ -246,7 +246,7 @@ const AdminRecipes: React.FC = () => {
 
   return (
     <AdminLayout>
-      <div className="p-6 space-y-6">
+      <div className="p-4 md:p-6 space-y-4 md:space-y-6">
         <AdminPageHeader
           title="Recetas de Productos"
           description="Gestiona las cantidades de ingredientes necesarios para cada producto"
@@ -259,8 +259,8 @@ const AdminRecipes: React.FC = () => {
 
         {/* Filtros */}
         <Card>
-          <CardContent className="p-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <CardContent className="p-3 md:p-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                 <Input
@@ -314,74 +314,137 @@ const AdminRecipes: React.FC = () => {
         )}
 
         {!isLoading && recipesByProduct.size > 0 && (
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             {Array.from(recipesByProduct.entries()).map(([productId, productRecipes]) => {
               const product = products.find(p => p.id === productId);
               return (
                 <Card key={productId}>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Package className="h-5 w-5 text-[#7d8768]" />
-                      {product?.name || `Producto ID: ${productId}`}
-                      <Badge variant="outline" className="ml-2">
+                  <CardHeader className="p-4 md:p-6">
+                    <CardTitle className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                      <div className="flex items-center gap-2">
+                        <Package className="h-5 w-5 text-[#7d8768]" />
+                        <span className="text-base md:text-lg">{product?.name || `Producto ID: ${productId}`}</span>
+                      </div>
+                      <Badge variant="outline" className="w-fit">
                         {productRecipes.length} {productRecipes.length === 1 ? 'ingrediente' : 'ingredientes'}
                       </Badge>
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Ingrediente</TableHead>
-                          <TableHead>SKU</TableHead>
-                          <TableHead>Unidad</TableHead>
-                          <TableHead>Cantidad por Unidad</TableHead>
-                          <TableHead>Notas</TableHead>
-                          <TableHead className="text-right">Acciones</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {productRecipes.map((recipe) => (
-                          <TableRow key={recipe.id}>
-                            <TableCell className="font-medium">
-                              {recipe.inventory_item?.name || 'N/A'}
-                            </TableCell>
-                            <TableCell className="text-gray-500">
-                              {recipe.inventory_item?.sku || 'N/A'}
-                            </TableCell>
-                            <TableCell>
-                              <Badge variant="outline">{recipe.inventory_item?.unit || 'N/A'}</Badge>
-                            </TableCell>
-                            <TableCell className="font-semibold">
-                              {recipe.quantity_per_unit.toFixed(4)}
-                            </TableCell>
-                            <TableCell className="text-gray-500 text-sm">
-                              {recipe.notes || '-'}
-                            </TableCell>
-                            <TableCell className="text-right">
-                              <div className="flex justify-end gap-2">
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => handleOpenEdit(recipe)}
-                                  className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50"
-                                >
-                                  <Edit className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => handleDelete(recipe.id)}
-                                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                                >
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              </div>
-                            </TableCell>
+                  <CardContent className="p-0">
+                    {/* Desktop Table View */}
+                    <div className="hidden lg:block overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Ingrediente</TableHead>
+                            <TableHead>SKU</TableHead>
+                            <TableHead>Unidad</TableHead>
+                            <TableHead>Cantidad por Unidad</TableHead>
+                            <TableHead>Notas</TableHead>
+                            <TableHead className="text-right">Acciones</TableHead>
                           </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                        </TableHeader>
+                        <TableBody>
+                          {productRecipes.map((recipe) => (
+                            <TableRow key={recipe.id}>
+                              <TableCell className="font-medium">
+                                {recipe.inventory_item?.name || 'N/A'}
+                              </TableCell>
+                              <TableCell className="text-gray-500">
+                                {recipe.inventory_item?.sku || 'N/A'}
+                              </TableCell>
+                              <TableCell>
+                                <Badge variant="outline">{recipe.inventory_item?.unit || 'N/A'}</Badge>
+                              </TableCell>
+                              <TableCell className="font-semibold">
+                                {recipe.quantity_per_unit.toFixed(4)}
+                              </TableCell>
+                              <TableCell className="text-gray-500 text-sm">
+                                {recipe.notes || '-'}
+                              </TableCell>
+                              <TableCell className="text-right">
+                                <div className="flex justify-end gap-2">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleOpenEdit(recipe)}
+                                    className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50"
+                                  >
+                                    <Edit className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleDelete(recipe.id)}
+                                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
+
+                    {/* Mobile Card View */}
+                    <div className="lg:hidden space-y-3 p-4">
+                      {productRecipes.map((recipe) => (
+                        <Card key={recipe.id} className="border-l-4 border-l-[#7d8768]">
+                          <CardContent className="p-4">
+                            <div className="space-y-3">
+                              <div className="flex items-start justify-between gap-3">
+                                <div className="flex-1 min-w-0">
+                                  <h3 className="font-semibold text-sm text-gray-900 mb-1">
+                                    {recipe.inventory_item?.name || 'N/A'}
+                                  </h3>
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <span className="text-xs text-gray-500">SKU: {recipe.inventory_item?.sku || 'N/A'}</span>
+                                    <Badge variant="outline" className="text-[10px]">
+                                      {recipe.inventory_item?.unit || 'N/A'}
+                                    </Badge>
+                                  </div>
+                                </div>
+                                <div className="flex gap-1 flex-shrink-0">
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8"
+                                    onClick={() => handleOpenEdit(recipe)}
+                                    title="Editar"
+                                  >
+                                    <Edit className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8 text-red-600"
+                                    onClick={() => handleDelete(recipe.id)}
+                                    title="Eliminar"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              </div>
+
+                              <div className="grid grid-cols-2 gap-2 text-xs">
+                                <div>
+                                  <span className="text-muted-foreground text-[10px]">Cantidad por Unidad:</span>
+                                  <p className="font-semibold text-sm mt-0.5">{recipe.quantity_per_unit.toFixed(4)}</p>
+                                </div>
+                                <div>
+                                  <span className="text-muted-foreground text-[10px]">Notas:</span>
+                                  <p className="text-gray-600 text-xs mt-0.5 line-clamp-2">
+                                    {recipe.notes || '-'}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
                   </CardContent>
                 </Card>
               );
@@ -391,7 +454,7 @@ const AdminRecipes: React.FC = () => {
 
         {/* Dialog para crear/editar receta */}
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col">
+          <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col w-[95vw] md:w-full">
             <DialogHeader className="flex-shrink-0">
               <DialogTitle>
                 {editingRecipe ? 'Editar Receta' : 'Nueva Receta'}

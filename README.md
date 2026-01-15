@@ -33,7 +33,18 @@ Create a `.env` file in the root directory:
 ```env
 VITE_SUPABASE_URL=your_supabase_project_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# Web3Forms Configuration (for contact form)
+# Get your access key from https://web3forms.com
+VITE_WEB3FORMS_ACCESS_KEY=your_web3forms_access_key
 ```
+
+#### Setting up Web3Forms:
+
+1. Go to [web3forms.com](https://web3forms.com) and sign up
+2. Verify your email address
+3. Get your Access Key from the dashboard
+4. Add it to your `.env` file as `VITE_WEB3FORMS_ACCESS_KEY`
 
 ### 4. Run the Development Server
 

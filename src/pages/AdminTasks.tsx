@@ -212,7 +212,7 @@ const AdminTasks: React.FC = () => {
 
   return (
     <AdminLayout>
-      <div className="p-6 space-y-6">
+      <div className="p-4 md:p-6 space-y-4 md:space-y-6">
         <AdminPageHeader
           title="Gestión de Tareas"
           description="Gestiona y organiza las tareas del equipo"
@@ -223,7 +223,7 @@ const AdminTasks: React.FC = () => {
           }}
         />
         {/* KPIs Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total de Tareas</CardTitle>
@@ -292,7 +292,7 @@ const AdminTasks: React.FC = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
@@ -361,122 +361,244 @@ const AdminTasks: React.FC = () => {
                 <p className="text-gray-500">No se encontraron tareas con los filtros seleccionados.</p>
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Título</TableHead>
-                      <TableHead>Asignado a</TableHead>
-                      <TableHead>Estado</TableHead>
-                      <TableHead>Prioridad</TableHead>
-                      <TableHead>Fecha Límite</TableHead>
-                      <TableHead className="text-right">Acciones</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {tasks.map((task) => {
-                      const isOverdue = task.due_date && 
-                        new Date(task.due_date) < new Date() && 
-                        task.status !== 'completed' && 
-                        task.status !== 'cancelled';
+              <>
+                {/* Desktop Table View */}
+                <div className="hidden lg:block overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Título</TableHead>
+                        <TableHead>Asignado a</TableHead>
+                        <TableHead>Estado</TableHead>
+                        <TableHead>Prioridad</TableHead>
+                        <TableHead>Fecha Límite</TableHead>
+                        <TableHead className="text-right">Acciones</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {tasks.map((task) => {
+                        const isOverdue = task.due_date && 
+                          new Date(task.due_date) < new Date() && 
+                          task.status !== 'completed' && 
+                          task.status !== 'cancelled';
 
-                      return (
-                        <TableRow key={task.id}>
-                          <TableCell>
-                            <div>
-                              <div className="font-medium">{task.title}</div>
-                              {task.description && (
-                                <div className="text-sm text-muted-foreground mt-1 line-clamp-2">
-                                  {task.description}
+                        return (
+                          <TableRow key={task.id}>
+                            <TableCell>
+                              <div>
+                                <div className="font-medium">{task.title}</div>
+                                {task.description && (
+                                  <div className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                                    {task.description}
+                                  </div>
+                                )}
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              {task.employee ? (
+                                <div className="flex items-center gap-2">
+                                  <User className="h-4 w-4 text-gray-400" />
+                                  <span>{task.employee.first_name} {task.employee.last_name}</span>
                                 </div>
+                              ) : (
+                                <span className="text-gray-400">Sin asignar</span>
                               )}
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            {task.employee ? (
-                              <div className="flex items-center gap-2">
-                                <User className="h-4 w-4 text-gray-400" />
-                                <span>{task.employee.first_name} {task.employee.last_name}</span>
-                              </div>
-                            ) : (
-                              <span className="text-gray-400">Sin asignar</span>
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            <Select
-                              value={task.status}
-                              onValueChange={(value) => handleStatusChange(task, value as Task['status'])}
-                            >
-                              <SelectTrigger className="w-[140px]">
-                                <Badge className={getStatusColor(task.status)}>
-                                  {task.status === 'pending' && 'Pendiente'}
-                                  {task.status === 'in_progress' && 'En Progreso'}
-                                  {task.status === 'completed' && 'Completada'}
-                                  {task.status === 'cancelled' && 'Cancelada'}
-                                </Badge>
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="pending">Pendiente</SelectItem>
-                                <SelectItem value="in_progress">En Progreso</SelectItem>
-                                <SelectItem value="completed">Completada</SelectItem>
-                                <SelectItem value="cancelled">Cancelada</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </TableCell>
-                          <TableCell>
-                            <Badge className={getPriorityColor(task.priority)}>
-                              <span className="flex items-center gap-1">
-                                {getPriorityIcon(task.priority)}
-                                {task.priority === 'urgent' && 'Urgente'}
-                                {task.priority === 'high' && 'Alta'}
-                                {task.priority === 'medium' && 'Media'}
-                                {task.priority === 'low' && 'Baja'}
-                              </span>
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            {task.due_date ? (
-                              <div className={isOverdue ? 'text-red-600 font-medium' : ''}>
-                                {format(new Date(task.due_date), 'dd/MM/yyyy', { locale: es })}
-                                {isOverdue && <span className="ml-2 text-xs">⚠️ Vencida</span>}
-                              </div>
-                            ) : (
-                              <span className="text-gray-400">Sin fecha</span>
-                            )}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            <div className="flex justify-end gap-2">
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => handleOpenDialog(task)}
-                                title="Editar"
+                            </TableCell>
+                            <TableCell>
+                              <Select
+                                value={task.status}
+                                onValueChange={(value) => handleStatusChange(task, value as Task['status'])}
                               >
-                                <Edit className="h-4 w-4" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => handleDelete(task.id)}
-                                title="Eliminar"
-                              >
-                                <Trash2 className="h-4 w-4 text-red-600" />
-                              </Button>
+                                <SelectTrigger className="w-[140px]">
+                                  <Badge className={getStatusColor(task.status)}>
+                                    {task.status === 'pending' && 'Pendiente'}
+                                    {task.status === 'in_progress' && 'En Progreso'}
+                                    {task.status === 'completed' && 'Completada'}
+                                    {task.status === 'cancelled' && 'Cancelada'}
+                                  </Badge>
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="pending">Pendiente</SelectItem>
+                                  <SelectItem value="in_progress">En Progreso</SelectItem>
+                                  <SelectItem value="completed">Completada</SelectItem>
+                                  <SelectItem value="cancelled">Cancelada</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className={getPriorityColor(task.priority)}>
+                                <span className="flex items-center gap-1">
+                                  {getPriorityIcon(task.priority)}
+                                  {task.priority === 'urgent' && 'Urgente'}
+                                  {task.priority === 'high' && 'Alta'}
+                                  {task.priority === 'medium' && 'Media'}
+                                  {task.priority === 'low' && 'Baja'}
+                                </span>
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              {task.due_date ? (
+                                <div className={isOverdue ? 'text-red-600 font-medium' : ''}>
+                                  {format(new Date(task.due_date), 'dd/MM/yyyy', { locale: es })}
+                                  {isOverdue && <span className="ml-2 text-xs">⚠️ Vencida</span>}
+                                </div>
+                              ) : (
+                                <span className="text-gray-400">Sin fecha</span>
+                              )}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <div className="flex justify-end gap-2">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => handleOpenDialog(task)}
+                                  title="Editar"
+                                >
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => handleDelete(task.id)}
+                                  title="Eliminar"
+                                >
+                                  <Trash2 className="h-4 w-4 text-red-600" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
+
+                {/* Mobile Card View */}
+                <div className="lg:hidden space-y-3">
+                  {tasks.map((task) => {
+                    const isOverdue = task.due_date && 
+                      new Date(task.due_date) < new Date() && 
+                      task.status !== 'completed' && 
+                      task.status !== 'cancelled';
+
+                    return (
+                      <Card key={task.id} className="border-l-4 border-l-[#7d8768]">
+                        <CardContent className="p-4">
+                          <div className="space-y-3">
+                            <div className="flex items-start justify-between gap-2">
+                              <div className="flex-1 min-w-0">
+                                <h3 className="font-medium text-base mb-1">{task.title}</h3>
+                                {task.description && (
+                                  <p className="text-sm text-muted-foreground line-clamp-2">
+                                    {task.description}
+                                  </p>
+                                )}
+                              </div>
+                              <div className="flex gap-1 flex-shrink-0">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-8 w-8"
+                                  onClick={() => handleOpenDialog(task)}
+                                  title="Editar"
+                                >
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-8 w-8"
+                                  onClick={() => handleDelete(task.id)}
+                                  title="Eliminar"
+                                >
+                                  <Trash2 className="h-4 w-4 text-red-600" />
+                                </Button>
+                              </div>
                             </div>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </div>
+
+                            <div className="grid grid-cols-2 gap-2 text-sm">
+                              <div>
+                                <span className="text-muted-foreground text-xs">Asignado a:</span>
+                                <div className="mt-1">
+                                  {task.employee ? (
+                                    <div className="flex items-center gap-1">
+                                      <User className="h-3 w-3 text-gray-400" />
+                                      <span className="text-xs">{task.employee.first_name} {task.employee.last_name}</span>
+                                    </div>
+                                  ) : (
+                                    <span className="text-gray-400 text-xs">Sin asignar</span>
+                                  )}
+                                </div>
+                              </div>
+
+                              <div>
+                                <span className="text-muted-foreground text-xs">Prioridad:</span>
+                                <div className="mt-1">
+                                  <Badge className={`${getPriorityColor(task.priority)} text-xs`}>
+                                    <span className="flex items-center gap-1">
+                                      {getPriorityIcon(task.priority)}
+                                      {task.priority === 'urgent' && 'Urgente'}
+                                      {task.priority === 'high' && 'Alta'}
+                                      {task.priority === 'medium' && 'Media'}
+                                      {task.priority === 'low' && 'Baja'}
+                                    </span>
+                                  </Badge>
+                                </div>
+                              </div>
+
+                              <div>
+                                <span className="text-muted-foreground text-xs">Estado:</span>
+                                <div className="mt-1">
+                                  <Select
+                                    value={task.status}
+                                    onValueChange={(value) => handleStatusChange(task, value as Task['status'])}
+                                  >
+                                    <SelectTrigger className="w-full h-8 text-xs">
+                                      <Badge className={getStatusColor(task.status)}>
+                                        {task.status === 'pending' && 'Pendiente'}
+                                        {task.status === 'in_progress' && 'En Progreso'}
+                                        {task.status === 'completed' && 'Completada'}
+                                        {task.status === 'cancelled' && 'Cancelada'}
+                                      </Badge>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="pending">Pendiente</SelectItem>
+                                      <SelectItem value="in_progress">En Progreso</SelectItem>
+                                      <SelectItem value="completed">Completada</SelectItem>
+                                      <SelectItem value="cancelled">Cancelada</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                              </div>
+
+                              <div>
+                                <span className="text-muted-foreground text-xs">Fecha Límite:</span>
+                                <div className={`mt-1 text-xs ${isOverdue ? 'text-red-600 font-medium' : ''}`}>
+                                  {task.due_date ? (
+                                    <>
+                                      {format(new Date(task.due_date), 'dd/MM/yyyy', { locale: es })}
+                                      {isOverdue && <span className="ml-1">⚠️</span>}
+                                    </>
+                                  ) : (
+                                    <span className="text-gray-400">Sin fecha</span>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+              </>
             )}
           </CardContent>
         </Card>
 
         {/* Diálogo de Formulario (Crear/Editar) */}
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto w-[95vw] md:w-full">
             <DialogHeader>
               <DialogTitle>
                 {editingTask ? 'Editar Tarea' : 'Nueva Tarea'}
