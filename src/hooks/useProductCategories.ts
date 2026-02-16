@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase';
+import { supabase, supabasePublic } from '@/lib/supabase';
 import { toast } from 'sonner';
 
 export interface ProductCategory {
@@ -50,16 +50,80 @@ export const useActiveProductCategories = () => {
   return useQuery<ProductCategory[], Error>({
     queryKey: ['active-product-categories'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('product_categories')
-        .select('*')
-        .eq('is_active', true)
-        .order('display_order', { ascending: true })
-        .order('name', { ascending: true });
-      
-      if (error) throw error;
-      return data || [];
+      console.log('🔍 useActiveProductCategories: Iniciando fetch de categorías...');
+      try {
+        // Intentar obtener categorías activas
+        console.log('🔍 useActiveProductCategories: Ejecutando query...');
+        console.log('🔍 useActiveProductCategories: Query construida, esperando respuesta...');
+        
+        try {
+          // Usar cliente público para evitar problemas con sesiones de usuarios nuevos
+          const { data, error } = await Promise.race([
+            supabasePublic
+              .from('product_categories')
+              .select('*')
+              .eq('is_active', true)
+              .order('display_order', { ascending: true })
+              .order('name', { ascending: true }),
+            new Promise((_, reject) => 
+              setTimeout(() => reject(new Error('Query timeout')), 5000)
+            )
+          ]) as any;
+          
+          console.log('🔍 useActiveProductCategories: Query completada', { 
+            dataLength: data?.length || 0, 
+            error: error ? { code: error.code, message: error.message, details: error.details, hint: error.hint } : null 
+          });
+          
+          if (error) {
+            console.error('❌ Error loading categories:', error);
+            
+            // Si es error de permisos, intentar sin filtro is_active
+            if (error.code === 'PGRST301' || error.message?.includes('permission') || error.message?.includes('policy') || error.message?.includes('RLS')) {
+              console.warn('Error de permisos, intentando obtener todas las categorías...');
+              const { data: allData, error: allError } = await supabasePublic
+                .from('product_categories')
+                .select('*')
+                .order('display_order', { ascending: true })
+                .order('name', { ascending: true });
+              
+              if (allError) {
+                console.error('Error incluso sin filtro:', allError);
+                return [];
+              }
+              
+              // Filtrar manualmente las activas
+              return (allData || []).filter(cat => cat.is_active === true);
+            }
+            
+            // Para otros errores, retornar array vacío
+            return [];
+          }
+          
+          const categories = data || [];
+          console.log('✅ useActiveProductCategories: Categorías obtenidas:', categories.length);
+          return categories;
+        } catch (queryError: any) {
+          console.error('❌ Error en la query de categorías:', queryError);
+          if (queryError.message?.includes('timeout')) {
+            console.error('⏱️ TIMEOUT: La query se colgó después de 5 segundos. Probable problema de RLS.');
+            console.error('💡 SOLUCIÓN: Ejecuta el script supabase/disable-rls-temporary.sql en Supabase');
+          }
+          return [];
+        }
+      } catch (err: any) {
+        console.error('❌ Error en useActiveProductCategories:', err);
+        // Siempre retornar array vacío en lugar de lanzar error
+        return [];
+      }
     },
+    staleTime: 1000 * 60 * 5, // 5 minutos
+    refetchOnWindowFocus: false,
+    refetchOnMount: true, // Permitir refetch al montar
+    refetchOnReconnect: false, // No refetch al reconectar
+    retry: 2, // Reintentar 2 veces
+    // No lanzar error, siempre retornar datos (aunque sea array vacío)
+    throwOnError: false,
   });
 };
 

@@ -85,77 +85,77 @@ const AdminFinishedProductsInventory: React.FC = () => {
 
   return (
     <AdminLayout>
-      <div className="p-6 space-y-6">
+      <div className="p-4 md:p-6 space-y-4 md:space-y-6">
         <AdminPageHeader
           title="Inventario de Productos Terminados"
           description="Gestiona el stock de productos terminados basado en la producción"
         />
 
         {/* KPIs */}
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
           <Card>
-            <CardContent className="p-4">
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Productos</p>
-                  <p className="text-2xl font-bold text-gray-900">{kpis.totalProducts}</p>
+                  <p className="text-xs md:text-sm text-gray-600">Productos</p>
+                  <p className="text-xl md:text-2xl font-bold text-gray-900">{kpis.totalProducts}</p>
                 </div>
-                <Package className="h-8 w-8 text-[#7d8768]" />
+                <Package className="h-6 w-6 md:h-8 md:w-8 text-[#7d8768]" />
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-4">
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Stock Total</p>
-                  <p className="text-2xl font-bold text-blue-600">{kpis.totalStock.toFixed(0)}</p>
+                  <p className="text-xs md:text-sm text-gray-600">Stock Total</p>
+                  <p className="text-xl md:text-2xl font-bold text-blue-600">{kpis.totalStock.toFixed(0)}</p>
                 </div>
-                <Package className="h-8 w-8 text-blue-600" />
+                <Package className="h-6 w-6 md:h-8 md:w-8 text-blue-600" />
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-4">
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">En Producción</p>
-                  <p className="text-2xl font-bold text-indigo-600">{kpis.inProduction.toFixed(0)}</p>
+                  <p className="text-xs md:text-sm text-gray-600">En Producción</p>
+                  <p className="text-xl md:text-2xl font-bold text-indigo-600">{kpis.inProduction.toFixed(0)}</p>
                 </div>
-                <Factory className="h-8 w-8 text-indigo-600" />
+                <Factory className="h-6 w-6 md:h-8 md:w-8 text-indigo-600" />
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-4">
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Completados</p>
-                  <p className="text-2xl font-bold text-emerald-600">{kpis.completed.toFixed(0)}</p>
+                  <p className="text-xs md:text-sm text-gray-600">Completados</p>
+                  <p className="text-xl md:text-2xl font-bold text-emerald-600">{kpis.completed.toFixed(0)}</p>
                 </div>
-                <CheckCircle className="h-8 w-8 text-emerald-600" />
+                <CheckCircle className="h-6 w-6 md:h-8 md:w-8 text-emerald-600" />
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-4">
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">En Almacén</p>
-                  <p className="text-2xl font-bold text-purple-600">{kpis.inWarehouse.toFixed(0)}</p>
+                  <p className="text-xs md:text-sm text-gray-600">En Almacén</p>
+                  <p className="text-xl md:text-2xl font-bold text-purple-600">{kpis.inWarehouse.toFixed(0)}</p>
                 </div>
-                <Warehouse className="h-8 w-8 text-purple-600" />
+                <Warehouse className="h-6 w-6 md:h-8 md:w-8 text-purple-600" />
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-4">
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Sin Stock</p>
-                  <p className="text-2xl font-bold text-red-600">{kpis.lowStock}</p>
+                  <p className="text-xs md:text-sm text-gray-600">Sin Stock</p>
+                  <p className="text-xl md:text-2xl font-bold text-red-600">{kpis.lowStock}</p>
                 </div>
-                <AlertTriangle className="h-8 w-8 text-red-600" />
+                <AlertTriangle className="h-6 w-6 md:h-8 md:w-8 text-red-600" />
               </div>
             </CardContent>
           </Card>
@@ -163,21 +163,21 @@ const AdminFinishedProductsInventory: React.FC = () => {
 
         {/* Filtros */}
         <Card>
-          <CardContent className="p-4">
-            <div className="flex flex-col md:flex-row gap-4">
+          <CardContent className="p-4 md:p-6">
+            <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
               <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4 md:h-5 md:w-5" />
                 <Input
                   placeholder="Buscar por producto o SKU..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
+                  className="pl-9 md:pl-10"
                 />
               </div>
               <Button
                 variant={minStockFilter ? 'default' : 'outline'}
                 onClick={() => setMinStockFilter(!minStockFilter)}
-                className={minStockFilter ? 'bg-red-600 hover:bg-red-700' : ''}
+                className={`w-full sm:w-auto ${minStockFilter ? 'bg-red-600 hover:bg-red-700' : ''}`}
               >
                 <AlertTriangle className="h-4 w-4 mr-2" />
                 Sin Stock
@@ -204,7 +204,8 @@ const AdminFinishedProductsInventory: React.FC = () => {
           </Card>
         ) : (
           <Card>
-            <div className="overflow-x-auto">
+            {/* Desktop Table View */}
+            <div className="hidden lg:block overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -271,6 +272,75 @@ const AdminFinishedProductsInventory: React.FC = () => {
                   })}
                 </TableBody>
               </Table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="lg:hidden p-4 space-y-3">
+              {filteredStock.map((stockItem) => {
+                const stockStatus = getStockStatus(stockItem);
+                return (
+                  <Card key={stockItem.product_id} className={`border-l-4 ${stockItem.total_stock === 0 ? 'border-l-red-500' : stockItem.total_stock <= 10 ? 'border-l-yellow-500' : 'border-l-[#7d8768]'}`}>
+                    <CardContent className="p-4">
+                      <div className="space-y-3">
+                        <div className="flex items-start gap-3">
+                          {stockItem.product_image_url && (
+                            <img
+                              src={stockItem.product_image_url}
+                              alt={stockItem.product_name}
+                              className="w-16 h-16 object-cover rounded flex-shrink-0"
+                            />
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-semibold text-sm text-gray-900 mb-1">{stockItem.product_name}</h3>
+                            <code className="text-xs bg-gray-100 px-2 py-0.5 rounded block w-fit mb-2">{stockItem.product_sku}</code>
+                            <Badge className={stockStatus.color}>{stockStatus.label}</Badge>
+                          </div>
+                        </div>
+                        <div className="pt-2 border-t space-y-2">
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <span className="text-xs text-muted-foreground">Stock Disponible:</span>
+                              <p className={`font-bold text-sm ${stockItem.total_stock === 0 ? 'text-red-600' : 'text-emerald-600'}`}>
+                                {stockItem.total_stock.toFixed(0)}
+                              </p>
+                            </div>
+                            <div>
+                              <span className="text-xs text-muted-foreground">Completados:</span>
+                              <p className="font-semibold text-sm">
+                                {stockItem.completed > 0 ? (
+                                  <Badge variant="outline" className="border-emerald-300 text-emerald-700 bg-emerald-50 text-xs">
+                                    {stockItem.completed.toFixed(0)}
+                                  </Badge>
+                                ) : (
+                                  <span className="text-gray-400">-</span>
+                                )}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <span className="text-xs text-muted-foreground">Batches:</span>
+                              <p className="font-semibold text-sm">
+                                <Badge variant="outline" className="text-xs">{stockItem.batches_count}</Badge>
+                              </p>
+                            </div>
+                            <div>
+                              <span className="text-xs text-muted-foreground">Última Producción:</span>
+                              <p className="font-semibold text-sm text-gray-600">
+                                {stockItem.last_production_date ? (
+                                  format(new Date(stockItem.last_production_date), 'dd/MM/yyyy', { locale: es })
+                                ) : (
+                                  <span className="text-gray-400">-</span>
+                                )}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           </Card>
         )}

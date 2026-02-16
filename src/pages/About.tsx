@@ -12,7 +12,10 @@ import {
   Sparkles,
   ArrowRight,
   CheckCircle,
-  Star
+  Star,
+  Recycle,
+  TreePine,
+  Flower2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -20,24 +23,24 @@ import Layout from '@/components/Layout';
 const About: React.FC = () => {
   const values = [
     {
-      icon: <Leaf className="h-8 w-8 text-white" />,
-      title: 'Ingredientes Naturales',
-      description: 'Usamos solo los ingredientes a base de plantas más puros, cuidadosamente obtenidos de granjas sostenibles alrededor del mundo.'
+      icon: <img src="/icons/icon1.png" alt="Made in Guatemala" className="h-64 w-64 object-contain" />,
+      title: 'Made in Guatemala',
+      description: 'Orgullosamente guatemaltecos, creamos productos que representan la riqueza natural de nuestra tierra y apoyan la economía local.'
     },
     {
-      icon: <Heart className="h-8 w-8 text-white" />,
-      title: 'Libre de Crueldad',
+      icon: <img src="/icons/icon2.png" alt="Cruelty Free" className="h-64 w-64 object-contain" />,
+      title: 'Cruelty Free',
       description: 'Nuestros productos nunca se prueban en animales. Creemos en la belleza ética que respeta a todos los seres vivos.'
     },
     {
-      icon: <Shield className="h-8 w-8 text-white" />,
-      title: 'Seguro y Efectivo',
-      description: 'Cada producto está formulado pensando en la seguridad, usando ingredientes que están probados para funcionar sin efectos secundarios dañinos.'
+      icon: <img src="/icons/icon3.png" alt="Natural Ingredients" className="h-64 w-64 object-contain" />,
+      title: 'Natural Ingredients',
+      description: 'Usamos solo los ingredientes a base de plantas más puros, cuidadosamente obtenidos de granjas sostenibles alrededor del mundo.'
     },
     {
-      icon: <Globe className="h-8 w-8 text-white" />,
-      title: 'Sostenible',
-      description: 'Estamos comprometidos a reducir nuestro impacto ambiental a través de empaques ecológicos y abastecimiento responsable.'
+      icon: <img src="/icons/icon4.png" alt="Safe and Sustainable" className="h-64 w-64 object-contain" />,
+      title: 'Safe and Sustainable',
+      description: 'Cada producto está formulado pensando en la seguridad y la sostenibilidad, usando ingredientes probados y empaques ecológicos.'
     }
   ];
 
@@ -59,7 +62,7 @@ const About: React.FC = () => {
       description: 'Sin parabenos, sulfatos, ni ingredientes sintéticos. Solo lo mejor que la naturaleza ofrece.'
     },
     {
-      icon: <Heart className="h-8 w-8 text-white" />,
+      icon: <Leaf className="h-6 w-6 text-white" />,
       title: 'Libre de Crueldad',
       description: 'Nunca probamos en animales. Todos nuestros productos son cruelty-free certificados.'
     },
@@ -88,11 +91,6 @@ const About: React.FC = () => {
             <div className="absolute -top-40 -right-40 w-96 h-96 bg-white/8 rounded-full blur-3xl animate-pulse"></div>
             <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-white/8 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/5 rounded-full blur-3xl"></div>
-            {/* Subtle botanical pattern overlay */}
-            <div className="absolute inset-0 opacity-5" style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-              backgroundSize: '60px 60px'
-            }}></div>
           </div>
           
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -101,14 +99,14 @@ const About: React.FC = () => {
                 <div className="flex items-center gap-2 px-5 py-2.5 bg-[#7d8768]/30 backdrop-blur-sm rounded-full border border-white/20 shadow-lg">
                   <Leaf className="h-5 w-5 text-white/95" />
                   <Sparkles className="h-4 w-4 text-white/80" />
-                  <span className="text-sm font-medium tracking-wide font-gilda-display">Nuestra Historia</span>
+                  <span className="text-sm font-medium tracking-wide font-gilda-display">Quiénes Somos</span>
                 </div>
               </div>
               <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-normal mb-8 font-editorial-new leading-tight tracking-tight animate-slide-in">
-                Sobre Botanic Care
+                Sobre Nosotros
               </h1>
               <p className="text-xl md:text-2xl lg:text-3xl text-white/95 max-w-3xl mx-auto leading-relaxed font-audrey font-normal mb-8">
-                Estamos en una misión para llevar el poder de la naturaleza a tu rutina diaria de cuidado de la piel
+                Botanic Care es una marca guatemalteca de productos naturales que combina el poder de la naturaleza y la ciencia creando fórmulas efectivas y respetuosas con el medio ambiente
               </p>
               <div className="flex items-center justify-center gap-6 text-white/80 text-sm font-body flex-wrap">
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-[#7d8768]/30 rounded-full">
@@ -117,7 +115,7 @@ const About: React.FC = () => {
                 </div>
                 <span className="text-white/40">•</span>
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-[#313522]/30 rounded-full">
-                  <Heart className="h-4 w-4" />
+                  <Leaf className="h-3 w-3" />
                   <span>Libre de Crueldad</span>
                 </div>
                 <span className="text-white/40">•</span>
@@ -135,17 +133,17 @@ const About: React.FC = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div>
-                <h2 className="text-4xl md:text-5xl font-normal text-gray-900 mb-8 font-editorial-new leading-tight">Nuestra Misión</h2>
+                <h2 className="text-4xl md:text-5xl font-normal text-gray-900 mb-8 font-editorial-new leading-tight">Nuestra Misión y Visión</h2>
                 <p className="text-lg text-gray-700 mb-6 leading-relaxed font-body text-justify">
-                  En Botanic Care, creemos que todos merecen acceso a productos de cuidado de la piel seguros, efectivos 
-                  y naturales. Nuestra misión es cerrar la brecha entre la belleza tradicional y el bienestar natural, 
-                  creando productos que no solo funcionan sino que también respetan tu piel y el medio ambiente.
+                  En Botanic Care, nuestra misión es ofrecer productos naturales de alta calidad que promuevan el bienestar y la belleza, 
+                  fusionando la sabiduría de la naturaleza con avances científicos. Nuestro compromiso es ser responsables con el medio ambiente, 
+                  utilizando ingredientes ecofriendly y biodegradables para enriquecer la vida de nuestros clientes.
                 </p>
                 <p className="text-lg text-gray-700 mb-10 leading-relaxed font-body text-justify">
-                  Comenzamos con una pregunta simple: "¿Por qué el cuidado de la piel no puede ser tanto efectivo 
-                  como completamente natural?" Esta pregunta nos llevó en un viaje para descubrir 
-                  los ingredientes a base de plantas más poderosos y crear formulaciones que 
-                  entregan resultados reales sin compromiso.
+                  Nuestra visión es llegar a ser reconocidos como líderes en la industria de productos naturales en Guatemala y Latinoamérica, 
+                  inspirando a las personas a elegir opciones saludables y sostenibles. Aspiramos a innovar continuamente nuestras fórmulas, 
+                  preservar la biodiversidad y educar a nuestros consumidores sobre los beneficios de los productos naturales para un estilo 
+                  de vida equilibrado y saludable.
                 </p>
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                   <Link to="/shop">
@@ -163,26 +161,32 @@ const About: React.FC = () => {
                 </div>
               </div>
               <div className="relative">
-                <Card className="border border-gray-200/60 shadow-xl bg-[#7d8768]/5 backdrop-blur-sm">
+                <Card className="border border-gray-200/60 shadow-xl bg-[#e7b745]">
                   <CardContent className="p-10">
-                    <div className="text-6xl mb-6 text-center">🌿</div>
-                    <h3 className="text-2xl font-normal text-gray-900 mb-6 font-gilda-display text-center">Por Qué Hacemos Lo Que Hacemos</h3>
+                    <div className="flex justify-center mb-6">
+                      <img
+                        src="/BC Brand/2. icono-20250730T203031Z-1-001/2. icono/Icono_BotanicCare_Verde Claro.png"
+                        alt="Botanic Care Icon"
+                        className="h-16 w-16 object-contain"
+                      />
+                    </div>
+                    <h3 className="text-3xl md:text-4xl font-normal text-gray-900 mb-6 font-gilda-display text-center">Nuestra Motivación</h3>
                     <ul className="space-y-4">
                       <li className="flex items-start gap-4">
-                        <CheckCircle className="h-6 w-6 text-[#7d8768] flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700 font-body leading-relaxed">Tu piel merece lo mejor que la naturaleza tiene para ofrecer</span>
+                        <Flower2 className="h-5 w-5 text-[#7d8768] flex-shrink-0 mt-0.5" />
+                        <span className="text-gray-700 font-body leading-relaxed">Creemos en el poder de los ingredientes naturales guatemaltecos para transformar el cuidado de la piel</span>
                       </li>
                       <li className="flex items-start gap-4">
-                        <CheckCircle className="h-6 w-6 text-[#313522] flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700 font-body leading-relaxed">El medio ambiente no debería sufrir por la belleza</span>
+                        <Flower2 className="h-5 w-5 text-[#313522] flex-shrink-0 mt-0.5" />
+                        <span className="text-gray-700 font-body leading-relaxed">Fusionamos la sabiduría ancestral con la innovación científica para crear fórmulas efectivas</span>
                       </li>
                       <li className="flex items-start gap-4">
-                        <CheckCircle className="h-6 w-6 text-[#8e421e] flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700 font-body leading-relaxed">Todos deberían tener acceso al cuidado de la piel natural</span>
+                        <Flower2 className="h-5 w-5 text-[#8e421e] flex-shrink-0 mt-0.5" />
+                        <span className="text-gray-700 font-body leading-relaxed">Promovemos la sostenibilidad y el respeto por el medio ambiente en cada producto</span>
                       </li>
                       <li className="flex items-start gap-4">
-                        <CheckCircle className="h-6 w-6 text-[#b9a035] flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700 font-body leading-relaxed">La ciencia y la naturaleza pueden trabajar juntas</span>
+                        <Flower2 className="h-5 w-5 text-[#b9a035] flex-shrink-0 mt-0.5" />
+                        <span className="text-gray-700 font-body leading-relaxed">Aspiramos a ser líderes en productos naturales en Guatemala y Latinoamérica</span>
                       </li>
                     </ul>
                   </CardContent>
@@ -203,22 +207,21 @@ const About: React.FC = () => {
               {values.map((value, index) => (
                 <Card 
                   key={index} 
-                  className="text-center hover:shadow-xl transition-all duration-500 bg-white border border-gray-200/60 hover:-translate-y-2"
+                  className={`text-center hover:shadow-xl transition-all duration-500 border border-gray-200/60 hover:-translate-y-2 ${
+                    index % 4 === 0 ? 'bg-[#698ba9]' :
+                    index % 4 === 1 ? 'bg-[#587e52]' :
+                    index % 4 === 2 ? 'bg-[#cc8f47]' :
+                    'bg-[#9d627b]'
+                  }`}
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <CardContent className="p-8">
-                    <div className="flex justify-center mb-6">
-                      <div className={`w-20 h-20 rounded-2xl flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform duration-300 ${
-                        index % 4 === 0 ? 'bg-[#7d8768]' :
-                        index % 4 === 1 ? 'bg-[#313522]' :
-                        index % 4 === 2 ? 'bg-[#8e421e]' :
-                        'bg-[#b9a035]'
-                      }`}>
+                  <CardContent className="p-0 pb-8 px-8">
+                    <div className="flex flex-col items-center -mt-8">
+                      <div className="mb-0 hover:scale-110 transition-transform duration-300">
                         {value.icon}
                       </div>
                     </div>
-                    <h3 className="text-xl font-normal text-gray-900 mb-4 font-gilda-display">{value.title}</h3>
-                    <p className="text-gray-600 leading-relaxed font-body text-center">{value.description}</p>
+                    <p className="text-white/90 leading-relaxed font-body text-center -mt-6">{value.description}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -230,7 +233,7 @@ const About: React.FC = () => {
         <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-normal text-gray-900 mb-4 font-editorial-new">Conoce a Nuestro Equipo</h2>
+              <h2 className="text-4xl md:text-5xl font-normal text-gray-900 mb-4 font-editorial-new">Nuestro Equipo</h2>
               <p className="text-xl text-gray-600 font-audrey max-w-2xl mx-auto">La pasión y visión detrás de Botanic Care</p>
             </div>
             
@@ -284,47 +287,6 @@ const About: React.FC = () => {
                   </div>
                 </CardContent>
               </Card>
-            </div>
-          </div>
-        </section>
-
-        {/* Commitments Section - Enhanced */}
-        <section className="py-20 bg-gradient-to-b from-white via-[#fafaf9] to-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-normal text-gray-900 mb-4 font-editorial-new">Nuestro Compromiso</h2>
-              <p className="text-xl text-gray-600 font-audrey max-w-2xl mx-auto">Lo que nos distingue y nuestra promesa para contigo</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {commitments.map((commitment, index) => (
-                <Card 
-                  key={index} 
-                  className="hover:shadow-xl transition-all duration-500 bg-white border border-gray-200/60 hover:-translate-y-2"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <CardContent className="p-8">
-                    <div className="flex justify-center mb-6">
-                      <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform duration-300 ${
-                        index % 4 === 0 ? 'bg-[#7d8768]' :
-                        index % 4 === 1 ? 'bg-[#313522]' :
-                        index % 4 === 2 ? 'bg-[#8e421e]' :
-                        'bg-[#b9a035]'
-                      }`}>
-                        {commitment.icon}
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-center gap-2 mb-4 flex-wrap">
-                      <h3 className="text-xl font-normal text-gray-900 font-gilda-display text-center">{commitment.title}</h3>
-                      {(commitment as any).comingSoon && (
-                        <Badge className="bg-amber-100 text-amber-800 border-amber-200 text-xs font-body">
-                          Próximamente
-                        </Badge>
-                      )}
-                    </div>
-                    <p className="text-gray-600 leading-relaxed font-body text-center">{commitment.description}</p>
-                  </CardContent>
-                </Card>
-              ))}
             </div>
           </div>
         </section>

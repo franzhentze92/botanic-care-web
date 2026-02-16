@@ -124,39 +124,42 @@ const AdminSettings: React.FC = () => {
 
   return (
     <AdminLayout>
-      <div className="p-6 space-y-6">
+      <div className="p-4 md:p-6 space-y-4 md:space-y-6">
         <AdminPageHeader
           title="Ajustes"
           description="Configura las opciones generales de la plataforma"
         />
 
-        <Tabs defaultValue="general" className="space-y-6">
+        <Tabs defaultValue="general" className="space-y-4 md:space-y-6">
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="general">
-              <Settings className="h-4 w-4 mr-2" />
-              General
+            <TabsTrigger value="general" className="text-xs md:text-sm">
+              <Settings className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
+              <span className="hidden sm:inline">General</span>
+              <span className="sm:hidden">Gen</span>
             </TabsTrigger>
-            <TabsTrigger value="orders">
-              <Store className="h-4 w-4 mr-2" />
-              Pedidos
+            <TabsTrigger value="orders" className="text-xs md:text-sm">
+              <Store className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
+              <span className="hidden sm:inline">Pedidos</span>
+              <span className="sm:hidden">Ped</span>
             </TabsTrigger>
-            <TabsTrigger value="security">
-              <Shield className="h-4 w-4 mr-2" />
-              Seguridad
+            <TabsTrigger value="security" className="text-xs md:text-sm">
+              <Shield className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
+              <span className="hidden sm:inline">Seguridad</span>
+              <span className="sm:hidden">Seg</span>
             </TabsTrigger>
           </TabsList>
 
           {/* Configuración General */}
-          <TabsContent value="general" className="space-y-6">
+          <TabsContent value="general" className="space-y-4 md:space-y-6">
             <Card>
-              <CardHeader>
-                <CardTitle>Información General de la Tienda</CardTitle>
-                <CardDescription>
+              <CardHeader className="p-4 md:p-6">
+                <CardTitle className="text-base md:text-lg">Información General de la Tienda</CardTitle>
+                <CardDescription className="text-xs md:text-sm">
                   Configura la información básica de tu tienda
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+              <CardContent className="p-4 md:p-6 space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="storeName">Nombre de la Tienda *</Label>
                     <Input
@@ -186,7 +189,7 @@ const AdminSettings: React.FC = () => {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="storePhone">Teléfono</Label>
                     <Input
@@ -213,7 +216,7 @@ const AdminSettings: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="storeCity">Ciudad</Label>
                     <Input
@@ -244,7 +247,7 @@ const AdminSettings: React.FC = () => {
                 <Separator />
 
                 <div className="flex justify-end">
-                  <Button onClick={handleSaveGeneral} disabled={saving} className="bg-[#7d8768] hover:bg-[#6a7559]">
+                  <Button onClick={handleSaveGeneral} disabled={saving} className="bg-[#7d8768] hover:bg-[#6a7559] w-full md:w-auto">
                     {saving ? (
                       <>
                         <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
@@ -263,16 +266,16 @@ const AdminSettings: React.FC = () => {
           </TabsContent>
 
           {/* Configuración de Pedidos */}
-          <TabsContent value="orders" className="space-y-6">
+          <TabsContent value="orders" className="space-y-4 md:space-y-6">
             <Card>
-              <CardHeader>
-                <CardTitle>Configuración de Pedidos</CardTitle>
-                <CardDescription>
+              <CardHeader className="p-4 md:p-6">
+                <CardTitle className="text-base md:text-lg">Configuración de Pedidos</CardTitle>
+                <CardDescription className="text-xs md:text-sm">
                   Ajusta las opciones relacionadas con pedidos y envíos
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+              <CardContent className="p-4 md:p-6 space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="minOrderAmount">Monto Mínimo de Pedido</Label>
                     <Input
@@ -295,7 +298,7 @@ const AdminSettings: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="shippingCost">Costo de Envío</Label>
                     <Input
@@ -347,7 +350,7 @@ const AdminSettings: React.FC = () => {
                 <Separator />
 
                 <div className="flex justify-end">
-                  <Button onClick={handleSaveOrders} disabled={saving} className="bg-[#7d8768] hover:bg-[#6a7559]">
+                  <Button onClick={handleSaveOrders} disabled={saving} className="bg-[#7d8768] hover:bg-[#6a7559] w-full md:w-auto">
                     {saving ? (
                       <>
                         <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
@@ -366,16 +369,16 @@ const AdminSettings: React.FC = () => {
           </TabsContent>
 
           {/* Configuración de Seguridad */}
-          <TabsContent value="security" className="space-y-6">
+          <TabsContent value="security" className="space-y-4 md:space-y-6">
             <Card>
-              <CardHeader>
-                <CardTitle>Configuración de Seguridad</CardTitle>
-                <CardDescription>
+              <CardHeader className="p-4 md:p-6">
+                <CardTitle className="text-base md:text-lg">Configuración de Seguridad</CardTitle>
+                <CardDescription className="text-xs md:text-sm">
                   Ajustes de seguridad y autenticación
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+              <CardContent className="p-4 md:p-6 space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="passwordMinLength">Longitud Mínima de Contraseña</Label>
                     <Input
@@ -440,7 +443,7 @@ const AdminSettings: React.FC = () => {
                 <Separator />
 
                 <div className="flex justify-end">
-                  <Button onClick={handleSaveSecurity} disabled={saving} className="bg-[#7d8768] hover:bg-[#6a7559]">
+                  <Button onClick={handleSaveSecurity} disabled={saving} className="bg-[#7d8768] hover:bg-[#6a7559] w-full md:w-auto">
                     {saving ? (
                       <>
                         <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
@@ -461,17 +464,17 @@ const AdminSettings: React.FC = () => {
 
         {/* Sección de Utilidades */}
         <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Database className="h-5 w-5" />
+          <CardHeader className="p-4 md:p-6">
+            <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+              <Database className="h-4 w-4 md:h-5 md:w-5" />
               Utilidades del Sistema
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-xs md:text-sm">
               Herramientas de mantenimiento y gestión de datos
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-3 gap-4">
+          <CardContent className="p-4 md:p-6 space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
               <Button onClick={handleExportData} variant="outline" className="w-full">
                 <Download className="h-4 w-4 mr-2" />
                 Exportar Datos

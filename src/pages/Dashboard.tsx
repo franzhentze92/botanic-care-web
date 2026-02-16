@@ -392,7 +392,26 @@ const Dashboard: React.FC = () => {
     ? new Date(user.created_at).getFullYear().toString()
     : '2023';
 
-  if (ordersLoading || addressesLoading || paymentMethodsLoading || profileLoading) {
+  // Mostrar loading solo si es la primera carga y hay usuario, pero con timeout muy corto
+  // No bloquear si el perfil falla en cargar - siempre mostrar contenido
+  const isInitialLoading = user && (
+    (ordersLoading && orders.length === 0) || 
+    (addressesLoading && addresses.length === 0) || 
+    (paymentMethodsLoading && paymentMethods.length === 0)
+  );
+
+  // Timeout muy corto para evitar loading infinito - mostrar contenido después de 1 segundo
+  const [showContent, setShowContent] = React.useState(false);
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowContent(true);
+    }, 1000); // Reducido a 1 segundo
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Siempre mostrar contenido, incluso si está cargando
+  // El loading solo se muestra si es muy rápido (< 1 segundo)
+  if (isInitialLoading && !showContent) {
     return (
       <Layout>
         <div className="min-h-screen flex items-center justify-center">
@@ -962,85 +981,6 @@ const Dashboard: React.FC = () => {
 
                       {/* Payments Section */}
                       <div className="space-y-6">
-                        <div className="flex items-center justify-between">
-                          <h3 className="text-xl font-semibold font-editorial-new">Métodos de Pago</h3>
-                          <Button 
-                            onClick={handleAddPayment}
-                            className="bg-[#7d8768] hover:bg-[#6d7660] text-white font-body"
-                          >
-                            <Plus className="h-4 w-4 mr-2" />
-                            Agregar Método
-                          </Button>
-                        </div>
-
-                        {paymentMethods.length === 0 ? (
-                          <div className="text-center py-12">
-                            <CreditCard className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                            <h3 className="text-lg font-medium text-gray-900 mb-2">No tienes métodos de pago guardados</h3>
-                            <p className="text-gray-600 mb-4">Agrega un método de pago para facilitar tus compras</p>
-                            <Button 
-                              onClick={handleAddPayment}
-                              className="bg-[#7d8768] hover:bg-[#6d7660] text-white font-body"
-                            >
-                              <Plus className="h-4 w-4 mr-2" />
-                              Agregar Método de Pago
-                            </Button>
-                          </div>
-                        ) : (
-                          <div className="space-y-4">
-                            {paymentMethods.map((method) => (
-                              <Card key={method.id} className="border-0 shadow-md hover:shadow-lg transition-shadow">
-                                <CardContent className="p-6">
-                                  <div className="flex items-center justify-between">
-                                    <div className="flex items-center space-x-4">
-                                      <div className="p-3 bg-[#7d8768]/20 rounded-lg">
-                                        <CreditCard className="h-6 w-6 text-[#7d8768]" />
-                                      </div>
-                                      <div>
-                                        <h4 className="font-medium">
-                                          {method.type === 'card' 
-                                            ? `${method.card_brand} •••• ${method.last4}`
-                                            : method.type === 'paypal'
-                                            ? `PayPal - ${method.paypal_email}`
-                                            : 'Efectivo contra entrega'
-                                          }
-                                        </h4>
-                                        {method.type === 'card' && method.expiry_month && method.expiry_year && (
-                                          <p className="text-sm text-gray-600">
-                                            Expira: {method.expiry_month}/{method.expiry_year}
-                                          </p>
-                                        )}
-                                        {method.is_default && (
-                                          <Badge variant="outline" className="text-green-600 border-green-600 mt-1">
-                                            Predeterminado
-                                          </Badge>
-                                        )}
-                                      </div>
-                                    </div>
-                                    <div className="flex space-x-2">
-                                      <Button 
-                                        variant="ghost" 
-                                        size="sm"
-                                        onClick={() => handleEditPayment(method)}
-                                      >
-                                        <Edit className="h-4 w-4" />
-                                      </Button>
-                                      <Button 
-                                        variant="ghost" 
-                                        size="sm" 
-                                        className="text-red-600 hover:text-red-700"
-                                        onClick={() => setDeletePaymentId(method.id)}
-                                      >
-                                        <Trash2 className="h-4 w-4" />
-                                      </Button>
-                                    </div>
-                                  </div>
-                                </CardContent>
-                              </Card>
-                            ))}
-                          </div>
-                        )}
-
                         <div className="flex items-center justify-between">
                           <h3 className="text-xl font-semibold font-editorial-new">Métodos de Pago</h3>
                           <Button 

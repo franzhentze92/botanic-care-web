@@ -127,7 +127,7 @@ const Home: React.FC = () => {
     {
       icon: <Truck className="h-8 w-8 text-white" />,
       title: 'Envío Gratis',
-      description: 'En pedidos superiores a $50'
+      description: 'En pedidos superiores a Q.500'
     },
     {
       icon: <Package className="h-8 w-8 text-white" />,
@@ -136,8 +136,8 @@ const Home: React.FC = () => {
     },
     {
       icon: <Shield className="h-8 w-8 text-white" />,
-      title: 'Garantía de Calidad',
-      description: '30 días de garantía'
+      title: 'Productos Certificados',
+      description: 'Ingredientes naturales verificados'
     },
     {
       icon: <Gift className="h-8 w-8 text-white" />,
@@ -150,24 +150,19 @@ const Home: React.FC = () => {
     <Layout>
       <div className="min-h-screen bg-white">
         {/* Hero Section - Enhanced */}
-        <section className="relative bg-[#7d8768] text-white py-24 md:py-32 overflow-hidden">
+        <section className="relative bg-[#7d8768] text-white py-20 md:py-28 overflow-hidden">
           {/* Background decorative elements */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 -right-40 w-96 h-96 bg-white/8 rounded-full blur-3xl animate-pulse"></div>
             <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-white/8 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/5 rounded-full blur-3xl"></div>
-            {/* Subtle botanical pattern overlay */}
-            <div className="absolute inset-0 opacity-5" style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-              backgroundSize: '60px 60px'
-            }}></div>
           </div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[600px]">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[400px]">
             <div className="text-left flex flex-col justify-center">
               <div className="inline-flex items-center gap-2 mb-6 bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-full border border-white/30 shadow-lg">
-                <span className="font-semibold font-audrey">Ingredientes 100% Naturales</span>
+                <span className="text-lg font-semibold font-audrey">Ingredientes 100% Naturales</span>
                 <CheckCircle className="h-5 w-5" />
               </div>
               <h1 className="text-5xl md:text-6xl font-bold text-white mb-8 leading-tight font-editorial-new drop-shadow-lg">
@@ -179,7 +174,7 @@ const Home: React.FC = () => {
               </h1>
               <p className="text-xl text-white/95 mb-10 max-w-2xl leading-relaxed font-audrey drop-shadow-md">
                 Transforma tu rutina de cuidado de la piel con nuestros productos premium a base de plantas. 
-                Desde aceites esenciales hasta cremas y serums naturales, llevamos lo mejor de la naturaleza a tu cuidado diario.
+                Desde jabones faciales hasta cremas corporales, llevamos lo mejor de la naturaleza a tu rutina de cuidado personal.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-6 mt-6">
@@ -225,13 +220,13 @@ const Home: React.FC = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
             <div className="flex items-center justify-center mb-6">
               <div className="px-5 py-2.5 bg-white/80 backdrop-blur-sm rounded-full border border-[#7d8768]/20 shadow-md">
-                <span className="text-4xl">🎉</span>
+                <Leaf className="h-8 w-8 text-[#7d8768]" />
               </div>
             </div>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 font-editorial-new text-gray-900">¡Oferta de Verano - Hasta 40% de Descuento!</h2>
-            <p className="text-xl md:text-2xl text-gray-700 mb-8 font-audrey max-w-3xl mx-auto">Envío gratis en pedidos superiores a Q. {freeShippingThreshold} • Oferta por tiempo limitado</p>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 font-editorial-new text-gray-900">¡Ofertas de Valentines - Hasta 15% de Descuento!</h2>
+            <p className="text-xl md:text-2xl text-gray-700 mb-8 font-audrey max-w-3xl mx-auto">Envío gratis en pedidos superiores a Q. 500 • Oferta por tiempo limitado</p>
             <Button size="lg" className="bg-[#7d8768] hover:bg-[#6d7660] text-white px-10 py-6 text-lg font-body shadow-xl hover:shadow-2xl transition-all duration-300" asChild>
-              <Link to="/shop?sale=true">
+              <Link to="/shop?bundle=true">
                 Aprovechar Oferta
                 <TrendingUp className="ml-2 h-5 w-5" />
               </Link>
@@ -239,17 +234,14 @@ const Home: React.FC = () => {
           </div>
         </section>
 
-        {/* Video 1 Section */}
+        {/* Banner 0 Section */}
         <section className="py-16 bg-white">
           <div className="max-w-5xl lg:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="relative rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300">
-              <video
-                src="/BC Brand/videos/video1.mp4"
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="w-full h-auto object-cover max-h-[500px] lg:max-h-[700px]"
+              <img
+                src="/banner0.png"
+                alt="Botanic Care Banner"
+                className="w-full h-auto object-cover max-h-[400px] lg:max-h-[450px]"
               />
             </div>
           </div>
@@ -259,14 +251,14 @@ const Home: React.FC = () => {
         <section className="py-24 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 bg-[#7d8768]/10 rounded-full border border-[#7d8768]/20">
+              <div className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 bg-[#7d8768]/20 rounded-full border border-[#7d8768]/40">
                 <Sparkles className="h-4 w-4 text-[#7d8768]" />
                 <span className="text-sm font-medium text-[#7d8768] font-audrey">Nuestras Categorías</span>
               </div>
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 font-editorial-new">
                 Comprar por <span className="text-[#7d8768]">Categoría</span>
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto font-audrey leading-relaxed">Encuentra exactamente lo que tu piel necesita con nuestra amplia selección de productos naturales</p>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto font-audrey leading-relaxed">Encuentra lo que tu piel necesita con nuestra amplia selección de productos naturales</p>
             </div>
             {isLoadingCategories ? (
               <div className="text-center py-12">
@@ -278,14 +270,34 @@ const Home: React.FC = () => {
                 <p className="text-gray-600 font-audrey">No hay categorías disponibles en este momento</p>
               </div>
             ) : (
-              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-                {categories.map((category, index) => (
+              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+                {categories.map((category, index) => {
+                  // Assign colors based on category name
+                  const getCategoryColor = (name: string) => {
+                    const nameLower = name.toLowerCase();
+                    if (nameLower.includes('home') || nameLower.includes('hogar') || nameLower.includes('essentials')) {
+                      return 'bg-[#698ba9]'; // Blue for Home Essentials
+                    }
+                    if (nameLower.includes('baby') || nameLower.includes('bebé') || nameLower.includes('bebe')) {
+                      return 'bg-[#9d627b]'; // Purple for Baby Care
+                    }
+                    if (nameLower.includes('body') || nameLower.includes('corporal')) {
+                      return 'bg-[#587e52]'; // Green for Body Care
+                    }
+                    if (nameLower.includes('skin') || nameLower.includes('piel') || nameLower.includes('facial')) {
+                      return 'bg-[#cc8f47]'; // Orange for Skin Care
+                    }
+                    // Default fallback colors
+                    const defaultColors = ['bg-[#698ba9]', 'bg-[#587e52]', 'bg-[#cc8f47]', 'bg-[#9d627b]'];
+                    return defaultColors[index % 4];
+                  };
+
+                  return (
                   <Link key={category.name} to={category.href}>
-                    <Card className="group hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer bg-white border border-gray-200/60 relative overflow-hidden h-full">
-                      <div className="absolute inset-0 bg-[#7d8768]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <CardContent className="p-6 text-center relative z-10 flex flex-col h-full">
-                      <div className="relative mb-6 mx-auto">
-                        <div className="w-32 h-32 md:w-36 md:h-36 rounded-full overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 shadow-xl group-hover:shadow-2xl transition-all duration-300 ring-4 ring-white group-hover:ring-[#7d8768]/20">
+                    <Card className={`group hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer border border-gray-200/60 relative overflow-hidden h-full ${getCategoryColor(category.name)}`}>
+                      <CardContent className="p-8 text-center relative z-10 flex flex-col h-full">
+                      <div className="relative mb-8 mx-auto">
+                        <div className="w-40 h-40 md:w-48 md:h-48 rounded-full overflow-hidden bg-white/20 shadow-xl group-hover:shadow-2xl transition-all duration-300 ring-4 ring-white/30 group-hover:ring-white/50">
                           <img 
                             src={category.image} 
                             alt={category.name}
@@ -295,15 +307,14 @@ const Home: React.FC = () => {
                             }}
                           />
                         </div>
-                        {/* Decorative gradient overlay on hover */}
-                        <div className="absolute inset-0 rounded-full bg-[#7d8768]/0 group-hover:bg-[#7d8768]/10 transition-all duration-300 pointer-events-none"></div>
                       </div>
-                        <h3 className="font-bold text-gray-900 text-base group-hover:text-[#7d8768] transition-colors duration-300 font-editorial-new mb-2">{category.name}</h3>
-                        <p className="text-xs text-gray-600 font-audrey leading-relaxed">{category.description}</p>
+                        <h3 className="font-bold text-white text-xl md:text-2xl transition-colors duration-300 font-editorial-new mb-3">{category.name}</h3>
+                        <p className="text-base md:text-lg text-white/90 font-audrey leading-relaxed">{category.description}</p>
                       </CardContent>
                     </Card>
                   </Link>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
@@ -441,17 +452,14 @@ const Home: React.FC = () => {
           </div>
         </section>
 
-        {/* Video 4 Section */}
+        {/* Banner 1 Section */}
         <section className="py-16 bg-[#7d8768]/5">
           <div className="max-w-5xl lg:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="relative rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300">
-              <video
-                src="/BC Brand/videos/video4.mp4"
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="w-full h-auto object-cover max-h-[600px] lg:max-h-[800px]"
+              <img
+                src="/banner1.png"
+                alt="Botanic Care Banner"
+                className="w-full h-auto object-cover max-h-[400px] lg:max-h-[450px]"
               />
             </div>
           </div>

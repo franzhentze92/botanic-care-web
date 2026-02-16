@@ -158,57 +158,47 @@ const OrderDetail: React.FC = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-white">
-        {/* Hero Section */}
-        <section className="relative bg-[#7d8768] text-white py-16 md:py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Header */}
+          <div className="mb-6 flex items-center justify-between">
             <Button
               variant="ghost"
               onClick={() => navigate('/dashboard')}
-              className="mb-8 text-white hover:bg-white/10 hover:text-white border border-white/20 font-body"
+              className="font-body"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Volver al Dashboard
             </Button>
-
-            <div className="text-center md:text-left">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 font-editorial-new leading-tight">
-                Detalles del Pedido
-              </h1>
-              <p className="text-xl text-white/95 font-audrey">
-                Pedido {order.order_number}
-              </p>
-            </div>
           </div>
-        </section>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 mb-20">
-          <Card className="border border-gray-200 shadow-2xl bg-white">
+          <Card className="border border-gray-200 shadow-xl bg-white">
             <CardContent className="p-6 lg:p-12">
               {/* Order Header */}
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 pb-6 border-b border-gray-200">
-                <div>
-                  <div className="flex items-center gap-3 mb-3">
-                    <Package className="h-5 w-5 text-[#7d8768]" />
-                    <h2 className="text-2xl font-bold text-gray-900 font-editorial-new">Pedido {order.order_number}</h2>
-                  </div>
-                  <div className="flex items-center gap-4 text-sm text-gray-600 font-body">
-                    <div className="flex items-center gap-2">
+              <div className="mb-8 pb-6 border-b border-gray-200">
+                <div className="flex items-center gap-3 mb-4">
+                  <Package className="h-5 w-5 text-[#7d8768]" />
+                  <h2 className="text-2xl font-bold text-gray-900 font-editorial-new">Detalles del Pedido</h2>
+                </div>
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <div>
+                    <p className="text-lg font-semibold text-gray-900 font-body mb-2">Pedido {order.order_number}</p>
+                    <div className="flex items-center gap-2 text-sm text-gray-600 font-body">
                       <Calendar className="h-4 w-4" />
                       <span>
                         {format(new Date(order.created_at), "dd 'de' MMMM 'de' yyyy", { locale: es })}
                       </span>
                     </div>
                   </div>
-                </div>
-                <div className="mt-4 md:mt-0 flex flex-col items-end gap-3">
-                  <Badge className={`px-4 py-2 text-sm font-semibold border font-body ${getStatusColor(order.status)}`}>
-                    <Clock className="h-4 w-4 mr-2" />
-                    {getStatusLabel(order.status)}
-                  </Badge>
-                  <div className="text-right">
-                    <p className="text-sm text-gray-600 font-body">Total</p>
-                    <p className="text-3xl font-bold text-[#7d8768] font-body">Q. {order.total.toFixed(2)}</p>
+                  <div className="flex flex-col items-end gap-3">
+                    <Badge className={`px-4 py-2 text-sm font-semibold border font-body ${getStatusColor(order.status)}`}>
+                      <Clock className="h-4 w-4 mr-2" />
+                      {getStatusLabel(order.status)}
+                    </Badge>
+                    <div className="text-right">
+                      <p className="text-sm text-gray-600 font-body">Total</p>
+                      <p className="text-3xl font-bold text-[#7d8768] font-body">Q. {order.total.toFixed(2)}</p>
+                    </div>
                   </div>
                 </div>
               </div>

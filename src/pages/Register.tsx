@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { AlertCircle, Loader2, Mail, Lock, User, Eye, EyeOff, CheckCircle } from 'lucide-react';
 import Layout from '@/components/Layout';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { supabase } from '@/lib/supabase';
 
 const Register: React.FC = () => {
   const [name, setName] = useState('');
@@ -18,6 +19,7 @@ const Register: React.FC = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [requiresEmailConfirmation, setRequiresEmailConfirmation] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { signUp } = useAuth();
   const navigate = useNavigate();
@@ -43,17 +45,45 @@ const Register: React.FC = () => {
 
     setIsLoading(true);
 
-    const { error } = await signUp(email, password, { name });
+    try {
+      const { error } = await signUp(email, password, { name });
 
-    if (error) {
-      setError(error.message);
+      if (error) {
+        // Traducir mensajes de error comunes a español
+        let errorMessage = error.message;
+        
+        if (error.message.includes('already registered') || error.message.includes('already exists') || error.message.includes('already been registered')) {
+          errorMessage = 'Este correo electrónico ya está registrado. Por favor, inicia sesión o usa otro correo.';
+        } else if (error.message.includes('Invalid email')) {
+          errorMessage = 'Por favor, ingresa un correo electrónico válido.';
+        } else if (error.message.includes('Password')) {
+          errorMessage = 'La contraseña no cumple con los requisitos.';
+        } else if (error.message.includes('Database error') || error.message.includes('database')) {
+          errorMessage = 'Error al guardar los datos. Por favor, intenta nuevamente.';
+        }
+        
+        setError(errorMessage);
+        setIsLoading(false);
+      } else {
+        setSuccess(true);
+        // Verificar si hay sesión activa (si no hay, requiere confirmación de email)
+        // Esperar un momento para que la sesión se establezca
+        setTimeout(async () => {
+          const { data: { session: currentSession } } = await supabase.auth.getSession();
+          if (currentSession) {
+            // Si hay sesión, redirigir al dashboard
+            navigate('/dashboard');
+          } else {
+            // Si no hay sesión, el usuario necesita confirmar su email
+            setRequiresEmailConfirmation(true);
+            setIsLoading(false);
+          }
+        }, 1000);
+      }
+    } catch (err: any) {
+      console.error('Error during registration:', err);
+      setError(err?.message || 'Ocurrió un error inesperado. Por favor, intenta nuevamente.');
       setIsLoading(false);
-    } else {
-      setSuccess(true);
-      setTimeout(() => {
-        // Redirigir al dashboard después de registrarse
-        navigate('/dashboard');
-      }, 2000);
     }
   };
 
@@ -85,10 +115,19 @@ const Register: React.FC = () => {
                 )}
 
                 {success && (
-                  <Alert className="bg-green-50 border-green-200">
-                    <CheckCircle className="h-4 w-4 text-green-600" />
-                    <AlertDescription className="text-green-800">
-                      ¡Cuenta creada exitosamente! Redirigiendo...
+                  <Alert className={`${requiresEmailConfirmation ? 'bg-blue-50 border-blue-200' : 'bg-green-50 border-green-200'}`}>
+                    <CheckCircle className={`h-4 w-4 ${requiresEmailConfirmation ? 'text-blue-600' : 'text-green-600'}`} />
+                    <AlertDescription className={requiresEmailConfirmation ? 'text-blue-800' : 'text-green-800'}>
+                      {requiresEmailConfirmation ? (
+                        <>
+                          <strong>¡Cuenta creada exitosamente!</strong>
+                          <br />
+                          Por favor, revisa tu correo electrónico y haz clic en el enlace de confirmación para activar tu cuenta.
+                          Una vez confirmado, podrás iniciar sesión.
+                        </>
+                      ) : (
+                        '¡Cuenta creada exitosamente! Redirigiendo...'
+                      )}
                     </AlertDescription>
                   </Alert>
                 )}

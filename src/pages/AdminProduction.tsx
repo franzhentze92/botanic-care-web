@@ -247,7 +247,7 @@ const AdminProduction: React.FC = () => {
 
   return (
     <AdminLayout>
-      <div className="p-6 space-y-6">
+      <div className="p-4 md:p-6 space-y-4 md:space-y-6">
         <AdminPageHeader
           title="Producción"
           description="Gestiona los batches de producción de productos"
@@ -259,70 +259,70 @@ const AdminProduction: React.FC = () => {
         />
 
         {/* KPIs */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
           <Card>
-            <CardContent className="p-4">
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Total Batches</p>
-                  <p className="text-2xl font-bold text-gray-900">{kpis.total}</p>
+                  <p className="text-xs md:text-sm text-gray-600">Total Batches</p>
+                  <p className="text-xl md:text-2xl font-bold text-gray-900">{kpis.total}</p>
                 </div>
-                <Factory className="h-8 w-8 text-[#7d8768]" />
+                <Factory className="h-6 w-6 md:h-8 md:w-8 text-[#7d8768]" />
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-4">
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">En Producción</p>
-                  <p className="text-2xl font-bold text-[#7a7539]">{kpis.enProduccion}</p>
+                  <p className="text-xs md:text-sm text-gray-600">En Producción</p>
+                  <p className="text-xl md:text-2xl font-bold text-[#7a7539]">{kpis.enProduccion}</p>
                 </div>
-                <Loader2 className="h-8 w-8 text-[#7a7539]" />
+                <Loader2 className="h-6 w-6 md:h-8 md:w-8 text-[#7a7539]" />
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-4">
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Completados</p>
-                  <p className="text-2xl font-bold text-[#7d8768]">{kpis.completados}</p>
+                  <p className="text-xs md:text-sm text-gray-600">Completados</p>
+                  <p className="text-xl md:text-2xl font-bold text-[#7d8768]">{kpis.completados}</p>
                 </div>
-                <CheckCircle className="h-8 w-8 text-[#7d8768]" />
+                <CheckCircle className="h-6 w-6 md:h-8 md:w-8 text-[#7d8768]" />
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-4">
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">En Almacén</p>
-                  <p className="text-2xl font-bold text-blue-600">{kpis.enAlmacen}</p>
+                  <p className="text-xs md:text-sm text-gray-600">En Almacén</p>
+                  <p className="text-xl md:text-2xl font-bold text-blue-600">{kpis.enAlmacen}</p>
                 </div>
-                <Package className="h-8 w-8 text-blue-600" />
+                <Package className="h-6 w-6 md:h-8 md:w-8 text-blue-600" />
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-4">
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Agotados</p>
-                  <p className="text-2xl font-bold text-gray-600">{kpis.agotados}</p>
+                  <p className="text-xs md:text-sm text-gray-600">Agotados</p>
+                  <p className="text-xl md:text-2xl font-bold text-gray-600">{kpis.agotados}</p>
                 </div>
-                <XCircle className="h-8 w-8 text-gray-600" />
+                <XCircle className="h-6 w-6 md:h-8 md:w-8 text-gray-600" />
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-4">
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Total Cantidad</p>
-                  <p className="text-2xl font-bold text-[#7d8768]">{kpis.totalCantidad.toLocaleString()}</p>
+                  <p className="text-xs md:text-sm text-gray-600">Total Cantidad</p>
+                  <p className="text-xl md:text-2xl font-bold text-[#7d8768]">{kpis.totalCantidad.toLocaleString()}</p>
                 </div>
-                <Package className="h-8 w-8 text-[#7d8768]" />
+                <Package className="h-6 w-6 md:h-8 md:w-8 text-[#7d8768]" />
               </div>
             </CardContent>
           </Card>
@@ -330,19 +330,19 @@ const AdminProduction: React.FC = () => {
 
         {/* Filtros */}
         <Card>
-          <CardContent className="p-4">
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+          <CardContent className="p-4 md:p-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+              <div className="relative sm:col-span-2 lg:col-span-1">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4 md:h-5 md:w-5" />
                 <Input
                   placeholder="Buscar por número de lote, producto, ubicación..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
+                  className="pl-9 md:pl-10"
                 />
               </div>
               <Select value={filterStatus} onValueChange={setFilterStatus}>
-                <SelectTrigger className="w-full md:w-[180px]">
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Estado" />
                 </SelectTrigger>
                 <SelectContent>
@@ -355,7 +355,7 @@ const AdminProduction: React.FC = () => {
                 </SelectContent>
               </Select>
               <Select value={filterProduct.toString()} onValueChange={(val) => setFilterProduct(parseInt(val))}>
-                <SelectTrigger className="w-full md:w-[180px]">
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Producto" />
                 </SelectTrigger>
                 <SelectContent>
@@ -368,7 +368,7 @@ const AdminProduction: React.FC = () => {
                 </SelectContent>
               </Select>
               <Select value={dateRange} onValueChange={setDateRange}>
-                <SelectTrigger className="w-full md:w-[180px]">
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Período" />
                 </SelectTrigger>
                 <SelectContent>
@@ -395,7 +395,8 @@ const AdminProduction: React.FC = () => {
           </Card>
         ) : (
           <Card>
-            <div className="overflow-x-auto">
+            {/* Desktop Table View */}
+            <div className="hidden lg:block overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -458,12 +459,87 @@ const AdminProduction: React.FC = () => {
                 </TableBody>
               </Table>
             </div>
+
+            {/* Mobile Card View */}
+            <div className="lg:hidden p-4 space-y-3">
+              {batches.map((batch) => (
+                <Card key={batch.id} className="border-l-4 border-l-[#7d8768]">
+                  <CardContent className="p-4">
+                    <div className="space-y-3">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-sm text-gray-900 mb-1">{batch.batch_number}</h3>
+                          {batch.product ? (
+                            <div className="mb-2">
+                              <p className="font-medium text-sm">{batch.product.name}</p>
+                              <p className="text-xs text-gray-500">SKU: {batch.product.sku}</p>
+                            </div>
+                          ) : (
+                            <p className="text-xs text-gray-400 mb-2">Sin producto</p>
+                          )}
+                        </div>
+                        <div className="flex gap-1 flex-shrink-0">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8"
+                            onClick={() => handleOpenEdit(batch)}
+                            title="Editar"
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-red-600"
+                            onClick={() => handleDelete(batch.id)}
+                            title="Eliminar"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="space-y-2 pt-2 border-t">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-muted-foreground">Cantidad:</span>
+                          <span className="font-semibold text-sm">{batch.quantity.toLocaleString()}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-muted-foreground">Estado:</span>
+                          <div>{getStatusBadge(batch.status)}</div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-muted-foreground">Fecha Producción:</span>
+                          <span className="text-xs font-medium">
+                            {format(new Date(batch.production_date), 'd MMM yyyy', { locale: es })}
+                          </span>
+                        </div>
+                        {batch.expiry_date && (
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-muted-foreground">Fecha Caducidad:</span>
+                            <span className="text-xs font-medium">
+                              {format(new Date(batch.expiry_date), 'd MMM yyyy', { locale: es })}
+                            </span>
+                          </div>
+                        )}
+                        {batch.location && (
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-muted-foreground">Ubicación:</span>
+                            <span className="text-xs font-medium">{batch.location}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </Card>
         )}
 
         {/* Dialog para crear/editar */}
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-2xl w-[95vw] md:w-full max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="font-editorial-new">
                 {editingBatch ? 'Editar Batch' : 'Nuevo Batch de Producción'}
@@ -475,7 +551,7 @@ const AdminProduction: React.FC = () => {
               </DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="product_id">Producto *</Label>
                   <Select
@@ -508,7 +584,7 @@ const AdminProduction: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="production_date">Fecha de Producción *</Label>
                   <Input
@@ -530,7 +606,7 @@ const AdminProduction: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="status">Estado *</Label>
                   <Select

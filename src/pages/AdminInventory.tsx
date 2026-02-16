@@ -359,7 +359,7 @@ const AdminInventory: React.FC = () => {
 
   return (
     <AdminLayout>
-      <div className="p-6 space-y-6">
+      <div className="p-4 md:p-6 space-y-4 md:space-y-6">
         <AdminPageHeader
           title="Materia Prima BC"
           description="Gestiona el inventario de productos internos e ingredientes (materia prima)"
@@ -371,59 +371,59 @@ const AdminInventory: React.FC = () => {
         />
 
         {/* KPIs */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
           <Card>
-            <CardContent className="p-4">
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Total Items</p>
-                  <p className="text-2xl font-bold text-gray-900">{kpis.total}</p>
+                  <p className="text-xs md:text-sm text-gray-600">Total Items</p>
+                  <p className="text-xl md:text-2xl font-bold text-gray-900">{kpis.total}</p>
                 </div>
-                <Package className="h-8 w-8 text-[#7d8768]" />
+                <Package className="h-6 w-6 md:h-8 md:w-8 text-[#7d8768]" />
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-4">
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Activos</p>
-                  <p className="text-2xl font-bold text-[#7d8768]">{kpis.active}</p>
+                  <p className="text-xs md:text-sm text-gray-600">Activos</p>
+                  <p className="text-xl md:text-2xl font-bold text-[#7d8768]">{kpis.active}</p>
                 </div>
-                <Warehouse className="h-8 w-8 text-[#7d8768]" />
+                <Warehouse className="h-6 w-6 md:h-8 md:w-8 text-[#7d8768]" />
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-4">
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Stock Bajo</p>
-                  <p className="text-2xl font-bold text-[#9d627b]">{kpis.lowStock}</p>
+                  <p className="text-xs md:text-sm text-gray-600">Stock Bajo</p>
+                  <p className="text-xl md:text-2xl font-bold text-[#9d627b]">{kpis.lowStock}</p>
                 </div>
-                <AlertTriangle className="h-8 w-8 text-[#9d627b]" />
+                <AlertTriangle className="h-6 w-6 md:h-8 md:w-8 text-[#9d627b]" />
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-4">
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Valor Total</p>
-                  <p className="text-2xl font-bold text-blue-600">{formatCurrency(kpis.totalValue)}</p>
+                  <p className="text-xs md:text-sm text-gray-600">Valor Total</p>
+                  <p className="text-lg md:text-2xl font-bold text-blue-600">{formatCurrency(kpis.totalValue)}</p>
                 </div>
-                <DollarSign className="h-8 w-8 text-blue-600" />
+                <DollarSign className="h-6 w-6 md:h-8 md:w-8 text-blue-600" />
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-4">
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Stock Total</p>
-                  <p className="text-2xl font-bold text-[#7d8768]">{kpis.totalStock.toFixed(2)}</p>
+                  <p className="text-xs md:text-sm text-gray-600">Stock Total</p>
+                  <p className="text-xl md:text-2xl font-bold text-[#7d8768]">{kpis.totalStock.toFixed(2)}</p>
                 </div>
-                <Package className="h-8 w-8 text-[#7d8768]" />
+                <Package className="h-6 w-6 md:h-8 md:w-8 text-[#7d8768]" />
               </div>
             </CardContent>
           </Card>
@@ -431,19 +431,19 @@ const AdminInventory: React.FC = () => {
 
         {/* Filtros */}
         <Card>
-          <CardContent className="p-4">
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+          <CardContent className="p-4 md:p-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+              <div className="relative sm:col-span-2 lg:col-span-1">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4 md:h-5 md:w-5" />
                 <Input
                   placeholder="Buscar por nombre, SKU, proveedor..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
+                  className="pl-9 md:pl-10"
                 />
               </div>
               <Select value={filterCategory} onValueChange={setFilterCategory}>
-                <SelectTrigger className="w-full md:w-[180px]">
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Categoría" />
                 </SelectTrigger>
                 <SelectContent>
@@ -459,7 +459,7 @@ const AdminInventory: React.FC = () => {
                 value={filterActive === undefined ? 'all' : filterActive ? 'active' : 'inactive'} 
                 onValueChange={(val) => setFilterActive(val === 'all' ? undefined : val === 'active')}
               >
-                <SelectTrigger className="w-full md:w-[180px]">
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Estado" />
                 </SelectTrigger>
                 <SelectContent>
@@ -471,7 +471,7 @@ const AdminInventory: React.FC = () => {
               <Button
                 variant={lowStockFilter ? 'default' : 'outline'}
                 onClick={() => setLowStockFilter(!lowStockFilter)}
-                className={lowStockFilter ? 'bg-red-600 hover:bg-red-700' : ''}
+                className={`w-full sm:w-auto ${lowStockFilter ? 'bg-red-600 hover:bg-red-700' : ''}`}
               >
                 <AlertTriangle className="h-4 w-4 mr-2" />
                 Stock Bajo
@@ -492,7 +492,8 @@ const AdminInventory: React.FC = () => {
           </Card>
         ) : (
           <Card>
-            <div className="overflow-x-auto">
+            {/* Desktop Table View */}
+            <div className="hidden lg:block overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -580,12 +581,109 @@ const AdminInventory: React.FC = () => {
                 </TableBody>
               </Table>
             </div>
+
+            {/* Mobile Card View */}
+            <div className="lg:hidden p-4 space-y-3">
+              {items.map((item) => {
+                const stockStatus = getStockStatus(item);
+                return (
+                  <Card key={item.id} className={`border-l-4 ${item.current_stock <= item.min_stock ? 'border-l-red-500' : 'border-l-[#7d8768]'}`}>
+                    <CardContent className="p-4">
+                      <div className="space-y-3">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-semibold text-sm text-gray-900 mb-1">{item.name}</h3>
+                            <code className="text-xs bg-gray-100 px-2 py-0.5 rounded block w-fit mb-2">{item.sku}</code>
+                            {item.description && (
+                              <p className="text-xs text-gray-600 line-clamp-2 mb-2">{item.description}</p>
+                            )}
+                            {item.category && (
+                              <Badge variant="outline" className="text-[10px] mb-2">
+                                {item.category}
+                              </Badge>
+                            )}
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <Badge className={stockStatus.color}>{stockStatus.label}</Badge>
+                              {!item.active && (
+                                <Badge variant="outline" className="text-[10px]">Inactivo</Badge>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex gap-1 flex-shrink-0 flex-wrap justify-end">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 text-indigo-600"
+                              onClick={() => handleOpenHistoryDialog(item)}
+                              title="Ver historial"
+                            >
+                              <History className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8"
+                              onClick={() => handleOpenMovementDialog(item)}
+                              title="Registrar movimiento"
+                            >
+                              <TrendingUp className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8"
+                              onClick={() => handleOpenEditItem(item)}
+                              title="Editar"
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 text-red-600"
+                              onClick={() => handleDeleteItem(item.id)}
+                              title="Eliminar"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="pt-2 border-t space-y-2">
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <span className="text-xs text-muted-foreground">Stock Actual:</span>
+                              <p className={`font-semibold text-sm ${item.current_stock <= item.min_stock ? 'text-red-600' : ''}`}>
+                                {item.current_stock.toFixed(2)} {item.unit}
+                              </p>
+                            </div>
+                            <div>
+                              <span className="text-xs text-muted-foreground">Stock Mínimo:</span>
+                              <p className="font-semibold text-sm">{item.min_stock.toFixed(2)} {item.unit}</p>
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <span className="text-xs text-muted-foreground">Costo Unit.:</span>
+                              <p className="font-semibold text-sm">{formatCurrency(item.cost_per_unit)}</p>
+                            </div>
+                            <div>
+                              <span className="text-xs text-muted-foreground">Valor Total:</span>
+                              <p className="font-semibold text-sm">{formatCurrency(item.current_stock * item.cost_per_unit)}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
           </Card>
         )}
 
         {/* Dialog para crear/editar item */}
         <Dialog open={itemDialogOpen} onOpenChange={setItemDialogOpen}>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-2xl w-[95vw] md:w-full max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="font-editorial-new">
                 {editingItem ? 'Editar Item' : 'Nuevo Item de Inventario'}
@@ -595,7 +693,7 @@ const AdminInventory: React.FC = () => {
               </DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmitItem} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="name">Nombre *</Label>
                   <Input
@@ -616,7 +714,7 @@ const AdminInventory: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="category">Categoría</Label>
                   <Input
@@ -658,7 +756,7 @@ const AdminInventory: React.FC = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <Label htmlFor="min_stock">Stock Mínimo</Label>
                   <Input
@@ -773,7 +871,7 @@ const AdminInventory: React.FC = () => {
 
         {/* Dialog para registrar movimiento */}
         <Dialog open={movementDialogOpen} onOpenChange={setMovementDialogOpen}>
-          <DialogContent>
+          <DialogContent className="max-w-2xl w-[95vw] md:w-full max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="font-editorial-new">
                 Registrar Movimiento - {selectedItemForMovement?.name}
@@ -783,7 +881,7 @@ const AdminInventory: React.FC = () => {
               </DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmitMovement} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="movement_type">Tipo de Movimiento *</Label>
                   <Select
@@ -816,7 +914,7 @@ const AdminInventory: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="quantity">Cantidad *</Label>
                   <Input
@@ -886,7 +984,7 @@ const AdminInventory: React.FC = () => {
 
         {/* Dialog para ver historial de movimientos */}
         <Dialog open={historyDialogOpen} onOpenChange={setHistoryDialogOpen}>
-          <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col">
+          <DialogContent className="max-w-4xl w-[95vw] md:w-full max-h-[90vh] flex flex-col">
             <DialogHeader className="flex-shrink-0">
               <DialogTitle className="font-editorial-new">
                 Historial de Movimientos - {selectedItemForHistory?.name}

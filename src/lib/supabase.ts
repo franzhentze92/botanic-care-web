@@ -4,6 +4,7 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 let supabase: SupabaseClient;
+let supabasePublic: SupabaseClient; // Cliente sin autenticación para queries públicas
 
 if (!supabaseUrl || !supabaseAnonKey) {
   console.error('⚠️ Missing Supabase environment variables!');
@@ -23,11 +24,34 @@ if (!supabaseUrl || !supabaseAnonKey) {
     'https://placeholder.supabase.co',
     'placeholder-key'
   );
+  supabasePublic = supabase;
 } else {
   // Validate URL format
   try {
     new URL(supabaseUrl);
     supabase = createClient(supabaseUrl, supabaseAnonKey);
+    
+    // Crear cliente público sin autenticación para queries públicas
+    // Esto evita problemas con sesiones de usuarios nuevos
+    // Usar una storage key única para evitar conflictos
+    supabasePublic = createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+        detectSessionInUrl: false,
+        storage: typeof window !== 'undefined' ? {
+          getItem: () => null,
+          setItem: () => {},
+          removeItem: () => {}
+        } : undefined,
+        storageKey: 'supabase-public-no-auth'
+      },
+      global: {
+        headers: {
+          'apikey': supabaseAnonKey
+        }
+      }
+    });
   } catch (error) {
     console.error('❌ Invalid Supabase URL format:', supabaseUrl);
     console.error('URL must be a valid HTTPS URL (e.g., https://xxxxx.supabase.co)');
@@ -37,8 +61,9 @@ if (!supabaseUrl || !supabaseAnonKey) {
       'https://placeholder.supabase.co',
       'placeholder-key'
     );
+    supabasePublic = supabase;
   }
 }
 
-export { supabase };
+export { supabase, supabasePublic };
 

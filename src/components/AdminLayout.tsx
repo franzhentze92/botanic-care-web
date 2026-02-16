@@ -29,6 +29,7 @@ import {
   Store
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useUserProfile } from '@/hooks/useDashboard';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -48,6 +49,7 @@ interface AdminLayoutProps {
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const { user, signOut } = useAuth();
+  const { data: userProfile } = useUserProfile();
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = React.useState(false); // Por defecto colapsado
@@ -91,7 +93,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
         { name: 'Materia Prima BC', href: '/admin/inventory', icon: Warehouse },
         { name: 'Inventario BC', href: '/admin/finished-products-inventory', icon: Package },
         { name: 'Inventario Dist.', href: '/admin/distributor-inventory', icon: Store },
-        { name: 'Análisis Operativo', href: '/admin/operational-analytics', icon: Activity },
       ]
     },
     {
@@ -101,6 +102,14 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       items: [
         { name: 'Ingresos', href: '/admin/revenue', icon: DollarSign },
         { name: 'Costos', href: '/admin/costs', icon: TrendingDown },
+      ]
+    },
+    {
+      type: 'group',
+      name: 'Análisis',
+      icon: BarChart3,
+      items: [
+        { name: 'Análisis Operativo', href: '/admin/operational-analytics', icon: Activity },
         { name: 'Análisis Financiero', href: '/admin/analytics', icon: BarChart3 },
       ]
     },
@@ -123,6 +132,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     'Productos': false,
     'Producción': false,
     'Finanzas': false,
+    'Análisis': false,
     'Miembros': false,
   });
 
@@ -370,8 +380,14 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
                   <div className="px-2 py-1.5">
-                    <p className="text-sm font-semibold">{user?.email}</p>
-                    <p className="text-xs text-gray-500">Administrador</p>
+                    <p className="text-sm font-semibold">
+                      {userProfile?.first_name && userProfile?.last_name 
+                        ? `${userProfile.first_name} ${userProfile.last_name}`.trim()
+                        : userProfile?.first_name 
+                        ? userProfile.first_name
+                        : user?.email?.split('@')[0] || 'Usuario'}
+                    </p>
+                    <p className="text-xs text-gray-500">{user?.email}</p>
                   </div>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>

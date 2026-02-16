@@ -282,7 +282,7 @@ const AdminCosts: React.FC = () => {
 
   return (
     <AdminLayout>
-      <div className="p-6 space-y-6">
+      <div className="p-4 md:p-6 space-y-4 md:space-y-6">
         <AdminPageHeader
           title="Gestión de Costos"
           description="Registra y gestiona todos los costos operativos"
@@ -293,56 +293,56 @@ const AdminCosts: React.FC = () => {
           }}
         />
         {/* KPIs Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total de Costos</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4 md:p-6">
+              <CardTitle className="text-xs md:text-sm font-medium">Total de Costos</CardTitle>
               <TrendingDown className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{formatCurrency(stats.total)}</div>
-              <p className="text-xs text-muted-foreground">
+            <CardContent className="p-4 md:p-6 pt-0">
+              <div className="text-xl md:text-2xl font-bold">{formatCurrency(stats.total)}</div>
+              <p className="text-[10px] md:text-xs text-muted-foreground">
                 {costs.length} {costs.length === 1 ? 'costo registrado' : 'costos registrados'}
               </p>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Costos Mensuales</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4 md:p-6">
+              <CardTitle className="text-xs md:text-sm font-medium">Costos Mensuales</CardTitle>
               <Calendar className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{formatCurrency(stats.monthly)}</div>
-              <p className="text-xs text-muted-foreground">Costos recurrentes mensuales</p>
+            <CardContent className="p-4 md:p-6 pt-0">
+              <div className="text-xl md:text-2xl font-bold">{formatCurrency(stats.monthly)}</div>
+              <p className="text-[10px] md:text-xs text-muted-foreground">Costos recurrentes mensuales</p>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Este Mes</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4 md:p-6">
+              <CardTitle className="text-xs md:text-sm font-medium">Este Mes</CardTitle>
               <DollarSign className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{formatCurrency(stats.thisMonth)}</div>
-              <p className="text-xs text-muted-foreground">Costos del mes actual</p>
+            <CardContent className="p-4 md:p-6 pt-0">
+              <div className="text-xl md:text-2xl font-bold">{formatCurrency(stats.thisMonth)}</div>
+              <p className="text-[10px] md:text-xs text-muted-foreground">Costos del mes actual</p>
             </CardContent>
           </Card>
         </div>
 
         {/* Filtros y Botón Agregar */}
         <Card>
-          <CardHeader>
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <CardTitle>Filtros</CardTitle>
+          <CardHeader className="p-4 md:p-6">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
+              <CardTitle className="text-base md:text-lg">Filtros</CardTitle>
               <Button onClick={() => handleOpenDialog()} className="w-full md:w-auto">
                 <Plus className="h-4 w-4 mr-2" />
                 Agregar Costo
               </Button>
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <CardContent className="p-4 md:p-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
               <Select value={filterCategory} onValueChange={setFilterCategory}>
                 <SelectTrigger>
                   <SelectValue placeholder="Categoría" />
@@ -389,21 +389,23 @@ const AdminCosts: React.FC = () => {
 
         {/* Tabla de Costos */}
         <Card>
-          <CardHeader>
-            <CardTitle>Lista de Costos</CardTitle>
+          <CardHeader className="p-4 md:p-6">
+            <CardTitle className="text-base md:text-lg">Lista de Costos</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 md:p-6">
             {isLoading ? (
               <div className="flex items-center justify-center h-64">
                 <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
               </div>
             ) : costs.length === 0 ? (
               <div className="flex items-center justify-center h-64">
-                <p className="text-gray-500">No se encontraron costos con los filtros seleccionados.</p>
+                <p className="text-gray-500 text-sm">No se encontraron costos con los filtros seleccionados.</p>
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <Table>
+              <>
+                {/* Desktop Table View */}
+                <div className="hidden lg:block overflow-x-auto">
+                  <Table>
                   <TableHeader>
                     <TableRow>
                       <TableHead>Nombre</TableHead>
@@ -468,16 +470,99 @@ const AdminCosts: React.FC = () => {
                     ))}
                   </TableBody>
                 </Table>
-              </div>
+                </div>
+
+                {/* Mobile Card View */}
+                <div className="lg:hidden space-y-3">
+                  {costs.map((cost) => (
+                    <Card key={cost.id} className="border-l-4 border-l-[#7d8768]">
+                      <CardContent className="p-4">
+                        <div className="space-y-3">
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-semibold text-sm text-gray-900 mb-1">{cost.name}</h3>
+                              {cost.description && (
+                                <p className="text-xs text-gray-600 line-clamp-2 mb-2">{cost.description}</p>
+                              )}
+                              <div className="flex items-center gap-2 flex-wrap mb-2">
+                                <Badge className={getCategoryColor(cost.category)}>
+                                  {categoryOptions.find(c => c.value === cost.category)?.label || cost.category}
+                                </Badge>
+                                {cost.is_recurring ? (
+                                  <Badge variant="outline" className="text-green-600 border-green-600 text-xs">
+                                    Recurrente
+                                  </Badge>
+                                ) : (
+                                  <Badge variant="outline" className="text-gray-600 text-xs">
+                                    Puntual
+                                  </Badge>
+                                )}
+                              </div>
+                            </div>
+                            <div className="flex gap-1 flex-shrink-0">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8"
+                                onClick={() => handleOpenDialog(cost)}
+                                title="Editar"
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 text-red-600"
+                                onClick={() => handleDelete(cost.id)}
+                                title="Eliminar"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                          <div className="pt-2 border-t space-y-2">
+                            <div className="grid grid-cols-2 gap-3">
+                              <div>
+                                <span className="text-xs text-muted-foreground">Frecuencia:</span>
+                                <p className="font-semibold text-sm">{getFrequencyLabel(cost.frequency)}</p>
+                              </div>
+                              <div>
+                                <span className="text-xs text-muted-foreground">Fecha:</span>
+                                <p className="font-semibold text-sm">
+                                  {format(new Date(cost.date), 'dd/MM/yyyy', { locale: es })}
+                                </p>
+                              </div>
+                            </div>
+                            <div>
+                              <span className="text-xs text-muted-foreground">Monto:</span>
+                              <p className="font-bold text-base text-[#7d8768]">
+                                {formatCurrency(parseFloat(cost.amount.toString()))}
+                              </p>
+                            </div>
+                            {cost.is_recurring && cost.next_payment_date && (
+                              <div>
+                                <span className="text-xs text-muted-foreground">Próximo Pago:</span>
+                                <p className="font-semibold text-sm">
+                                  {format(new Date(cost.next_payment_date), 'dd/MM/yyyy', { locale: es })}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </>
             )}
 
             {/* Resumen */}
             {costs.length > 0 && (
-              <div className="mt-6 pt-4 border-t">
-                <div className="flex justify-end">
-                  <div className="text-right">
-                    <p className="text-sm text-gray-500">Total de costos mostrados: {costs.length}</p>
-                    <p className="text-lg font-bold mt-2">
+              <div className="mt-4 md:mt-6 pt-4 border-t">
+                <div className="flex flex-col sm:flex-row sm:justify-end gap-2">
+                  <div className="text-left sm:text-right">
+                    <p className="text-xs md:text-sm text-gray-500">Total de costos mostrados: {costs.length}</p>
+                    <p className="text-base md:text-lg font-bold mt-1 md:mt-2">
                       Total: {formatCurrency(
                         costs.reduce((sum, cost) => sum + parseFloat(cost.amount.toString()), 0)
                       )}
@@ -491,7 +576,7 @@ const AdminCosts: React.FC = () => {
 
         {/* Diálogo de Formulario */}
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-2xl w-[95vw] md:w-full max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 {editingCost ? 'Editar Costo' : 'Nuevo Costo'}

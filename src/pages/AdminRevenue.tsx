@@ -308,25 +308,25 @@ const AdminRevenue: React.FC = () => {
 
   return (
     <AdminLayout>
-      <div className="p-6 space-y-6">
+      <div className="p-4 md:p-6 space-y-4 md:space-y-6">
         <AdminPageHeader
           title="Gestión de Ingresos"
           description="Visualiza y gestiona todos los ingresos de la tienda"
         />
         {/* KPIs Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Ingresos Totales</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4 md:p-6">
+              <CardTitle className="text-xs md:text-sm font-medium">Ingresos Totales</CardTitle>
               <DollarSign className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4 md:p-6 pt-0">
               {statsLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
                 <>
-                  <div className="text-2xl font-bold">{formatCurrency(stats?.totalRevenue || 0)}</div>
-                  <p className="text-xs text-muted-foreground">
+                  <div className="text-xl md:text-2xl font-bold">{formatCurrency(stats?.totalRevenue || 0)}</div>
+                  <p className="text-[10px] md:text-xs text-muted-foreground">
                     {stats?.totalOrders || 0} {stats?.totalOrders === 1 ? 'pedido' : 'pedidos'}
                   </p>
                 </>
@@ -335,17 +335,17 @@ const AdminRevenue: React.FC = () => {
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Ingresos del Mes</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4 md:p-6">
+              <CardTitle className="text-xs md:text-sm font-medium">Ingresos del Mes</CardTitle>
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4 md:p-6 pt-0">
               {statsLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
                 <>
-                  <div className="text-2xl font-bold">{formatCurrency(stats?.monthlyRevenue || 0)}</div>
-                  <p className="text-xs text-muted-foreground">
+                  <div className="text-xl md:text-2xl font-bold">{formatCurrency(stats?.monthlyRevenue || 0)}</div>
+                  <p className="text-[10px] md:text-xs text-muted-foreground">
                     {stats?.monthlyOrders || 0} {stats?.monthlyOrders === 1 ? 'pedido' : 'pedidos'} este mes
                   </p>
                 </>
@@ -354,17 +354,17 @@ const AdminRevenue: React.FC = () => {
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Ingresos de Hoy</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4 md:p-6">
+              <CardTitle className="text-xs md:text-sm font-medium">Ingresos de Hoy</CardTitle>
               <Calendar className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4 md:p-6 pt-0">
               {statsLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
                 <>
-                  <div className="text-2xl font-bold">{formatCurrency(stats?.todayRevenue || 0)}</div>
-                  <p className="text-xs text-muted-foreground">
+                  <div className="text-xl md:text-2xl font-bold">{formatCurrency(stats?.todayRevenue || 0)}</div>
+                  <p className="text-[10px] md:text-xs text-muted-foreground">
                     {stats?.todayOrders || 0} {stats?.todayOrders === 1 ? 'pedido' : 'pedidos'} hoy
                   </p>
                 </>
@@ -373,17 +373,17 @@ const AdminRevenue: React.FC = () => {
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Ticket Promedio</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4 md:p-6">
+              <CardTitle className="text-xs md:text-sm font-medium">Ticket Promedio</CardTitle>
               <ShoppingCart className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4 md:p-6 pt-0">
               {statsLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
                 <>
-                  <div className="text-2xl font-bold">{formatCurrency(stats?.averageOrderValue || 0)}</div>
-                  <p className="text-xs text-muted-foreground">
+                  <div className="text-xl md:text-2xl font-bold">{formatCurrency(stats?.averageOrderValue || 0)}</div>
+                  <p className="text-[10px] md:text-xs text-muted-foreground">
                     Por pedido
                   </p>
                 </>
@@ -394,17 +394,17 @@ const AdminRevenue: React.FC = () => {
 
         {/* Filtros y Acciones */}
         <Card>
-          <CardHeader>
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <CardTitle>Filtros y Búsqueda</CardTitle>
-              <Button onClick={handleExport} variant="outline" size="sm">
+          <CardHeader className="p-4 md:p-6">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
+              <CardTitle className="text-base md:text-lg">Filtros y Búsqueda</CardTitle>
+              <Button onClick={handleExport} variant="outline" size="sm" className="w-full md:w-auto">
                 <Download className="h-4 w-4 mr-2" />
                 Exportar CSV
               </Button>
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <CardContent className="p-4 md:p-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
               {/* Búsqueda */}
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -464,21 +464,23 @@ const AdminRevenue: React.FC = () => {
 
         {/* Tabla de Ingresos */}
         <Card>
-          <CardHeader>
-            <CardTitle>Detalle de Ingresos</CardTitle>
+          <CardHeader className="p-4 md:p-6">
+            <CardTitle className="text-base md:text-lg">Detalle de Ingresos</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 md:p-6">
             {isLoading ? (
               <div className="flex items-center justify-center h-64">
                 <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
               </div>
             ) : filteredOrders.length === 0 ? (
               <div className="flex items-center justify-center h-64">
-                <p className="text-gray-500">No se encontraron ingresos con los filtros seleccionados.</p>
+                <p className="text-gray-500 text-sm">No se encontraron ingresos con los filtros seleccionados.</p>
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <Table>
+              <>
+                {/* Desktop Table View */}
+                <div className="hidden lg:block overflow-x-auto">
+                  <Table>
                   <TableHeader>
                     <TableRow>
                       <TableHead>
@@ -583,16 +585,66 @@ const AdminRevenue: React.FC = () => {
                     ))}
                   </TableBody>
                 </Table>
-              </div>
+                </div>
+
+                {/* Mobile Card View */}
+                <div className="lg:hidden space-y-3">
+                  {filteredOrders.map((order) => (
+                    <Card key={order.id} className="border-l-4 border-l-[#7d8768]">
+                      <CardContent className="p-4">
+                        <div className="space-y-3">
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-semibold text-sm text-gray-900 mb-1">{order.order_number}</h3>
+                              <div className="mb-2">
+                                <p className="font-medium text-sm">{order.user_name || 'N/A'}</p>
+                                <p className="text-xs text-gray-500">{order.user_email || 'N/A'}</p>
+                              </div>
+                              <p className="text-xs text-gray-600 mb-2">
+                                {format(new Date(order.created_at), 'dd/MM/yyyy HH:mm', { locale: es })}
+                              </p>
+                              <Badge className={getStatusColor(order.status)}>
+                                {getStatusText(order.status)}
+                              </Badge>
+                            </div>
+                          </div>
+                          <div className="pt-2 border-t space-y-2">
+                            <div className="grid grid-cols-2 gap-2">
+                              <div>
+                                <span className="text-xs text-muted-foreground">Subtotal:</span>
+                                <p className="font-semibold text-sm">{formatCurrency(parseFloat(order.subtotal.toString()))}</p>
+                              </div>
+                              <div>
+                                <span className="text-xs text-muted-foreground">Envío:</span>
+                                <p className="font-semibold text-sm">{formatCurrency(parseFloat(order.shipping_cost.toString()))}</p>
+                              </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                              <div>
+                                <span className="text-xs text-muted-foreground">Impuestos:</span>
+                                <p className="font-semibold text-sm">{formatCurrency(parseFloat(order.tax.toString()))}</p>
+                              </div>
+                              <div>
+                                <span className="text-xs text-muted-foreground">Total:</span>
+                                <p className="font-bold text-sm text-[#7d8768]">{formatCurrency(parseFloat(order.total.toString()))}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </>
             )}
 
             {/* Resumen al final */}
             {filteredOrders.length > 0 && (
-              <div className="mt-6 pt-4 border-t">
-                <div className="flex justify-end">
-                  <div className="text-right">
-                    <p className="text-sm text-gray-500">Total de pedidos mostrados: {filteredOrders.length}</p>
-                    <p className="text-lg font-bold mt-2">
+              <div className="mt-4 md:mt-6 pt-4 border-t">
+                <div className="flex flex-col sm:flex-row sm:justify-end gap-2">
+                  <div className="text-left sm:text-right">
+                    <p className="text-xs md:text-sm text-gray-500">Total de pedidos mostrados: {filteredOrders.length}</p>
+                    <p className="text-base md:text-lg font-bold mt-1 md:mt-2">
                       Total: {formatCurrency(
                         filteredOrders
                           .filter(o => o.status !== 'cancelled')

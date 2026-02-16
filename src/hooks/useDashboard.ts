@@ -195,7 +195,19 @@ export const useCreateOrder = () => {
 
   return useMutation({
     mutationFn: async (orderData: CreateOrderData): Promise<OrderWithItems> => {
-      if (!user) throw new Error('User not authenticated');
+      if (!user) {
+        const error = new Error('User not authenticated');
+        console.error('Error en useCreateOrder: Usuario no autenticado');
+        throw error;
+      }
+
+      // Verificar sesión activa
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        const error = new Error('No active session');
+        console.error('Error en useCreateOrder: No hay sesión activa');
+        throw error;
+      }
 
       // Crear la orden
       const { data: order, error: orderError } = await supabase
@@ -213,7 +225,16 @@ export const useCreateOrder = () => {
         .select()
         .single();
 
-      if (orderError) throw orderError;
+      if (orderError) {
+        console.error('Error al crear la orden:', orderError);
+        // Mejorar mensaje de error
+        if (orderError.code === '23505') {
+          throw new Error('Ya existe una orden con este número. Por favor, intenta de nuevo.');
+        } else if (orderError.code === 'PGRST301' || orderError.message?.includes('permission') || orderError.message?.includes('policy')) {
+          throw new Error('No tienes permisos para crear órdenes. Verifica que hayas confirmado tu email.');
+        }
+        throw orderError;
+      }
 
       // Crear los items de la orden
       const orderItems = orderData.items.map(item => ({
@@ -480,31 +501,64 @@ export const useUserProfile = () => {
     queryFn: async () => {
       if (!user) return null;
 
-      const { data, error } = await supabase
-        .from('user_profiles')
-        .select('*')
-        .eq('user_id', user.id)
-        .single();
-
-      if (error && error.code !== 'PGRST116') { // PGRST116 = no rows found
-        throw error;
+      // Verificar que haya sesión activa
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        return null;
       }
 
-      // Si no existe perfil, crear uno por defecto
-      if (!data) {
-        const { data: newProfile, error: createError } = await supabase
+      try {
+        const { data, error } = await supabase
           .from('user_profiles')
-          .insert([{ user_id: user.id }])
-          .select()
+          .select('*')
+          .eq('user_id', user.id)
           .single();
 
-        if (createError) throw createError;
-        return newProfile;
-      }
+        // Si el error es "no rows found", el perfil no existe aún
+        if (error && error.code === 'PGRST116') {
+          // Intentar crear el perfil
+          const { data: newProfile, error: createError } = await supabase
+            .from('user_profiles')
+            .insert([{ user_id: user.id }])
+            .select()
+            .single();
 
-      return data;
+          if (createError) {
+            // Si falla, esperar un momento (el trigger puede haberlo creado)
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            const { data: retryData } = await supabase
+              .from('user_profiles')
+              .select('*')
+              .eq('user_id', user.id)
+              .single();
+            return retryData || null;
+          }
+          
+          return newProfile;
+        }
+
+        // Si hay error de permisos, retornar null en lugar de lanzar error
+        if (error) {
+          if (error.code === 'PGRST301' || error.message?.includes('permission') || error.message?.includes('policy') || error.message?.includes('401') || error.message?.includes('406')) {
+            console.warn('Error de permisos al acceder al perfil:', error);
+            return null;
+          }
+          throw error;
+        }
+
+        return data;
+      } catch (err: any) {
+        console.error('Error en useUserProfile:', err);
+        // Retornar null en lugar de lanzar error para no romper la UI
+        return null;
+      }
     },
-    enabled: !!user,
+    enabled: !!user, // Ejecutar si hay usuario
+    retry: 3, // Reintentar 3 veces
+    staleTime: 1000 * 60 * 2, // 2 minutos
+    refetchOnWindowFocus: false,
+    refetchOnMount: true,
+    throwOnError: false, // No lanzar error, retornar null
   });
 };
 

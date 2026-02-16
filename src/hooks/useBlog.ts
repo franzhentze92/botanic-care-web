@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase';
+import { supabase, supabasePublic } from '@/lib/supabase';
 import { toast } from 'sonner';
 
 // ==================== TYPES ====================
@@ -57,7 +57,8 @@ export const useBlogPosts = (filters?: {
   return useQuery<BlogPost[], Error>({
     queryKey: ['blog-posts', filters],
     queryFn: async () => {
-      let query = supabase
+      // Usar supabasePublic para acceso público sin autenticación
+      let query = supabasePublic
         .from('blog_posts')
         .select('*')
         .eq('status', 'published')
@@ -120,7 +121,8 @@ export const useBlogPost = (slug: string) => {
   return useQuery<BlogPost | null, Error>({
     queryKey: ['blog-post', slug],
     queryFn: async () => {
-      const { data: post, error } = await supabase
+      // Usar supabasePublic para acceso público sin autenticación
+      const { data: post, error } = await supabasePublic
         .from('blog_posts')
         .select('*')
         .eq('slug', slug)
@@ -134,7 +136,7 @@ export const useBlogPost = (slug: string) => {
         throw error;
       }
 
-      // Incrementar contador de vistas
+      // Incrementar contador de vistas (usar supabase normal para escritura)
       if (post) {
         supabase
           .from('blog_posts')
@@ -169,7 +171,8 @@ export const useBlogCategories = () => {
   return useQuery<string[], Error>({
     queryKey: ['blog-categories'],
     queryFn: async () => {
-      const { data, error } = await supabase
+      // Usar supabasePublic para acceso público sin autenticación
+      const { data, error } = await supabasePublic
         .from('blog_posts')
         .select('category')
         .eq('status', 'published')

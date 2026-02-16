@@ -152,23 +152,23 @@ const AdminAnalytics: React.FC = () => {
 
   return (
     <AdminLayout>
-      <div className="p-6 space-y-6">
+      <div className="p-4 md:p-6 space-y-4 md:space-y-6">
         <AdminPageHeader
           title="Análisis Financiero"
           description="Visualización completa de ingresos, costos y ganancias"
         />
         {/* Filtros */}
         <Card>
-          <CardHeader>
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <CardHeader className="p-4 md:p-6">
+            <div className="flex flex-col gap-3 md:gap-4">
               <div>
-                <Label htmlFor="period" className="text-base font-semibold">Período de Análisis</Label>
+                <Label htmlFor="period" className="text-sm md:text-base font-semibold">Período de Análisis</Label>
               </div>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <Label htmlFor="period" className="whitespace-nowrap">Período:</Label>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                  <Label htmlFor="period" className="whitespace-nowrap text-sm">Período:</Label>
                   <Select value={period} onValueChange={(value: any) => setPeriod(value)}>
-                    <SelectTrigger id="period" className="w-[180px]">
+                    <SelectTrigger id="period" className="w-full sm:w-[180px]">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -187,72 +187,72 @@ const AdminAnalytics: React.FC = () => {
         </Card>
 
         {/* KPIs */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Ingresos Totales</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4 md:p-6">
+              <CardTitle className="text-xs md:text-sm font-medium">Ingresos Totales</CardTitle>
               <DollarSign className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{formatCurrency(analyticsData.totalRevenue)}</div>
-              <div className="flex items-center text-xs text-muted-foreground mt-1">
+            <CardContent className="p-4 md:p-6 pt-0">
+              <div className="text-xl md:text-2xl font-bold">{formatCurrency(analyticsData.totalRevenue)}</div>
+              <div className="flex items-center text-[10px] md:text-xs text-muted-foreground mt-1">
                 {analyticsData.revenueGrowth >= 0 ? (
                   <TrendingUp className="h-3 w-3 mr-1 text-green-600" />
                 ) : (
                   <TrendingDown className="h-3 w-3 mr-1 text-red-600" />
                 )}
-                <span className={analyticsData.revenueGrowth >= 0 ? 'text-green-600' : 'text-red-600'}>
-                  {formatPercentage(analyticsData.revenueGrowth)} vs período anterior
+                <span className={`${analyticsData.revenueGrowth >= 0 ? 'text-green-600' : 'text-red-600'} truncate`}>
+                  {formatPercentage(analyticsData.revenueGrowth)} vs anterior
                 </span>
               </div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Costos Totales</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4 md:p-6">
+              <CardTitle className="text-xs md:text-sm font-medium">Costos Totales</CardTitle>
               <TrendingDown className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-red-600">{formatCurrency(analyticsData.totalCosts)}</div>
-              <div className="flex items-center text-xs text-muted-foreground mt-1">
+            <CardContent className="p-4 md:p-6 pt-0">
+              <div className="text-xl md:text-2xl font-bold text-red-600">{formatCurrency(analyticsData.totalCosts)}</div>
+              <div className="flex items-center text-[10px] md:text-xs text-muted-foreground mt-1">
                 {analyticsData.costGrowth <= 0 ? (
                   <TrendingDown className="h-3 w-3 mr-1 text-green-600" />
                 ) : (
                   <TrendingUp className="h-3 w-3 mr-1 text-red-600" />
                 )}
-                <span className={analyticsData.costGrowth <= 0 ? 'text-green-600' : 'text-red-600'}>
-                  {formatPercentage(analyticsData.costGrowth)} vs período anterior
+                <span className={`${analyticsData.costGrowth <= 0 ? 'text-green-600' : 'text-red-600'} truncate`}>
+                  {formatPercentage(analyticsData.costGrowth)} vs anterior
                 </span>
               </div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Ganancia Neta</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4 md:p-6">
+              <CardTitle className="text-xs md:text-sm font-medium">Ganancia Neta</CardTitle>
               <BarChart3 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className={`text-2xl font-bold ${analyticsData.netProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+            <CardContent className="p-4 md:p-6 pt-0">
+              <div className={`text-xl md:text-2xl font-bold ${analyticsData.netProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                 {formatCurrency(analyticsData.netProfit)}
               </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                Margen de ganancia: {analyticsData.profitMargin.toFixed(2)}%
+              <p className="text-[10px] md:text-xs text-muted-foreground mt-1">
+                Margen: {analyticsData.profitMargin.toFixed(2)}%
               </p>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Margen de Ganancia</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4 md:p-6">
+              <CardTitle className="text-xs md:text-sm font-medium">Margen de Ganancia</CardTitle>
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className={`text-2xl font-bold ${analyticsData.profitMargin >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+            <CardContent className="p-4 md:p-6 pt-0">
+              <div className={`text-xl md:text-2xl font-bold ${analyticsData.profitMargin >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                 {analyticsData.profitMargin.toFixed(2)}%
               </div>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-[10px] md:text-xs text-muted-foreground mt-1">
                 {analyticsData.profitMargin >= 0 ? 'Negocio rentable' : 'Pérdidas'}
               </p>
             </CardContent>
@@ -261,12 +261,12 @@ const AdminAnalytics: React.FC = () => {
 
         {/* Gráfico de Barras - Ingresos vs Costos por Mes */}
         <Card>
-          <CardHeader>
-            <CardTitle>Ingresos vs Costos por Mes</CardTitle>
-            <CardDescription>Comparación mensual de ingresos, costos y ganancias</CardDescription>
+          <CardHeader className="p-4 md:p-6">
+            <CardTitle className="text-base md:text-lg">Ingresos vs Costos por Mes</CardTitle>
+            <CardDescription className="text-xs md:text-sm">Comparación mensual de ingresos, costos y ganancias</CardDescription>
           </CardHeader>
-          <CardContent>
-            <ChartContainer config={chartConfig} className="h-[400px] w-full">
+          <CardContent className="p-4 md:p-6">
+            <ChartContainer config={chartConfig} className="h-[300px] md:h-[400px] w-full">
               <BarChart data={chartDataMonthly} width={undefined} height={400}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="mes" />
@@ -283,12 +283,12 @@ const AdminAnalytics: React.FC = () => {
 
         {/* Gráfico de Barras - Análisis Diario */}
         <Card>
-          <CardHeader>
-            <CardTitle>Análisis Diario (Últimos 30 días)</CardTitle>
-            <CardDescription>Tendencias diarias de ingresos, costos y ganancias</CardDescription>
+          <CardHeader className="p-4 md:p-6">
+            <CardTitle className="text-base md:text-lg">Análisis Diario (Últimos 30 días)</CardTitle>
+            <CardDescription className="text-xs md:text-sm">Tendencias diarias de ingresos, costos y ganancias</CardDescription>
           </CardHeader>
-          <CardContent>
-            <ChartContainer config={chartConfig} className="h-[400px] w-full">
+          <CardContent className="p-4 md:p-6">
+            <ChartContainer config={chartConfig} className="h-[300px] md:h-[400px] w-full">
               <BarChart data={chartDataDaily} width={undefined} height={400}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="fecha" />
@@ -304,15 +304,15 @@ const AdminAnalytics: React.FC = () => {
         </Card>
 
         {/* Gráficos en Grid: Desglose de Costos y Comparación */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
           {/* Gráfico de Pastel - Desglose de Costos por Categoría */}
           <Card>
-            <CardHeader>
-              <CardTitle>Desglose de Costos por Categoría</CardTitle>
-              <CardDescription>Distribución de costos según categoría</CardDescription>
+            <CardHeader className="p-4 md:p-6">
+              <CardTitle className="text-base md:text-lg">Desglose de Costos por Categoría</CardTitle>
+              <CardDescription className="text-xs md:text-sm">Distribución de costos según categoría</CardDescription>
             </CardHeader>
-            <CardContent>
-              <ChartContainer config={chartConfig} className="h-[300px]">
+            <CardContent className="p-4 md:p-6">
+              <ChartContainer config={chartConfig} className="h-[250px] md:h-[300px]">
                 <PieChart>
                   <Pie
                     data={pieChartData}
@@ -354,30 +354,30 @@ const AdminAnalytics: React.FC = () => {
 
           {/* Tabla de Resumen de Categorías */}
           <Card>
-            <CardHeader>
-              <CardTitle>Resumen de Costos por Categoría</CardTitle>
-              <CardDescription>Detalle de costos agrupados por categoría</CardDescription>
+            <CardHeader className="p-4 md:p-6">
+              <CardTitle className="text-base md:text-lg">Resumen de Costos por Categoría</CardTitle>
+              <CardDescription className="text-xs md:text-sm">Detalle de costos agrupados por categoría</CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
+            <CardContent className="p-4 md:p-6">
+              <div className="space-y-3 md:space-y-4">
                 {analyticsData.costByCategory.map((item, index) => (
                   <div key={item.category} className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 min-w-0 flex-1">
                         <div
-                          className="h-4 w-4 rounded"
+                          className="h-4 w-4 rounded flex-shrink-0"
                           style={{ backgroundColor: COLORS[index % COLORS.length] }}
                         />
-                        <span className="text-sm font-medium">
+                        <span className="text-xs md:text-sm font-medium truncate">
                           {item.category
                             .split('_')
                             .map(word => word.charAt(0).toUpperCase() + word.slice(1))
                             .join(' ')}
                         </span>
                       </div>
-                      <div className="text-right">
-                        <div className="text-sm font-bold">{formatCurrency(item.amount)}</div>
-                        <div className="text-xs text-muted-foreground">{item.percentage.toFixed(1)}%</div>
+                      <div className="text-right flex-shrink-0">
+                        <div className="text-xs md:text-sm font-bold">{formatCurrency(item.amount)}</div>
+                        <div className="text-[10px] md:text-xs text-muted-foreground">{item.percentage.toFixed(1)}%</div>
                       </div>
                     </div>
                     <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -392,7 +392,7 @@ const AdminAnalytics: React.FC = () => {
                   </div>
                 ))}
                 {analyticsData.costByCategory.length === 0 && (
-                  <p className="text-sm text-muted-foreground text-center py-4">
+                  <p className="text-xs md:text-sm text-muted-foreground text-center py-4">
                     No hay costos registrados en este período
                   </p>
                 )}

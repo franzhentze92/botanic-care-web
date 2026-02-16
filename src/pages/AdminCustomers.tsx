@@ -241,64 +241,64 @@ const AdminCustomers: React.FC = () => {
 
   return (
     <AdminLayout>
-      <div className="p-6 space-y-6">
+      <div className="p-4 md:p-6 space-y-4 md:space-y-6">
         <AdminPageHeader
           title="Gestión de Clientes"
           description="Gestiona la información y el historial de tus clientes"
         />
         {/* KPIs Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total de Clientes</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4 md:p-6">
+              <CardTitle className="text-xs md:text-sm font-medium">Total de Clientes</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.totalCustomers}</div>
-              <p className="text-xs text-muted-foreground">Clientes registrados</p>
+            <CardContent className="p-4 md:p-6 pt-0">
+              <div className="text-xl md:text-2xl font-bold">{stats.totalCustomers}</div>
+              <p className="text-[10px] md:text-xs text-muted-foreground">Clientes registrados</p>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total de Pedidos</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4 md:p-6">
+              <CardTitle className="text-xs md:text-sm font-medium">Total de Pedidos</CardTitle>
               <ShoppingCart className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.totalOrders}</div>
-              <p className="text-xs text-muted-foreground">Pedidos realizados</p>
+            <CardContent className="p-4 md:p-6 pt-0">
+              <div className="text-xl md:text-2xl font-bold">{stats.totalOrders}</div>
+              <p className="text-[10px] md:text-xs text-muted-foreground">Pedidos realizados</p>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Ingresos Totales</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4 md:p-6">
+              <CardTitle className="text-xs md:text-sm font-medium">Ingresos Totales</CardTitle>
               <DollarSign className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{formatCurrency(stats.totalRevenue)}</div>
-              <p className="text-xs text-muted-foreground">De todos los clientes</p>
+            <CardContent className="p-4 md:p-6 pt-0">
+              <div className="text-xl md:text-2xl font-bold">{formatCurrency(stats.totalRevenue)}</div>
+              <p className="text-[10px] md:text-xs text-muted-foreground">De todos los clientes</p>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Ticket Promedio</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4 md:p-6">
+              <CardTitle className="text-xs md:text-sm font-medium">Ticket Promedio</CardTitle>
               <ShoppingCart className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{formatCurrency(stats.averageOrderValue)}</div>
-              <p className="text-xs text-muted-foreground">Por pedido</p>
+            <CardContent className="p-4 md:p-6 pt-0">
+              <div className="text-xl md:text-2xl font-bold">{formatCurrency(stats.averageOrderValue)}</div>
+              <p className="text-[10px] md:text-xs text-muted-foreground">Por pedido</p>
             </CardContent>
           </Card>
         </div>
 
         {/* Filtros y Búsqueda */}
         <Card>
-          <CardHeader>
-            <CardTitle>Filtros y Búsqueda</CardTitle>
+          <CardHeader className="p-4 md:p-6">
+            <CardTitle className="text-base md:text-lg">Filtros y Búsqueda</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 md:p-6">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
@@ -313,21 +313,23 @@ const AdminCustomers: React.FC = () => {
 
         {/* Tabla de Clientes */}
         <Card>
-          <CardHeader>
-            <CardTitle>Lista de Clientes</CardTitle>
+          <CardHeader className="p-4 md:p-6">
+            <CardTitle className="text-base md:text-lg">Lista de Clientes</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 md:p-6">
             {isLoading ? (
               <div className="flex items-center justify-center h-64">
                 <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
               </div>
             ) : sortedCustomers.length === 0 ? (
               <div className="flex items-center justify-center h-64">
-                <p className="text-gray-500">No se encontraron clientes.</p>
+                <p className="text-gray-500 text-sm">No se encontraron clientes.</p>
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <Table>
+              <>
+                {/* Desktop Table View */}
+                <div className="hidden lg:block overflow-x-auto">
+                  <Table>
                   <TableHeader>
                     <TableRow>
                       <TableHead>
@@ -445,14 +447,95 @@ const AdminCustomers: React.FC = () => {
                     ))}
                   </TableBody>
                 </Table>
-              </div>
+                </div>
+
+                {/* Mobile Card View */}
+                <div className="lg:hidden space-y-3">
+                  {sortedCustomers.map((customer) => (
+                    <Card key={customer.user_id} className="border-l-4 border-l-[#7d8768]">
+                      <CardContent className="p-4">
+                        <div className="space-y-3">
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-semibold text-sm text-gray-900 mb-2">{getCustomerName(customer)}</h3>
+                              <div className="space-y-2">
+                                <div className="flex items-center gap-2">
+                                  <Mail className="h-3 w-3 text-gray-400 flex-shrink-0" />
+                                  <span className="text-xs text-gray-600 truncate">{customer.email}</span>
+                                </div>
+                                {customer.phone && (
+                                  <div className="flex items-center gap-2">
+                                    <Phone className="h-3 w-3 text-gray-400 flex-shrink-0" />
+                                    <span className="text-xs text-gray-600">{customer.phone}</span>
+                                  </div>
+                                )}
+                                <div className="flex items-center gap-2">
+                                  <Calendar className="h-3 w-3 text-gray-400 flex-shrink-0" />
+                                  <span className="text-xs text-gray-600">
+                                    {format(new Date(customer.created_at), 'dd/MM/yyyy', { locale: es })}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex gap-1 flex-shrink-0 flex-wrap justify-end">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 text-blue-600"
+                                onClick={() => handleViewCustomer(customer)}
+                                title="Ver detalles"
+                              >
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 text-indigo-600"
+                                onClick={() => handleOpenDialog(customer)}
+                                title="Editar"
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 text-red-600"
+                                onClick={() => handleDelete(customer.user_id)}
+                                title="Eliminar"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                          <div className="pt-2 border-t space-y-2">
+                            <div className="grid grid-cols-2 gap-3">
+                              <div>
+                                <span className="text-xs text-muted-foreground">Pedidos:</span>
+                                <p className="font-semibold text-sm">
+                                  <Badge variant="outline" className="border-blue-300 text-blue-700 bg-blue-50 text-xs">
+                                    {customer.total_orders}
+                                  </Badge>
+                                </p>
+                              </div>
+                              <div>
+                                <span className="text-xs text-muted-foreground">Total Gastado:</span>
+                                <p className="font-semibold text-sm text-[#7d8768]">{formatCurrency(customer.total_spent)}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </>
             )}
           </CardContent>
         </Card>
 
         {/* Diálogo de Formulario (Crear/Editar) */}
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl w-[95vw] md:w-full max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 {editingCustomer ? 'Editar Cliente' : 'Nuevo Cliente'}
@@ -545,7 +628,7 @@ const AdminCustomers: React.FC = () => {
 
         {/* Diálogo de Ver Detalles */}
         <Dialog open={viewDialogOpen} onOpenChange={setViewDialogOpen}>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl w-[95vw] md:w-full max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Detalles del Cliente</DialogTitle>
               <DialogDescription>
@@ -554,7 +637,7 @@ const AdminCustomers: React.FC = () => {
             </DialogHeader>
             {viewingCustomer && (
               <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label className="text-sm text-gray-500">Nombre</Label>
                     <p className="font-medium">{getCustomerName(viewingCustomer)}</p>

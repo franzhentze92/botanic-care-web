@@ -276,7 +276,7 @@ const AdminBlog = () => {
 
   return (
     <AdminLayout>
-      <div className="p-6 space-y-6">
+      <div className="p-4 md:p-6 space-y-4 md:space-y-6">
         <AdminPageHeader
           title="Gestión de Blog"
           description="Crea, edita y gestiona los posts del blog"
@@ -300,7 +300,7 @@ const AdminBlog = () => {
           }}
         >
           <DialogContent 
-              className="max-w-4xl max-h-[90vh] overflow-y-auto"
+              className="max-w-4xl w-[95vw] md:w-full max-h-[90vh] overflow-y-auto"
               onInteractOutside={(e) => {
                 if (uploadingImage) {
                   e.preventDefault();
@@ -350,7 +350,7 @@ const AdminBlog = () => {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="category">Categoría</Label>
                     <Select
@@ -535,7 +535,7 @@ const AdminBlog = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="meta_title">Meta Título (SEO)</Label>
                     <Input
@@ -570,10 +570,10 @@ const AdminBlog = () => {
           </Dialog>
 
         {/* Filters */}
-        <Card className="p-4">
-          <div className="flex flex-col md:flex-row gap-4">
+        <Card className="p-4 md:p-6">
+          <div className="flex flex-col md:flex-row gap-3 md:gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4 md:h-5 md:w-5" />
               <Input
                 placeholder="Buscar posts..."
                 value={searchQuery}
@@ -609,59 +609,60 @@ const AdminBlog = () => {
         </Card>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="p-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+          <Card className="p-3 md:p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Total Posts</p>
-                <p className="text-2xl font-bold text-gray-900">{posts?.length || 0}</p>
+                <p className="text-xs md:text-sm text-gray-600">Total Posts</p>
+                <p className="text-xl md:text-2xl font-bold text-gray-900">{posts?.length || 0}</p>
               </div>
-              <FileText className="h-8 w-8 text-[#7d8768]" />
+              <FileText className="h-6 w-6 md:h-8 md:w-8 text-[#7d8768]" />
             </div>
           </Card>
-          <Card className="p-4">
+          <Card className="p-3 md:p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Publicados</p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-xs md:text-sm text-gray-600">Publicados</p>
+                <p className="text-xl md:text-2xl font-bold text-green-600">
                   {posts?.filter((p) => p.status === 'published').length || 0}
                 </p>
               </div>
-              <Eye className="h-8 w-8 text-green-600" />
+              <Eye className="h-6 w-6 md:h-8 md:w-8 text-green-600" />
             </div>
           </Card>
-          <Card className="p-4">
+          <Card className="p-3 md:p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Borradores</p>
-                <p className="text-2xl font-bold text-yellow-600">
+                <p className="text-xs md:text-sm text-gray-600">Borradores</p>
+                <p className="text-xl md:text-2xl font-bold text-yellow-600">
                   {posts?.filter((p) => p.status === 'draft').length || 0}
                 </p>
               </div>
-              <FileText className="h-8 w-8 text-yellow-600" />
+              <FileText className="h-6 w-6 md:h-8 md:w-8 text-yellow-600" />
             </div>
           </Card>
-          <Card className="p-4">
+          <Card className="p-3 md:p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Total Vistas</p>
-                <p className="text-2xl font-bold text-blue-600">
+                <p className="text-xs md:text-sm text-gray-600">Total Vistas</p>
+                <p className="text-xl md:text-2xl font-bold text-blue-600">
                   {posts?.reduce((sum, p) => sum + (p.views || 0), 0) || 0}
                 </p>
               </div>
-              <Eye className="h-8 w-8 text-blue-600" />
+              <Eye className="h-6 w-6 md:h-8 md:w-8 text-blue-600" />
             </div>
           </Card>
         </div>
 
         {/* Posts Table */}
         {isLoading ? (
-          <Card className="p-8 text-center">
-            <p className="text-gray-600">Cargando posts...</p>
+          <Card className="p-4 md:p-8 text-center">
+            <p className="text-gray-600 text-sm md:text-base">Cargando posts...</p>
           </Card>
         ) : posts && posts.length > 0 ? (
           <Card>
-            <div className="overflow-x-auto">
+            {/* Desktop Table View */}
+            <div className="hidden lg:block overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
@@ -756,10 +757,87 @@ const AdminBlog = () => {
                 </tbody>
               </table>
             </div>
+
+            {/* Mobile Card View */}
+            <div className="lg:hidden p-4 space-y-3">
+              {posts.map((post) => (
+                <Card key={post.id} className="border-l-4 border-l-[#7d8768]">
+                  <div className="p-4 space-y-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-sm text-gray-900 mb-2 line-clamp-2">{post.title}</h3>
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            {post.category && (
+                              <Badge variant="outline" className="text-xs">{post.category}</Badge>
+                            )}
+                            <Badge
+                              className={
+                                post.status === 'published'
+                                  ? 'bg-green-100 text-green-800 text-xs'
+                                  : post.status === 'draft'
+                                  ? 'bg-yellow-100 text-yellow-800 text-xs'
+                                  : 'bg-gray-100 text-gray-800 text-xs'
+                              }
+                            >
+                              {post.status === 'published'
+                                ? 'Publicado'
+                                : post.status === 'draft'
+                                ? 'Borrador'
+                                : 'Archivado'}
+                            </Badge>
+                          </div>
+                          <div className="flex items-center gap-3 text-xs text-gray-600">
+                            <div className="flex items-center gap-1">
+                              <Calendar className="h-3 w-3" />
+                              <span>
+                                {post.published_at
+                                  ? format(new Date(post.published_at), 'd MMM yyyy', { locale: es })
+                                  : post.created_at
+                                  ? format(new Date(post.created_at), 'd MMM yyyy', { locale: es })
+                                  : '-'}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Eye className="h-3 w-3" />
+                              <span>{post.views || 0} vistas</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex gap-1 flex-shrink-0 flex-wrap justify-end">
+                        {post.status === 'published' && (
+                          <a
+                            href={`/blog/${post.slug}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:text-blue-900 p-1"
+                          >
+                            <Eye className="h-4 w-4" />
+                          </a>
+                        )}
+                        <button
+                          onClick={() => handleOpenEdit(post)}
+                          className="text-[#7d8768] hover:text-[#6a7559] p-1"
+                        >
+                          <Edit className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(post.id)}
+                          className="text-red-600 hover:text-red-900 p-1"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
           </Card>
         ) : (
-          <Card className="p-8 text-center">
-            <p className="text-gray-600">No hay posts disponibles.</p>
+          <Card className="p-4 md:p-8 text-center">
+            <p className="text-gray-600 text-sm md:text-base">No hay posts disponibles.</p>
           </Card>
         )}
       </div>

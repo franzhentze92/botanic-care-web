@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -28,6 +28,7 @@ import { useCart } from '@/contexts/CartContext';
 import { useCreateOrder, useUserProfile, useAddresses, useCreateAddress, usePaymentMethods, useCreatePaymentMethod, useUpdateAddress, useUpdatePaymentMethod } from '@/hooks/useDashboard';
 import { useAuth } from '@/contexts/AuthContext';
 import { useStoreSettings } from '@/hooks/useStoreSettings';
+import { supabase } from '@/lib/supabase';
 import { useQueryClient } from '@tanstack/react-query';
 
 const Cart: React.FC = () => {
@@ -45,6 +46,7 @@ const Cart: React.FC = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   
   const freeShippingThreshold = storeSettings?.freeShippingThreshold || 50;
   const shippingCostValue = storeSettings?.shippingCost || 25;
@@ -62,34 +64,55 @@ const Cart: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState('journey-pay');
 
   // Cargar información del perfil y dirección predeterminada cuando estén disponibles
-  useEffect(() => {
+  // Usar useMemo para evitar actualizaciones innecesarias
+  const initialShippingInfo = React.useMemo(() => {
     if (userProfile) {
-      // Obtener la dirección predeterminada o la primera dirección disponible
       const defaultAddress = addresses.find(addr => addr.is_default) || addresses[0];
-      
-      setShippingInfo(prev => ({
-        ...prev,
-        firstName: userProfile.first_name || prev.firstName,
-        lastName: userProfile.last_name || prev.lastName,
-        email: user?.email || prev.email,
-        phone: userProfile.phone || prev.phone,
-        // Si hay una dirección predeterminada, usarla
-        ...(defaultAddress && {
-          address: defaultAddress.street || prev.address,
-          city: defaultAddress.city || prev.city,
-          state: defaultAddress.state || prev.state,
-          zipCode: defaultAddress.zip_code || prev.zipCode,
-          country: defaultAddress.country || prev.country,
-        }),
-      }));
+      return {
+        firstName: userProfile.first_name || '',
+        lastName: userProfile.last_name || '',
+        email: user?.email || '',
+        phone: userProfile.phone || '',
+        address: defaultAddress?.street || '',
+        city: defaultAddress?.city || '',
+        state: defaultAddress?.state || '',
+        zipCode: defaultAddress?.zip_code || '',
+        country: defaultAddress?.country || 'Guatemala',
+      };
     } else if (user) {
-      // Si no hay perfil pero sí hay usuario, al menos usar el email
-      setShippingInfo(prev => ({
-        ...prev,
-        email: user.email || prev.email,
-      }));
+      return {
+        firstName: '',
+        lastName: '',
+        email: user.email || '',
+        phone: '',
+        address: '',
+        city: '',
+        state: '',
+        zipCode: '',
+        country: 'Guatemala',
+      };
     }
-  }, [userProfile, addresses, user]);
+    return {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      address: '',
+      city: '',
+      state: '',
+      zipCode: '',
+      country: 'Guatemala',
+    };
+  }, [userProfile?.first_name, userProfile?.last_name, userProfile?.phone, user?.email, addresses?.length]);
+
+  // Solo actualizar shippingInfo una vez cuando los datos estén disponibles
+  const hasInitialized = useRef(false);
+  useEffect(() => {
+    if (!hasInitialized.current && initialShippingInfo.email) {
+      setShippingInfo(initialShippingInfo);
+      hasInitialized.current = true;
+    }
+  }, [initialShippingInfo.email]);
 
   const shippingCost = getCartTotal() >= freeShippingThreshold ? 0 : shippingCostValue;
   const tax = getCartTotal() * 0.16; // 16% IVA
@@ -110,38 +133,92 @@ const Cart: React.FC = () => {
   };
 
   const handlePlaceOrder = async () => {
-    if (!user) {
-      toast.error('Debes iniciar sesión para realizar un pedido', {
-        description: 'Por favor, inicia sesión o crea una cuenta',
-      });
-      navigate('/login');
+    // Prevenir doble clic o múltiples ejecuciones simultáneas
+    if (isPlacingOrder) {
+      console.warn('⚠️ Ya se está procesando una orden, ignorando solicitud duplicada');
       return;
     }
-
-    // Validar información de envío
-    if (!shippingInfo.firstName || !shippingInfo.lastName || !shippingInfo.email || 
-        !shippingInfo.phone || !shippingInfo.address || !shippingInfo.city || 
-        !shippingInfo.state || !shippingInfo.zipCode) {
-      toast.error('Por favor completa toda la información de envío', {
-        description: 'Todos los campos son requeridos',
-      });
-      return;
-    }
-
-    const orderTotal = total;
-    const itemCount = getCartItemCount();
-    const subtotal = getCartTotal();
+    
+    setIsPlacingOrder(true);
     
     try {
+      if (!user) {
+        toast.error('Debes iniciar sesión para realizar un pedido', {
+          description: 'Por favor, inicia sesión o crea una cuenta',
+        });
+        navigate('/login');
+        setIsPlacingOrder(false);
+        return;
+      }
+
+      // Verificar que el usuario tenga sesión activa
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error('Sesión no válida', {
+          description: 'Por favor, confirma tu email o inicia sesión nuevamente',
+        });
+        navigate('/login');
+        setIsPlacingOrder(false);
+        return;
+      }
+
+      // Validar información de envío
+      if (!shippingInfo.firstName || !shippingInfo.lastName || !shippingInfo.email || 
+          !shippingInfo.phone || !shippingInfo.address || !shippingInfo.city || 
+          !shippingInfo.state || !shippingInfo.zipCode) {
+        toast.error('Por favor completa toda la información de envío', {
+          description: 'Todos los campos son requeridos',
+        });
+        setIsPlacingOrder(false);
+        return;
+      }
+
+      const orderTotal = total;
+      const itemCount = getCartItemCount();
+      const subtotal = getCartTotal();
+      // Obtener direcciones y métodos de pago actualizados directamente desde Supabase
+      // Esto asegura que tenemos los datos más recientes antes de buscar duplicados
+      const { data: updatedAddresses = [] } = await supabase
+        .from('addresses')
+        .select('*')
+        .eq('user_id', user!.id)
+        .order('is_default', { ascending: false })
+        .order('created_at', { ascending: false });
+      
+      const { data: updatedPaymentMethods = [] } = await supabase
+        .from('payment_methods')
+        .select('*')
+        .eq('user_id', user!.id)
+        .order('is_default', { ascending: false })
+        .order('created_at', { ascending: false });
+      
+      // Refrescar las queries después de obtener los datos para mantener sincronizado el cache
+      queryClient.setQueryData(['addresses', user?.id], updatedAddresses);
+      queryClient.setQueryData(['payment-methods', user?.id], updatedPaymentMethods);
+      
       // Verificar si ya existe una dirección con los mismos datos
+      // Comparación más flexible que normaliza espacios y mayúsculas
+      const normalizeString = (str: string) => (str || '').toLowerCase().trim().replace(/\s+/g, ' ');
       const addressName = `${shippingInfo.firstName} ${shippingInfo.lastName}`;
-      const existingAddress = addresses.find(addr => 
-        addr.street.toLowerCase().trim() === shippingInfo.address.toLowerCase().trim() &&
-        addr.city.toLowerCase().trim() === shippingInfo.city.toLowerCase().trim() &&
-        addr.state.toLowerCase().trim() === shippingInfo.state.toLowerCase().trim() &&
-        addr.zip_code.trim() === shippingInfo.zipCode.trim() &&
-        addr.country.toLowerCase().trim() === shippingInfo.country.toLowerCase().trim()
-      );
+      const existingAddress = updatedAddresses.find((addr: any) => {
+        const addrStreet = normalizeString(addr.street || '');
+        const addrCity = normalizeString(addr.city || '');
+        const addrState = normalizeString(addr.state || '');
+        const addrZip = (addr.zip_code || '').trim();
+        const addrCountry = normalizeString(addr.country || '');
+        
+        const infoStreet = normalizeString(shippingInfo.address || '');
+        const infoCity = normalizeString(shippingInfo.city || '');
+        const infoState = normalizeString(shippingInfo.state || '');
+        const infoZip = (shippingInfo.zipCode || '').trim();
+        const infoCountry = normalizeString(shippingInfo.country || '');
+        
+        return addrStreet === infoStreet &&
+               addrCity === infoCity &&
+               addrState === infoState &&
+               addrZip === infoZip &&
+               addrCountry === infoCountry;
+      });
 
       let address;
       if (existingAddress) {
@@ -155,18 +232,57 @@ const Cart: React.FC = () => {
           });
         }
       } else {
-        // Crear nueva dirección solo si no existe
-        address = await createAddressMutation.mutateAsync({
-          type: 'home',
-          name: addressName,
-          street: shippingInfo.address,
-          city: shippingInfo.city,
-          state: shippingInfo.state,
-          zip_code: shippingInfo.zipCode,
-          country: shippingInfo.country,
-          phone: shippingInfo.phone,
-          is_default: true,
+        // Verificar una vez más antes de crear para evitar duplicados por condiciones de carrera
+        // Consultar directamente a Supabase para asegurar que no se creó mientras tanto
+        const normalizeString = (str: string) => (str || '').toLowerCase().trim().replace(/\s+/g, ' ');
+        const { data: lastCheckAddresses = [] } = await supabase
+          .from('addresses')
+          .select('*')
+          .eq('user_id', user!.id);
+        
+        const duplicateAddress = lastCheckAddresses.find((addr: any) => {
+          const addrStreet = normalizeString(addr.street || '');
+          const addrCity = normalizeString(addr.city || '');
+          const addrState = normalizeString(addr.state || '');
+          const addrZip = (addr.zip_code || '').trim();
+          const addrCountry = normalizeString(addr.country || '');
+          
+          const infoStreet = normalizeString(shippingInfo.address || '');
+          const infoCity = normalizeString(shippingInfo.city || '');
+          const infoState = normalizeString(shippingInfo.state || '');
+          const infoZip = (shippingInfo.zipCode || '').trim();
+          const infoCountry = normalizeString(shippingInfo.country || '');
+          
+          return addrStreet === infoStreet &&
+                 addrCity === infoCity &&
+                 addrState === infoState &&
+                 addrZip === infoZip &&
+                 addrCountry === infoCountry;
         });
+        
+        if (duplicateAddress) {
+          // Se creó una mientras tanto, usar esa
+          address = duplicateAddress;
+          if (!duplicateAddress.is_default) {
+            await updateAddressMutation.mutateAsync({
+              id: duplicateAddress.id,
+              is_default: true,
+            });
+          }
+        } else {
+          // Crear nueva dirección solo si realmente no existe
+          address = await createAddressMutation.mutateAsync({
+            type: 'home',
+            name: addressName,
+            street: shippingInfo.address,
+            city: shippingInfo.city,
+            state: shippingInfo.state,
+            zip_code: shippingInfo.zipCode,
+            country: shippingInfo.country,
+            phone: shippingInfo.phone,
+            is_default: true,
+          });
+        }
       }
 
       // Verificar si ya existe un método de pago del mismo tipo
@@ -177,11 +293,16 @@ const Cart: React.FC = () => {
         paymentMethodType = 'paypal';
       }
 
-      // Para cash_on_delivery, siempre buscar o crear uno genérico
+      // Para cash_on_delivery, siempre usar el primero existente o crear solo uno
       // Para card y paypal, buscar uno existente del mismo tipo
-      const existingPaymentMethod = paymentMethods.find(pm => 
-        pm.type === paymentMethodType
-      );
+      let existingPaymentMethod;
+      if (paymentMethodType === 'cash_on_delivery') {
+        // Para cash_on_delivery, usar el primero que encuentre (solo debería haber uno)
+        existingPaymentMethod = updatedPaymentMethods.find((pm: any) => pm.type === 'cash_on_delivery');
+      } else {
+        // Para card y paypal, buscar uno existente del mismo tipo
+        existingPaymentMethod = updatedPaymentMethods.find((pm: any) => pm.type === paymentMethodType);
+      }
 
       let paymentMethodData;
       if (existingPaymentMethod) {
@@ -195,11 +316,31 @@ const Cart: React.FC = () => {
           });
         }
       } else {
-        // Crear nuevo método de pago solo si no existe
-        paymentMethodData = await createPaymentMethodMutation.mutateAsync({
-          type: paymentMethodType,
-          is_default: true,
-        });
+        // Verificar una vez más antes de crear para evitar duplicados por condiciones de carrera
+        // Consultar directamente a Supabase para asegurar que no se creó mientras tanto
+        const { data: lastCheckPaymentMethods = [] } = await supabase
+          .from('payment_methods')
+          .select('*')
+          .eq('user_id', user!.id)
+          .eq('type', paymentMethodType)
+          .limit(1);
+        
+        if (lastCheckPaymentMethods && lastCheckPaymentMethods.length > 0) {
+          // Se creó uno mientras tanto, usar ese
+          paymentMethodData = lastCheckPaymentMethods[0];
+          if (!paymentMethodData.is_default) {
+            await updatePaymentMethodMutation.mutateAsync({
+              id: paymentMethodData.id,
+              is_default: true,
+            });
+          }
+        } else {
+          // Crear nuevo método de pago solo si realmente no existe
+          paymentMethodData = await createPaymentMethodMutation.mutateAsync({
+            type: paymentMethodType,
+            is_default: true,
+          });
+        }
       }
 
       // Crear la orden en la base de datos
@@ -263,10 +404,33 @@ const Cart: React.FC = () => {
       setTimeout(() => {
         navigate('/dashboard');
       }, 1500);
+      
+      setIsPlacingOrder(false);
     } catch (error: any) {
+      console.error('Error al crear la orden:', error);
+      
+      // Mensajes de error más específicos
+      let errorMessage = 'Hubo un problema al procesar tu pedido. Por favor, intenta de nuevo.';
+      
+      if (error.message) {
+        if (error.message.includes('permission') || error.message.includes('policy') || error.message.includes('RLS')) {
+          errorMessage = 'No tienes permisos para realizar esta acción. Por favor, verifica que hayas confirmado tu email e inicia sesión nuevamente.';
+        } else if (error.message.includes('401') || error.message.includes('Unauthorized')) {
+          errorMessage = 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.';
+        } else if (error.message.includes('not authenticated') || error.message.includes('User not authenticated')) {
+          errorMessage = 'Debes estar autenticado para realizar una compra. Por favor, inicia sesión.';
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      
       toast.error('Error al crear la orden', {
-        description: error.message || 'Hubo un problema al procesar tu pedido. Por favor, intenta de nuevo.',
+        description: errorMessage,
+        duration: 5000,
       });
+      
+      setIsCheckingOut(false);
+      setIsPlacingOrder(false);
     }
   };
 
@@ -644,7 +808,8 @@ const Cart: React.FC = () => {
 
                     <Button 
                       onClick={handlePlaceOrder}
-                      className="w-full bg-[#7d8768] hover:bg-[#6d7660] text-white py-3 font-body"
+                      disabled={isPlacingOrder}
+                      className="w-full bg-[#7d8768] hover:bg-[#6d7660] text-white py-3 font-body disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <Lock className="h-4 w-4 mr-2" />
                       Realizar Pedido - Q. {total.toFixed(2)}

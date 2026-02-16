@@ -25,7 +25,9 @@ const Wishlist: React.FC = () => {
       <Layout>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
-            <div className="text-6xl mb-6">💝</div>
+            <div className="mb-6 flex justify-center">
+              <Heart className="h-24 w-24 text-[#7d8768] fill-[#7d8768]" />
+            </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-4 font-editorial-new">Tu lista de deseos está vacía</h1>
             <p className="text-gray-600 mb-8 font-body">Guarda tus productos favoritos para comprarlos más tarde</p>
             <Button asChild className="bg-[#7d8768] hover:bg-[#6d7660] text-white font-body">

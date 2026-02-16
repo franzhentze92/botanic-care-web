@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,10 +9,10 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
   DropdownMenuGroup,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
 } from '@/components/ui/dropdown-menu';
 import { 
   Search, 
@@ -41,7 +41,8 @@ import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useStoreSettings } from '@/hooks/useStoreSettings';
 import { useActiveProductCategories } from '@/hooks/useProductCategories';
-import Chatbot from '@/components/Chatbot';
+import { useUserProfile } from '@/hooks/useDashboard';
+import { UserDropdownMenu } from './UserDropdownMenu';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -50,32 +51,47 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isCategoriesExpanded, setIsCategoriesExpanded] = useState(false);
   const [isMobileShopExpanded, setIsMobileShopExpanded] = useState(false);
   const [isMobileCategoriesExpanded, setIsMobileCategoriesExpanded] = useState(false);
-  const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false);
-  const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
   const { getCartItemCount, getWishlistCount } = useCart();
   const { user, signOut } = useAuth();
+  const { data: userProfile } = useUserProfile();
   const { data: storeSettings } = useStoreSettings();
-  const { data: productCategories = [], isLoading: isLoadingCategories } = useActiveProductCategories();
+  const { data: productCategoriesRaw = [], isLoading: isLoadingCategories } = useActiveProductCategories();
   
-  // Debug: Log categories
-  React.useEffect(() => {
-    console.log('Product Categories:', productCategories);
-    console.log('Is Loading:', isLoadingCategories);
-    console.log('Categories Length:', productCategories?.length || 0);
-    console.log('Is Categories Expanded:', isCategoriesExpanded);
-  }, [productCategories, isLoadingCategories, isCategoriesExpanded]);
+  // Memoizar productCategories para evitar re-renders
+  // Usar una comparación más estable basada en IDs
+  const productCategories = useMemo(() => {
+    if (!productCategoriesRaw || productCategoriesRaw.length === 0) {
+      return [];
+    }
+    return productCategoriesRaw;
+  }, [productCategoriesRaw?.length, productCategoriesRaw?.map(c => c.id).join(',')]);
   
   // Email permitido para acceso admin
   const ADMIN_EMAIL = 'admin@botaniccare.com';
-  const isAuthorizedAdmin = user?.email === ADMIN_EMAIL;
+  const isAuthorizedAdmin = useMemo(() => {
+    return user?.email === ADMIN_EMAIL;
+  }, [user?.email]);
   
   const navigate = useNavigate();
   const location = useLocation();
   
-  const freeShippingThreshold = storeSettings?.freeShippingThreshold || 50;
+  const freeShippingThreshold = useMemo(() => {
+    return storeSettings?.freeShippingThreshold || 50;
+  }, [storeSettings?.freeShippingThreshold]);
+
+  // Memoizar el nombre del usuario para evitar re-renders innecesarios
+  const userName = useMemo(() => {
+    if (!user) return 'Usuario';
+    if (userProfile?.first_name && userProfile?.last_name) {
+      return `${userProfile.first_name} ${userProfile.last_name}`.trim();
+    }
+    if (userProfile?.first_name) {
+      return userProfile.first_name;
+    }
+    return user.email?.split('@')[0] || 'Usuario';
+  }, [user?.id, user?.email, userProfile?.first_name, userProfile?.last_name]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -91,17 +107,32 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }
   };
 
-  const handleSignOut = async () => {
-    await signOut();
-    navigate('/');
-  };
+  const handleSignOut = useCallback(async () => {
+    try {
+      await signOut();
+      // Limpiar cualquier estado local
+      setIsMenuOpen(false);
+      // Redirigir después de un pequeño delay para asegurar que la sesión se cerró
+      setTimeout(() => {
+        navigate('/');
+        window.location.reload(); // Forzar recarga para limpiar todo el estado
+      }, 100);
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+      // Intentar redirigir de todas formas
+      navigate('/');
+      window.location.reload();
+    }
+  }, [signOut, navigate]);
+
+
+
 
   const navigation = [
     { name: 'Inicio', href: '/' },
     { name: 'Sobre Nosotros', href: '/about' },
     { name: 'Tienda', href: '/shop' },
     { name: 'Personalizar', href: '/custom-cream' },
-    { name: 'Nutrición', href: '/nutrition' },
     { name: 'Blog', href: '/blog' },
     { name: 'Contáctanos', href: '/contact' },
   ];
@@ -109,12 +140,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const isActive = (path: string) => location.pathname === path;
 
   // Categories for bottom navigation - from database
-  // Convert product categories to navigation format
-  const categories = productCategories.map(cat => ({
-    name: cat.name,
-    href: `/shop?category=${cat.id}`,
-    id: cat.id
-  }));
+  // Convert product categories to navigation format (memoizado para evitar re-renders)
+  const categories = useMemo(() => {
+    return productCategories.map(cat => ({
+      name: cat.name,
+      href: `/shop?category=${cat.id}`,
+      id: cat.id
+    }));
+  }, [productCategories]);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -194,133 +227,66 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="flex items-center justify-between h-16">
             {/* Left Navigation */}
             <nav className="hidden lg:flex items-center space-x-4">
-              <DropdownMenu open={isShopDropdownOpen} onOpenChange={setIsShopDropdownOpen}>
+              <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
-                  <button 
-                    onMouseEnter={() => setIsShopDropdownOpen(true)}
-                    onMouseLeave={() => setIsShopDropdownOpen(false)}
-                    className={`text-sm font-medium flex items-center gap-0.5 font-gilda-display ${
-                      isActive('/shop') ? 'text-[#313522] underline' : 'text-gray-700 hover:text-[#313522]'
-                    }`}>
+                  <button
+                    className={`text-sm font-medium font-gilda-display flex items-center gap-1 ${
+                      location.pathname === '/shop' ? 'text-[#313522] underline' : 'text-gray-700 hover:text-[#313522]'
+                    }`}
+                  >
                     Tienda
-                    <ChevronDown className="h-2.5 w-2.5" />
+                    <ChevronDown className="h-3 w-3" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent 
-                  className="bg-[#faf9f6] border-gray-200"
-                  onMouseEnter={() => setIsShopDropdownOpen(true)}
-                  onMouseLeave={() => setIsShopDropdownOpen(false)}
-                >
+                <DropdownMenuContent align="start" className="w-56 z-[100]">
                   <DropdownMenuGroup>
-                    <DropdownMenuItem asChild className="p-0">
-                      <Link to="/shop" className="px-2 py-1.5 text-[#313522] text-xs font-normal uppercase font-audrey font-semibold">
-                        TODOS LOS PRODUCTOS
+                    <DropdownMenuItem asChild>
+                      <Link to="/shop" className="cursor-pointer font-body">
+                        Todos los Productos
                       </Link>
                     </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                  <DropdownMenuSeparator className="bg-gray-300" />
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem asChild className="p-0">
-                      <Link to="/shop?new=true" className="px-2 py-1.5 text-[#313522] text-xs font-normal uppercase underline font-audrey">
-                        RECIÉN LLEGADOS
+                    <DropdownMenuItem asChild>
+                      <Link to="/shop?new=true" className="cursor-pointer font-body">
+                        Recién Llegados
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild className="p-0">
-                      <Link to="/shop?bestsellers=true" className="px-2 py-1.5 text-[#313522] text-xs font-normal uppercase font-audrey">
-                        MÁS VENDIDOS
+                    <DropdownMenuItem asChild>
+                      <Link to="/shop?bestsellers=true" className="cursor-pointer font-body">
+                        Más Vendidos
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild className="p-0">
-                      <Link to="/shop?seasonal=true" className="px-2 py-1.5 text-[#313522] text-xs font-normal uppercase font-audrey">
-                        TEMPORADA
+                    <DropdownMenuItem asChild>
+                      <Link to="/shop?seasonal=true" className="cursor-pointer font-body">
+                        Temporada
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild className="p-0">
-                      <Link to="/shop?sale=true" className="px-2 py-1.5 text-[#313522] text-xs font-normal uppercase font-audrey">
-                        OFERTAS
-                      </Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                  <DropdownMenuSeparator className="bg-gray-300" />
-                  <DropdownMenuGroup>
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log('Toggle clicked, current state:', isCategoriesExpanded);
-                        setIsCategoriesExpanded(!isCategoriesExpanded);
-                      }}
-                      className="w-full px-2 py-1.5 text-[#313522] text-xs font-normal uppercase flex items-center justify-between hover:bg-gray-100 cursor-pointer font-audrey"
-                    >
-                      <span>TODAS LAS CATEGORÍAS</span>
-                      <ChevronRight className={`h-3 w-3 transition-transform ${isCategoriesExpanded ? 'rotate-90' : ''}`} />
-                    </button>
-                    {isCategoriesExpanded && (
-                      <div className="w-full">
-                        {isLoadingCategories ? (
-                          <div className="px-2 py-1.5 pl-4 text-xs text-gray-500 font-body">
-                            Cargando categorías...
-                          </div>
-                        ) : productCategories && productCategories.length > 0 ? (
-                          productCategories.map((category) => (
-                            <DropdownMenuItem key={category.id} asChild className="p-0">
-                              <Link 
-                                to={`/shop?category=${category.id}`} 
-                                className="px-2 py-1.5 pl-4 text-xs text-[#313522] hover:bg-gray-100 w-full block font-body"
-                                onClick={() => {
-                                  console.log('Category clicked:', category);
-                                }}
-                              >
-                                {category.name}
-                              </Link>
-                            </DropdownMenuItem>
-                          ))
-                        ) : (
-                          <div className="px-2 py-1.5 pl-4 text-xs text-gray-500 font-body">
-                            No hay categorías disponibles (Total: {productCategories?.length || 0})
-                          </div>
-                        )}
-                      </div>
-                    )}
                   </DropdownMenuGroup>
                 </DropdownMenuContent>
               </DropdownMenu>
               <Link
                 to="/shop?sale=true"
                 className={`text-sm font-medium font-gilda-display ${
-                  isActive('/shop?sale=true') ? 'text-red-600 underline' : 'text-red-600 hover:underline'
+                  location.search.includes('sale=true') ? 'text-red-600 underline' : 'text-red-600 hover:underline'
                 }`}
               >
                 Ofertas
               </Link>
-              <DropdownMenu open={isAboutDropdownOpen} onOpenChange={setIsAboutDropdownOpen}>
-                <DropdownMenuTrigger asChild>
-                  <button 
-                    onMouseEnter={() => setIsAboutDropdownOpen(true)}
-                    onMouseLeave={() => setIsAboutDropdownOpen(false)}
-                    className={`text-sm font-medium flex items-center gap-0.5 font-gilda-display ${
-                      isActive('/about') ? 'text-[#313522] underline' : 'text-gray-700 hover:text-[#313522]'
-                    }`}>
-                    Quiénes Somos
-                    <ChevronDown className="h-2.5 w-2.5" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  onMouseEnter={() => setIsAboutDropdownOpen(true)}
-                  onMouseLeave={() => setIsAboutDropdownOpen(false)}
-                >
-                  <DropdownMenuItem asChild>
-                    <Link to="/about" className="font-body">Sobre Botanic Care</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/nutrition" className="font-body">Nutrición</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/blog" className="font-body">Blog</Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Link
+                to="/about"
+                className={`text-sm font-medium font-gilda-display ${
+                  isActive('/about') ? 'text-[#313522] underline' : 'text-gray-700 hover:text-[#313522]'
+                }`}
+              >
+                Quiénes Somos
+              </Link>
+              <Link
+                to="/blog"
+                className={`text-sm font-medium font-gilda-display ${
+                  isActive('/blog') ? 'text-[#313522] underline' : 'text-gray-700 hover:text-[#313522]'
+                }`}
+              >
+                Blog
+              </Link>
             </nav>
 
             {/* Center Logo */}
@@ -329,9 +295,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <img
                   src="/BC Brand/2. icono-20250730T203031Z-1-001/2. icono/Icono_BotanicCare_Verde Claro.png"
                   alt="Botanic Care Icon"
-                  className="h-8 w-8 object-contain"
+                  className="h-12 w-12 object-contain"
                 />
-                <h1 className="text-3xl font-normal text-[#7d8768] font-editorial-new leading-none">
+                <h1 className="text-5xl font-normal text-[#7d8768] font-editorial-new leading-none">
                   Botanic Care
                 </h1>
               </Link>
@@ -365,41 +331,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   </Link>
                 </Button>
                 {user ? (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="rounded-full h-10 w-10">
-                        <User className="h-5 w-5" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-56">
-                      <div className="px-2 py-1.5">
-                        <p className="text-sm font-normal font-gilda-display">
-                          {user.user_metadata?.name || user.email}
-                        </p>
-                        <p className="text-xs text-gray-500 font-body">{user.email}</p>
-                      </div>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem asChild>
-                        <Link to="/dashboard" className="cursor-pointer font-body">
-                          <User className="mr-2 h-4 w-4" />
-                          Mi Cuenta
-                        </Link>
-                      </DropdownMenuItem>
-                      {isAuthorizedAdmin && (
-                        <DropdownMenuItem asChild>
-                          <Link to="/admin" className="cursor-pointer font-body">
-                            <Settings className="mr-2 h-4 w-4" />
-                            Administración
-                          </Link>
-                        </DropdownMenuItem>
-                      )}
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-red-600 font-body">
-                        <LogOut className="mr-2 h-4 w-4" />
-                        Cerrar Sesión
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <UserDropdownMenu
+                    userName={userName}
+                    userEmail={user?.email || ''}
+                    isAuthorizedAdmin={isAuthorizedAdmin}
+                    onSignOut={handleSignOut}
+                  />
                 ) : (
                   <Button variant="ghost" size="icon" className="rounded-full h-10 w-10" asChild>
                     <Link to="/login">
@@ -437,13 +374,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <nav className="hidden lg:flex items-center justify-center gap-4 py-2">
               {isLoadingCategories ? (
-                <div className="text-sm text-white/70 font-body">Cargando categorías...</div>
+                <div className="text-base text-white/70 font-body">Cargando categorías...</div>
               ) : categories.length > 0 ? (
                 categories.map((category) => (
                   <Link
                     key={category.id || category.href}
                     to={category.href}
-                    className="text-sm font-medium text-white hover:underline py-1 font-gilda-display"
+                    className="text-lg font-medium text-white hover:underline py-1 font-gilda-display"
                   >
                     {category.name}
                   </Link>
@@ -604,18 +541,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </div>
 
                 <Link
-                  to="/nutrition"
-                  className={`block py-2 text-sm font-medium font-body ${
-                    location.pathname === '/nutrition'
-                      ? 'text-white'
-                      : 'text-white/90 hover:text-white'
-                  }`}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Nutrición
-                </Link>
-
-                <Link
                   to="/blog"
                   className={`block py-2 text-sm font-medium font-body ${
                     location.pathname === '/blog'
@@ -641,25 +566,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
                 {/* User Actions Section */}
                 <div className="pt-4 border-t border-white/10 mt-4 space-y-1">
-                  {!user ? (
-                    <Link
-                      to="/login"
-                      className="block py-2 text-sm font-medium text-white/90 hover:text-white font-body"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Iniciar Sesión
-                    </Link>
-                  ) : (
-                    <button
-                      onClick={() => {
-                        handleSignOut();
-                        setIsMenuOpen(false);
-                      }}
-                      className="block py-2 text-sm font-medium text-red-400 hover:text-red-300 w-full text-left font-body"
-                    >
-                      Cerrar Sesión
-                    </button>
-                  )}
                   <Link
                     to="/wishlist"
                     className="block py-2 text-sm font-medium text-white/90 hover:text-white font-body"
@@ -673,6 +579,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Carrito
+                  </Link>
+                  <Link
+                    to="/rewards"
+                    className="block py-2 text-sm font-medium text-white/90 hover:text-white font-body"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Botanic Care Rewards
                   </Link>
                 </div>
 
@@ -705,6 +618,29 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     )}
                   </div>
                 )}
+
+                {/* Login/Logout Section - Moved to end */}
+                <div className="pt-4 border-t border-white/10 mt-4">
+                  {!user ? (
+                    <Link
+                      to="/login"
+                      className="block py-2 text-sm font-medium text-white/90 hover:text-white font-body"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Iniciar Sesión
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        handleSignOut();
+                        setIsMenuOpen(false);
+                      }}
+                      className="block py-2 text-sm font-medium text-red-400 hover:text-red-300 w-full text-left font-body"
+                    >
+                      Cerrar Sesión
+                    </button>
+                  )}
+                </div>
               </nav>
             </div>
           </>
@@ -773,11 +709,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/nutrition" className="text-white/80 hover:text-white transition-colors font-body">
-                    Nutrición
-                  </Link>
-                </li>
-                <li>
                   <Link to="/blog" className="text-white/80 hover:text-white transition-colors font-body">
                     Blog
                   </Link>
@@ -824,9 +755,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </div>
         </div>
       </footer>
-
-      {/* Chatbot */}
-      <Chatbot />
     </div>
   );
 };
