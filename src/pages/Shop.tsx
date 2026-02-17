@@ -43,6 +43,9 @@ const Shop: React.FC = () => {
   const urlSearchQuery = searchParams.get('search') || '';
   const [searchQuery, setSearchQuery] = useState(urlSearchQuery);
   
+  // State for mobile filters collapse/expand
+  const [isFiltersExpanded, setIsFiltersExpanded] = useState(false);
+  
   // Get filter params from URL
   const isNew = searchParams.get('new') === 'true';
   const isBestsellers = searchParams.get('bestsellers') === 'true';
@@ -228,8 +231,18 @@ const Shop: React.FC = () => {
                       <SlidersHorizontal className="h-5 w-5 text-[#7d8768]" />
                       <h3 className="text-xl font-normal text-gray-900 font-gilda-display">Filtros</h3>
                     </div>
+                    {/* Mobile collapse/expand button */}
+                    <button
+                      onClick={() => setIsFiltersExpanded(!isFiltersExpanded)}
+                      className="lg:hidden flex items-center justify-center w-8 h-8 rounded-md hover:bg-gray-100 transition-colors"
+                      aria-label={isFiltersExpanded ? "Colapsar filtros" : "Expandir filtros"}
+                    >
+                      <ChevronDown className={`h-5 w-5 text-gray-600 transition-transform ${isFiltersExpanded ? 'rotate-180' : ''}`} />
+                    </button>
                   </div>
 
+                  {/* Filters Content - Collapsible on mobile */}
+                  <div className={`lg:block ${isFiltersExpanded ? 'block' : 'hidden'}`}>
                   {/* Categories - Enhanced */}
                   <div className="mb-8">
                     <h4 className="font-normal text-gray-900 mb-4 font-gilda-display text-base">Categorías</h4>
@@ -369,6 +382,7 @@ const Shop: React.FC = () => {
                   >
                     Limpiar Filtros
                   </Button>
+                  </div>
                 </CardContent>
               </Card>
             </div>

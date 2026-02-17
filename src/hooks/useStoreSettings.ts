@@ -46,11 +46,21 @@ export const useStoreSettings = () => {
         
         if (setting.category === 'orders') {
           if (key === 'freeShippingThreshold') {
-            settingsData.freeShippingThreshold = setting.setting_value || 50;
+            // Asegurar que el valor sea un número
+            const value = typeof setting.setting_value === 'number' 
+              ? setting.setting_value 
+              : parseFloat(setting.setting_value) || 50;
+            settingsData.freeShippingThreshold = value;
           } else if (key === 'shippingCost') {
-            settingsData.shippingCost = setting.setting_value || 25;
+            const value = typeof setting.setting_value === 'number' 
+              ? setting.setting_value 
+              : parseFloat(setting.setting_value) || 25;
+            settingsData.shippingCost = value;
           } else if (key === 'minOrderAmount') {
-            settingsData.minOrderAmount = setting.setting_value || 50;
+            const value = typeof setting.setting_value === 'number' 
+              ? setting.setting_value 
+              : parseFloat(setting.setting_value) || 50;
+            settingsData.minOrderAmount = value;
           }
         } else if (setting.category === 'general') {
           if (key === 'storeName') {

@@ -98,7 +98,6 @@ const About: React.FC = () => {
               <div className="flex items-center justify-center gap-3 mb-8 animate-fade-in">
                 <div className="flex items-center gap-2 px-5 py-2.5 bg-[#7d8768]/30 backdrop-blur-sm rounded-full border border-white/20 shadow-lg">
                   <Leaf className="h-5 w-5 text-white/95" />
-                  <Sparkles className="h-4 w-4 text-white/80" />
                   <span className="text-sm font-medium tracking-wide font-gilda-display">Quiénes Somos</span>
                 </div>
               </div>
@@ -109,17 +108,11 @@ const About: React.FC = () => {
                 Botanic Care es una marca guatemalteca de productos naturales que combina el poder de la naturaleza y la ciencia creando fórmulas efectivas y respetuosas con el medio ambiente
               </p>
               <div className="flex items-center justify-center gap-6 text-white/80 text-sm font-body flex-wrap">
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-[#7d8768]/30 rounded-full">
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-[#9d627b]/30 rounded-full">
                   <Leaf className="h-4 w-4" />
                   <span>100% Natural</span>
                 </div>
-                <span className="text-white/40">•</span>
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-[#313522]/30 rounded-full">
-                  <Leaf className="h-3 w-3" />
-                  <span>Libre de Crueldad</span>
-                </div>
-                <span className="text-white/40">•</span>
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-[#b9a035]/30 rounded-full">
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-[#cc8f47]/30 rounded-full">
                   <Globe className="h-4 w-4" />
                   <span>Sostenible</span>
                 </div>

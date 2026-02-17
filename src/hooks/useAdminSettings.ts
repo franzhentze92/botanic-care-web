@@ -140,6 +140,10 @@ export const useSaveSettings = () => {
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['admin-settings'] });
+      // También invalidar store-settings si se guardaron configuraciones de orders o general
+      if (variables.category === 'orders' || variables.category === 'general') {
+        queryClient.invalidateQueries({ queryKey: ['store-settings'] });
+      }
       toast.success(`Configuración de ${variables.category} guardada exitosamente`);
     },
     onError: (error: Error) => {

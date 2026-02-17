@@ -291,15 +291,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
             {/* Center Logo */}
             <div className="flex-1 flex flex-col items-center justify-center">
-              <Link to="/" className="text-center flex items-center justify-center gap-2">
+              <Link to="/" className="text-center flex items-center justify-center">
                 <img
-                  src="/BC Brand/2. icono-20250730T203031Z-1-001/2. icono/Icono_BotanicCare_Verde Claro.png"
-                  alt="Botanic Care Icon"
-                  className="h-12 w-12 object-contain"
+                  src="/Logotipo_BotanicCare_Full Color.png"
+                  alt="Botanic Care Logo"
+                  className="h-24 md:h-20 object-contain"
                 />
-                <h1 className="text-5xl font-normal text-[#7d8768] font-editorial-new leading-none">
-                  Botanic Care
-                </h1>
               </Link>
             </div>
 

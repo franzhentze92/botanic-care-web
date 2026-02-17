@@ -70,27 +70,27 @@ const Home: React.FC = () => {
 
   const benefits = [
     {
-      icon: <Leaf className="h-8 w-8 text-white" />,
+      icon: <img src="/icons/icon3.png" alt="100% Natural" className="h-64 w-64 object-contain" />,
       title: '100% Natural',
-      description: 'Ingredientes a base de plantas puros sin químicos dañinos',
+      description: 'Usamos solo los ingredientes a base de plantas más puros, cuidadosamente obtenidos de granjas sostenibles alrededor del mundo',
       color: 'bg-[#7d8768]'
     },
     {
-      icon: <Shield className="h-8 w-8 text-white" />,
+      icon: <img src="/icons/icon2.png" alt="Libre de Crueldad" className="h-64 w-64 object-contain" />,
       title: 'Libre de Crueldad',
-      description: 'Nunca probado en animales, siempre probado en humanos',
-      color: 'bg-[#313522]'
+      description: 'Nuestros productos nunca se prueban en animales. Creemos en la belleza ética que respeta a todos los seres vivos',
+      color: 'bg-[#9d627b]'
     },
     {
-      icon: <Sparkles className="h-8 w-8 text-white" />,
-      title: 'Formulaciones Personalizadas',
-      description: 'Crea tu cuidado de la piel perfecto con nuestro constructor personalizado',
+      icon: <img src="/icons/icon1.png" alt="Made in Guatemala" className="h-64 w-64 object-contain" />,
+      title: 'Made in Guatemala',
+      description: 'Orgullosamente guatemaltecos, creamos productos que representan la riqueza natural de nuestra tierra y apoyan la economía local',
       color: 'bg-[#8e421e]'
     },
     {
-      icon: <Zap className="h-8 w-8 text-white" />,
-      title: 'Resultados Rápidos',
-      description: 'Ve mejoras visibles en tu piel en semanas',
+      icon: <img src="/icons/icon4.png" alt="Safe and Sustainable" className="h-64 w-64 object-contain" />,
+      title: 'Safe and Sustainable',
+      description: 'Cada producto está formulado pensando en la seguridad y la sostenibilidad, usando ingredientes probados y empaques ecológicos',
       color: 'bg-[#b9a035]'
     }
   ];
@@ -125,24 +125,28 @@ const Home: React.FC = () => {
 
   const features = [
     {
-      icon: <Truck className="h-8 w-8 text-white" />,
+      icon: <Truck className="h-8 w-8" />,
       title: 'Envío Gratis',
-      description: 'En pedidos superiores a Q.500'
+      description: `En pedidos superiores a Q.${freeShippingThreshold}`,
+      bgColor: '#9d627b' // Morado/Rosa
     },
     {
-      icon: <Package className="h-8 w-8 text-white" />,
+      icon: <Package className="h-8 w-8" />,
       title: 'Empaque Sostenible',
-      description: 'Materiales 100% reciclables'
+      description: 'Materiales 100% reciclables',
+      bgColor: '#e7b745' // Amarillo/Dorado
     },
     {
-      icon: <Shield className="h-8 w-8 text-white" />,
+      icon: <Shield className="h-8 w-8" />,
       title: 'Productos Certificados',
-      description: 'Ingredientes naturales verificados'
+      description: 'Ingredientes naturales verificados',
+      bgColor: '#7a7539' // Verde Oliva Oscuro
     },
     {
-      icon: <Gift className="h-8 w-8 text-white" />,
+      icon: <Gift className="h-8 w-8" />,
       title: 'Muestras Gratis',
-      description: 'Con cada pedido'
+      description: 'Con cada pedido',
+      bgColor: '#52703c' // Verde
     }
   ];
 
@@ -224,7 +228,7 @@ const Home: React.FC = () => {
               </div>
             </div>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 font-editorial-new text-gray-900">¡Ofertas de Valentines - Hasta 15% de Descuento!</h2>
-            <p className="text-xl md:text-2xl text-gray-700 mb-8 font-audrey max-w-3xl mx-auto">Envío gratis en pedidos superiores a Q. 500 • Oferta por tiempo limitado</p>
+            <p className="text-xl md:text-2xl text-gray-700 mb-8 font-audrey max-w-3xl mx-auto">Envío gratis en pedidos superiores a Q. {freeShippingThreshold} • Oferta por tiempo limitado</p>
             <Button size="lg" className="bg-[#7d8768] hover:bg-[#6d7660] text-white px-10 py-6 text-lg font-body shadow-xl hover:shadow-2xl transition-all duration-300" asChild>
               <Link to="/shop?bundle=true">
                 Aprovechar Oferta
@@ -235,7 +239,7 @@ const Home: React.FC = () => {
         </section>
 
         {/* Banner 0 Section */}
-        <section className="py-16 bg-white">
+        <section className="pb-8 pt-16 md:py-16 bg-white">
           <div className="max-w-5xl lg:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="relative rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300">
               <img
@@ -248,7 +252,7 @@ const Home: React.FC = () => {
         </section>
 
         {/* Categories - Enhanced */}
-        <section className="py-24 bg-white">
+        <section className="pt-8 pb-24 md:py-24 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <div className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 bg-[#7d8768]/20 rounded-full border border-[#7d8768]/40">
@@ -294,22 +298,22 @@ const Home: React.FC = () => {
 
                   return (
                   <Link key={category.name} to={category.href}>
-                    <Card className={`group hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer border border-gray-200/60 relative overflow-hidden h-full ${getCategoryColor(category.name)}`}>
-                      <CardContent className="p-8 text-center relative z-10 flex flex-col h-full">
-                      <div className="relative mb-8 mx-auto">
-                        <div className="w-40 h-40 md:w-48 md:h-48 rounded-full overflow-hidden bg-white/20 shadow-xl group-hover:shadow-2xl transition-all duration-300 ring-4 ring-white/30 group-hover:ring-white/50">
-                          <img 
-                            src={category.image} 
-                            alt={category.name}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                            onError={(e) => {
-                              e.currentTarget.src = 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=400&fit=crop&crop=center';
-                            }}
-                          />
+                    <Card className={`group hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer border border-gray-200/60 relative overflow-hidden ${getCategoryColor(category.name)}`}>
+                      <CardContent className="p-6 md:p-8 text-center relative z-10 flex flex-col items-center justify-center min-h-[320px] md:min-h-[380px]">
+                        <div className="flex justify-center items-center mb-6 w-full">
+                          <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden bg-white/20 shadow-xl group-hover:shadow-2xl transition-all duration-300 ring-4 ring-white/30 group-hover:ring-white/50 flex-shrink-0">
+                            <img 
+                              src={category.image} 
+                              alt={category.name}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.currentTarget.src = 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=400&fit=crop&crop=center';
+                              }}
+                            />
+                          </div>
                         </div>
-                      </div>
-                        <h3 className="font-bold text-white text-xl md:text-2xl transition-colors duration-300 font-editorial-new mb-3">{category.name}</h3>
-                        <p className="text-base md:text-lg text-white/90 font-audrey leading-relaxed">{category.description}</p>
+                        <h3 className="font-bold text-white text-lg md:text-xl transition-colors duration-300 font-editorial-new mb-2 w-full">{category.name}</h3>
+                        <p className="text-sm md:text-base text-white/90 font-audrey leading-relaxed w-full">{category.description}</p>
                       </CardContent>
                     </Card>
                   </Link>
@@ -433,27 +437,29 @@ const Home: React.FC = () => {
         <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {features.map((feature, index) => (
-                <Card key={index} className="text-center group border border-gray-200/60 hover:border-[#7d8768] bg-white hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                  <CardContent className="p-6">
-                    <div className="flex justify-center mb-4">
-                      <div className="p-4 bg-[#7d8768]/10 rounded-xl group-hover:bg-[#7d8768] transition-all duration-300">
-                        <div className="text-[#7d8768] group-hover:text-white transition-colors duration-300">
-                          {feature.icon}
+              {features.map((feature, index) => {
+                return (
+                  <Card key={index} className="text-center group border-0 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden" style={{ backgroundColor: feature.bgColor }}>
+                    <CardContent className="p-6">
+                      <div className="flex justify-center mb-4">
+                        <div className="p-4 rounded-xl bg-white/20 backdrop-blur-sm transition-all duration-300 group-hover:scale-110 group-hover:bg-white/30">
+                          <div className="text-white">
+                            {feature.icon}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <h3 className="text-base font-bold text-gray-900 mb-2 group-hover:text-[#7d8768] transition-colors duration-300 font-editorial-new">{feature.title}</h3>
-                    <p className="text-sm text-gray-600 font-audrey leading-relaxed">{feature.description}</p>
-                  </CardContent>
-                </Card>
-              ))}
+                      <h3 className="text-base font-bold text-white mb-2 transition-colors duration-300 font-editorial-new">{feature.title}</h3>
+                      <p className="text-sm text-white/90 font-audrey leading-relaxed">{feature.description}</p>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           </div>
         </section>
 
         {/* Banner 1 Section */}
-        <section className="py-16 bg-[#7d8768]/5">
+        <section className="pb-8 pt-16 md:py-16 bg-[#7d8768]/5">
           <div className="max-w-5xl lg:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="relative rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300">
               <img
@@ -466,7 +472,7 @@ const Home: React.FC = () => {
         </section>
 
         {/* Benefits Section - Enhanced */}
-        <section className="py-24 bg-[#7d8768]/5">
+        <section className="pt-8 pb-24 md:py-24 bg-[#7d8768]/5">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <div className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 bg-[#7d8768]/10 rounded-full border border-[#7d8768]/20">
@@ -478,21 +484,24 @@ const Home: React.FC = () => {
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto font-audrey leading-relaxed">Estamos comprometidos a traerte lo mejor de la naturaleza con productos de la más alta calidad</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                {benefits.map((benefit, index) => (
-                 <Card key={index} className="group text-center h-full border border-gray-200/60 hover:border-[#7d8768] bg-white hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
-                   <CardContent className="p-8 h-full flex flex-col">
-                     <div className="flex justify-center mb-6">
-                       <div className={`p-5 ${benefit.color} rounded-2xl text-white group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                 <Card 
+                   key={index} 
+                   className={`text-center hover:shadow-xl transition-all duration-500 border border-gray-200/60 hover:-translate-y-2 ${benefit.color}`}
+                   style={{ animationDelay: `${index * 0.1}s` }}
+                 >
+                   <CardContent className="p-0 pb-8 px-8">
+                     <div className="flex flex-col items-center -mt-8">
+                       <div className="mb-0 hover:scale-110 transition-transform duration-300">
                          {benefit.icon}
                        </div>
                      </div>
-                     <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-[#7d8768] transition-colors duration-300 font-editorial-new">{benefit.title}</h3>
-                     <p className="text-gray-600 leading-relaxed font-audrey flex-grow">{benefit.description}</p>
+                     <p className="text-white/90 leading-relaxed font-body text-center -mt-6">{benefit.description}</p>
                    </CardContent>
                  </Card>
                ))}
-             </div>
+            </div>
           </div>
         </section>
 
