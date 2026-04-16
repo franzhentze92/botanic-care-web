@@ -33,7 +33,7 @@ jobs:
           protocol: ftps
           port: 21
           local-dir: dist/
-          server-dir: botanic-care.com/
+          server-dir: ./
           dangerous-clean-slate: false
           exclude: |
             **/.git*
