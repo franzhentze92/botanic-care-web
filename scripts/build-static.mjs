@@ -42,11 +42,5 @@ if (existsSync(join(pub, 'botanic-images'))) {
   console.log('[build] botanic-images/ → dist/');
 }
 
-if (existsSync(join(pub, '_redirects'))) {
-  cpSync(join(pub, '_redirects'), join(dist, '_redirects'));
-}
-if (existsSync(join(pub, '.htaccess'))) {
-  cpSync(join(pub, '.htaccess'), join(dist, '.htaccess'));
-}
 
 console.log('\n[build] Done! Static site ready in dist/');
