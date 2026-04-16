@@ -2,7 +2,7 @@
 
 Marketing site (static HTML in `botanic-html/`) plus a React app (`app.html`) for extra routes. **Product data and checkout are intended to live in Shopify**, not in a custom database.
 
-## Shopify (catalog & checkout)
+## Shopify (catalog & check-out)
 
 1. Create a **custom app** in Shopify Admin and enable the **Storefront API**.
 2. Copy the **Storefront API public access token** and your shop domain (`your-store.myshopify.com`).
