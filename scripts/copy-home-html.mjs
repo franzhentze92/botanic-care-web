@@ -12,6 +12,7 @@ const pdpSrc = join(root, 'botanic-html', 'botanic_care_pdp.html');
 const contactSrc = join(root, 'botanic-html', 'botanic_care_contactanos.html');
 const comingSoonSrc = join(root, 'botanic-html', 'botanic_care_coming_soon.html');
 const destIndex = join(root, 'index.html');
+const destHome = join(root, 'public', 'home.html');
 const destShop = join(root, 'public', 'shop.html');
 const destAroma = join(root, 'public', 'aroma-lavanda.html');
 const destAromaVainilla = join(root, 'public', 'aroma-vainilla.html');
@@ -20,11 +21,18 @@ const destProduct = join(root, 'public', 'product.html');
 const destContact = join(root, 'public', 'contactanos.html');
 const destComingSoon = join(root, 'public', 'coming-soon.html');
 
+if (!existsSync(comingSoonSrc)) {
+  console.warn('[copy-home-html] Skip coming soon: not found:', comingSoonSrc);
+} else {
+  copyFileSync(comingSoonSrc, destIndex);
+  console.log('[copy-home-html] Copied botanic_care_coming_soon.html → index.html (coming soon as home)');
+}
+
 if (!existsSync(homeSrc)) {
   console.warn('[copy-home-html] Skip home: not found:', homeSrc);
 } else {
-  copyFileSync(homeSrc, destIndex);
-  console.log('[copy-home-html] Copied botanic_care_home.html → index.html');
+  copyFileSync(homeSrc, destHome);
+  console.log('[copy-home-html] Copied botanic_care_home.html → public/home.html');
 }
 
 if (!existsSync(shopSrc)) {
@@ -69,9 +77,3 @@ if (!existsSync(contactSrc)) {
   console.log('[copy-home-html] Copied botanic_care_contactanos.html → public/contactanos.html');
 }
 
-if (!existsSync(comingSoonSrc)) {
-  console.warn('[copy-home-html] Skip coming soon: not found:', comingSoonSrc);
-} else {
-  copyFileSync(comingSoonSrc, destComingSoon);
-  console.log('[copy-home-html] Copied botanic_care_coming_soon.html → public/coming-soon.html');
-}

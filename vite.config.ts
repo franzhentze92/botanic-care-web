@@ -5,7 +5,7 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const botanicHomePath = path.join(__dirname, "botanic-html", "botanic_care_home.html");
+const botanicHomePath = path.join(__dirname, "botanic-html", "botanic_care_coming_soon.html");
 
 /** Dev: serve marketing HTML with zero Vite transforms (exact file bytes). */
 function rawMarketingHomeMiddleware() {
