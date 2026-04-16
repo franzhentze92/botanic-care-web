@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nuestra Historia · Botanic Care</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green-deep:#313522;--green-sage:#7d8768;--green-light:#a9b394;--green-pale:#e8ebe1;
+  --terracotta:#8e421e;--terracotta-soft:#b86a47;
+  --gold:#b9a035;--gold-soft:#d4bf6c;
+  --cream:#f5f1e8;--cream-warm:#ede5d3;--paper:#fbf9f4;
+  --ink:#2a2c20;--muted:#6b6e5c;--line:rgba(49,53,34,0.12);
+  --serif:'Cormorant Garamond',serif;--sans:'Manrope',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-weight:300;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+.container{max-width:1320px;margin:0 auto;padding:0 32px}
+
+/* ===== ANNOUNCEMENT BAR (aligned with home) ===== */
+.announce{background:var(--green-deep);color:var(--cream);text-align:center;padding:10px 20px;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500;position:relative;overflow:hidden}
+.announce-track{display:inline-flex;gap:60px;align-items:center;flex-wrap:wrap;justify-content:center}
+.announce-track span::before{content:"✦";margin-right:14px;color:var(--gold-soft);font-size:10px}
+
+/* ===== NAV (aligned with home) ===== */
+nav{background:rgba(251,249,244,0.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:22px 48px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-left,.nav-right{display:flex;gap:36px;align-items:center;flex:1}
+.nav-right{justify-content:flex-end}
+nav a.menu-link{font-size:12px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;color:var(--ink);transition:color 0.3s;position:relative}
+nav a.menu-link:hover{color:var(--terracotta)}
+nav a.menu-link::after{content:"";position:absolute;bottom:-6px;left:0;width:0;height:1px;background:var(--terracotta);transition:width 0.3s ease}
+nav a.menu-link:hover::after{width:100%}
+.nav-dropdown{position:relative;display:flex;align-items:center;align-self:stretch}
+.nav-dropdown-trigger.menu-link{
+  display:inline-flex;align-items:center;gap:6px;border:none;background:none;cursor:pointer;font-family:inherit;
+  font-size:12px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;color:var(--ink);padding:0;transition:color 0.3s;position:relative;
+}
+.nav-dropdown-trigger.menu-link:hover{color:var(--terracotta)}
+.nav-dropdown-trigger.menu-link::after{content:"";position:absolute;bottom:-6px;left:0;width:0;height:1px;background:var(--terracotta);transition:width 0.3s ease}
+.nav-dropdown:hover .nav-dropdown-trigger.menu-link::after{width:100%}
+.nav-dropdown-menu{
+  display:none;position:absolute;top:100%;left:0;margin-top:4px;min-width:240px;padding:10px 0;list-style:none;
+  background:rgba(251,249,244,0.98);backdrop-filter:blur(10px);border:1px solid var(--line);
+  box-shadow:0 20px 50px rgba(49,53,34,0.12);z-index:200;
+}
+.nav-dropdown:hover .nav-dropdown-menu{display:block}
+.nav-dropdown-menu a{
+  display:block;padding:12px 22px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;
+  color:var(--ink);text-decoration:none;transition:background 0.2s,color 0.2s;
+}
+.nav-dropdown-menu a:hover{background:var(--green-pale);color:var(--terracotta)}
+a.logo{color:inherit;text-decoration:none}
+.logo{text-align:center;line-height:1;font-family:var(--serif)}
+.logo .mark{width:28px;height:28px;color:var(--green-deep);margin:0 auto 6px;display:block}
+.logo .name{font-size:26px;letter-spacing:0.18em;color:var(--green-deep);font-weight:500}
+.logo .care{font-style:italic;font-size:18px;color:var(--green-sage);display:inline;margin-left:0.35em;vertical-align:baseline}
+.nav-icons{display:flex;gap:22px;align-items:center}
+.nav-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--green-deep);transition:color 0.3s;position:relative}
+.nav-icon:hover{color:var(--terracotta)}
+.cart-count{
+  position:absolute;top:-6px;right:-8px;background:var(--terracotta);color:var(--cream);
+  font-size:9px;width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;
+}
+
+/* ===== HERO EDITORIAL ===== */
+.hero{background:var(--green-deep);color:var(--cream);padding:120px 0 140px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 70% 30%, rgba(125,135,104,.25), transparent 60%);pointer-events:none}
+.hero-inner{position:relative;text-align:center;max-width:920px;margin:0 auto}
+.eyebrow{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-soft);font-weight:500;display:inline-flex;align-items:center;gap:14px;margin-bottom:32px}
+.eyebrow::before,.eyebrow::after{content:"";width:36px;height:1px;background:var(--gold-soft);opacity:.6}
+.hero h1{font-family:var(--serif);font-size:clamp(56px,9vw,128px);font-weight:300;line-height:.95;letter-spacing:-.015em;margin-bottom:36px}
+.hero h1 i{font-style:italic;color:var(--gold-soft);display:block;font-weight:300}
+.hero p{font-family:var(--serif);font-size:clamp(20px,2.4vw,28px);font-style:italic;font-weight:300;color:var(--cream);opacity:.88;max-width:680px;margin:0 auto 48px;line-height:1.5}
+.hero-creds{display:inline-flex;align-items:center;gap:18px;padding:18px 36px;border:1px solid rgba(212,191,108,.35);border-radius:2px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft);font-weight:500;flex-wrap:wrap;justify-content:center}
+.cred-sep{opacity:.5;font-size:9px}
+@media (max-width:700px){.hero-creds{font-size:10px;gap:12px;padding:14px 22px}}
+
+/* ===== SECTION GENERIC ===== */
+section{padding:120px 0}
+.eyebrow-dark{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--terracotta);font-weight:600;display:inline-flex;align-items:center;gap:14px;margin-bottom:24px}
+.eyebrow-dark::before{content:"—";color:var(--terracotta)}
+.section-title{font-family:var(--serif);font-size:clamp(44px,5.5vw,76px);font-weight:300;line-height:1.05;letter-spacing:-.01em;color:var(--green-deep);margin-bottom:28px}
+.section-title i{font-style:italic;color:var(--terracotta)}
+
+/* ===== ORIGEN ===== */
+.origen{background:var(--paper)}
+.origen-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:96px;align-items:center}
+.origen-img{aspect-ratio:4/5;background:linear-gradient(135deg,var(--green-pale),var(--cream-warm));border-radius:2px;position:relative;overflow:hidden}
+.origen-img::after{content:"foto · Ana Cristina en su laboratorio";position:absolute;bottom:24px;left:24px;font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.origen-text p{font-size:17px;color:var(--ink);margin-bottom:22px;max-width:560px;line-height:1.75}
+.pull-quote{border-left:2px solid var(--terracotta);padding:8px 0 8px 32px;margin:40px 0;font-family:var(--serif);font-size:26px;font-style:italic;font-weight:300;color:var(--green-deep);line-height:1.4}
+.quote-author{display:block;font-family:var(--sans);font-style:normal;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:16px;font-weight:500}
+
+/* ===== TIMELINE ===== */
+.timeline{background:var(--green-pale);position:relative}
+.timeline-head{text-align:center;margin-bottom:96px}
+.tl-wrap{position:relative;max-width:920px;margin:0 auto}
+.tl-wrap::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--green-sage);opacity:.4}
+.tl-item{display:grid;grid-template-columns:1fr 80px 1fr;gap:0;margin-bottom:72px;align-items:center}
+.tl-item:last-child{margin-bottom:0}
+.tl-year{font-family:var(--serif);font-size:48px;font-weight:300;color:var(--terracotta);font-style:italic;line-height:1}
+.tl-content{background:var(--paper);padding:32px 36px;border:1px solid var(--line);border-radius:2px}
+.tl-content h3{font-family:var(--serif);font-size:26px;font-weight:400;color:var(--green-deep);margin-bottom:10px;line-height:1.2}
+.tl-content p{font-size:14px;color:var(--muted);line-height:1.65}
+.tl-dot{width:14px;height:14px;background:var(--terracotta);border-radius:50%;justify-self:center;border:3px solid var(--green-pale);position:relative;z-index:2}
+.tl-item.left .tl-year{text-align:right;padding-right:40px}
+.tl-item.right{grid-template-columns:1fr 80px 1fr}
+.tl-item.right .tl-year{order:3;padding-left:40px}
+.tl-item.right .tl-content{order:1;min-width:0}
+.tl-item.right .tl-dot{order:2}
+.tl-item.left .tl-content{min-width:0}
+.tl-badge{display:inline-block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:8px}
+
+/* ===== FILOSOFIA ===== */
+.filosofia{background:var(--green-deep);color:var(--cream)}
+.filosofia .section-title{color:var(--cream)}
+.filosofia .section-title i{color:var(--gold-soft)}
+.filosofia .eyebrow-dark{color:var(--gold-soft)}
+.filosofia .eyebrow-dark::before{color:var(--gold-soft)}
+.filo-head{text-align:center;margin-bottom:90px}
+.filo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:48px}
+.filo-card{border-top:1px solid rgba(212,191,108,.25);padding-top:36px}
+.filo-num{font-family:var(--serif);font-size:42px;font-style:italic;font-weight:300;color:var(--gold-soft);margin-bottom:24px;line-height:1}
+.filo-card h4{font-family:var(--serif);font-size:24px;font-weight:400;margin-bottom:14px;color:var(--cream)}
+.filo-card p{font-size:14px;color:var(--cream);opacity:.78;line-height:1.7}
+
+/* ===== PROCESO ===== */
+.proceso{background:var(--cream-warm)}
+.proceso-head{text-align:center;margin-bottom:80px}
+.proc-intro{font-family:var(--serif);font-size:22px;font-style:italic;font-weight:300;color:var(--muted);max-width:680px;margin:24px auto 0;line-height:1.5}
+.proceso-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;position:relative}
+.proceso-steps::before{content:"";position:absolute;top:80px;left:12%;right:12%;height:1px;background:var(--green-sage);opacity:.3;z-index:0}
+.proc-step{position:relative;text-align:center;z-index:1}
+.proc-img{aspect-ratio:1;background:linear-gradient(135deg,var(--green-pale),var(--cream));border-radius:50%;margin:0 auto 28px;width:160px;border:6px solid var(--cream-warm);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:36px;font-style:italic;color:var(--green-sage)}
+.proc-step h4{font-family:var(--serif);font-size:22px;font-weight:400;color:var(--green-deep);margin-bottom:12px}
+.proc-step p{font-size:13px;color:var(--muted);line-height:1.65;max-width:240px;margin:0 auto}
+
+/* ===== GUATEMALA ===== */
+.guate{background:var(--paper)}
+.guate-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:96px;align-items:center}
+.guate-img{aspect-ratio:5/6;background:linear-gradient(160deg,var(--green-sage),var(--green-deep));border-radius:2px;position:relative}
+.guate-img::after{content:"foto · paisaje guatemalteco / ingredientes locales";position:absolute;bottom:24px;left:24px;font-size:11px;color:var(--cream);opacity:.7;letter-spacing:.08em;text-transform:uppercase}
+.guate-text p{font-size:17px;margin-bottom:22px;line-height:1.75;max-width:520px}
+.guate-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:36px;margin-top:48px;padding-top:48px;border-top:1px solid var(--line)}
+.stat-num{font-family:var(--serif);font-size:54px;font-weight:300;color:var(--terracotta);font-style:italic;line-height:1;margin-bottom:8px}
+.stat-label{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500}
+
+/* ===== QUIEN ESTA DETRAS ===== */
+.equipo{background:var(--green-pale)}
+.equipo-head{text-align:center;margin-bottom:80px}
+.equipo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:48px;max-width:1100px;margin:0 auto}
+.persona{text-align:center}
+.persona-img{aspect-ratio:3/4;background:linear-gradient(135deg,var(--cream-warm),var(--green-light));border-radius:2px;margin-bottom:24px;position:relative;overflow:hidden}
+.persona h4{font-family:var(--serif);font-size:26px;font-weight:400;color:var(--green-deep);margin-bottom:6px}
+.persona-role{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--terracotta);font-weight:600;margin-bottom:14px}
+.persona p{font-size:14px;color:var(--muted);line-height:1.7;max-width:280px;margin:0 auto}
+/* TEAM PLACEHOLDER: duplicar .persona para añadir miembros del equipo */
+
+/* ===== PRENSA ===== */
+.prensa{background:var(--paper)}
+.prensa-head{text-align:center;margin-bottom:72px}
+.prensa-logos{display:grid;grid-template-columns:repeat(5,1fr);gap:48px;align-items:center;padding:48px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.prensa-logo{font-family:var(--serif);font-size:24px;font-style:italic;color:var(--muted);text-align:center;font-weight:400;opacity:.7;transition:opacity .3s}
+.prensa-logo:hover{opacity:1}
+
+/* ===== CTA ===== */
+.cta{background:var(--green-deep);color:var(--cream);text-align:center;padding:140px 0}
+.cta h2{font-family:var(--serif);font-size:clamp(44px,6vw,82px);font-weight:300;line-height:1.05;margin-bottom:24px}
+.cta h2 i{font-style:italic;color:var(--gold-soft)}
+.cta p{font-family:var(--serif);font-size:22px;font-style:italic;opacity:.85;max-width:560px;margin:0 auto 48px}
+.btn{display:inline-block;background:var(--gold-soft);color:var(--green-deep);padding:20px 56px;font-size:13px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;border-radius:2px;transition:all .3s}
+.btn:hover{background:var(--cream);transform:translateY(-2px)}
+
+/* ===== FOOTER ===== */
+footer{background:#1a1c12;color:var(--cream);padding:90px 0 40px}
+.foot-grid{display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:60px;margin-bottom:64px}
+.foot-brand .logo{text-align:left;color:var(--cream);margin-bottom:20px}
+.foot-brand p{font-size:13px;opacity:.65;line-height:1.7;max-width:280px}
+footer h5{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:22px;font-weight:600}
+footer ul{list-style:none}
+footer ul li{margin-bottom:12px;font-size:13px;opacity:.75;transition:opacity .2s}
+footer ul li:hover{opacity:1}
+.foot-bottom{border-top:1px solid rgba(245,241,232,.1);padding-top:32px;display:flex;justify-content:space-between;font-size:12px;opacity:.55}
+
+/* ===== WHATSAPP ===== */
+.wa{position:fixed;bottom:28px;right:28px;width:58px;height:58px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 28px rgba(0,0,0,.2);z-index:90;font-size:28px;color:white}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width:1100px){
+  nav{padding:18px 24px}
+  .nav-left,.nav-right{gap:24px}
+}
+@media (max-width:700px){
+  nav{padding:14px 20px;flex-wrap:wrap;gap:12px}
+  .nav-left{display:none}
+  .logo .name{font-size:20px}
+}
+@media (max-width:900px){
+  .origen-grid,.guate-grid{grid-template-columns:1fr;gap:48px}
+  .filo-grid,.proceso-steps{grid-template-columns:repeat(2,1fr);gap:40px}
+  .proceso-steps::before{display:none}
+  .equipo-grid,.prensa-logos{grid-template-columns:repeat(2,1fr);gap:32px}
+  .foot-grid{grid-template-columns:1fr 1fr;gap:40px}
+  section{padding:80px 0}
+  .hero{padding:80px 0 90px}
+  .tl-wrap::before{left:20px}
+  .tl-item,.tl-item.right{grid-template-columns:50px 1fr;gap:20px}
+  .tl-item .tl-year,.tl-item.right .tl-year{order:0;text-align:left;padding:0;font-size:32px;grid-column:2}
+  .tl-item .tl-content,.tl-item.right .tl-content{order:0;grid-column:2}
+  .tl-dot{grid-column:1;grid-row:1/3}
+}
+</style>
+</head>
+<body>
+
+<div class="announce">
+  <div class="announce-track">
+    <span>Envío gratis en compras mayores a Q400</span>
+    <span>Visto en Shark Tank Guatemala — Temporada 2</span>
+    <span>100% Natural · Hecho en Guatemala · Cruelty Free</span>
+  </div>
+</div>
+
+<nav>
+  <div class="nav-left">
+    <a href="/shop.html" class="menu-link">Tienda</a>
+    <div class="nav-dropdown">
+      <button type="button" class="menu-link nav-dropdown-trigger" aria-haspopup="true" id="historia-por-aroma-btn">Por Aroma</button>
+      <ul class="nav-dropdown-menu" role="menu" aria-labelledby="historia-por-aroma-btn">
+        <li role="none"><a href="/aroma-lavanda.html" role="menuitem">Lavanda</a></li>
+        <li role="none"><a href="/aroma-vainilla.html" role="menuitem">Vainilla</a></li>
+      </ul>
+    </div>
+    <a href="/historia.html" class="menu-link">Historia</a>
+  </div>
+  <a href="/" class="logo">
+    <svg class="mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g fill="currentColor"><ellipse cx="50" cy="22" rx="6" ry="14"/><ellipse cx="34" cy="34" rx="5.5" ry="13" transform="rotate(-45 34 34)"/><ellipse cx="66" cy="34" rx="5.5" ry="13" transform="rotate(45 66 34)"/><ellipse cx="34" cy="62" rx="5.5" ry="13" transform="rotate(45 34 62)"/><ellipse cx="66" cy="62" rx="5.5" ry="13" transform="rotate(-45 66 62)"/><ellipse cx="50" cy="76" rx="6" ry="16"/><circle cx="20" cy="48" r="3"/><circle cx="80" cy="48" r="3"/></g></svg>
+    <span class="name">BOTANIC</span>
+    <span class="care">care</span>
+  </a>
+  <div class="nav-right">
+    <a href="/contactanos.html" class="menu-link">Contáctanos</a>
+    <div class="nav-icons">
+      <div class="nav-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+      </div>
+      <div class="nav-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <div class="nav-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="cart-count" style="display:none">0</span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="eyebrow">Nuestra historia</div>
+    <h1>Botánica, <i>formulada</i> con criterio</h1>
+    <p>Una marca guatemalteca de cosmética 100% natural, donde cada fórmula nace del cruce entre conocimiento científico y la riqueza botánica de Centroamérica.</p>
+    <div class="hero-creds">
+      <span>Formulado por bióloga</span>
+      <span class="cred-sep">✦</span>
+      <span>Maestría en plantas medicinales</span>
+      <span class="cred-sep">✦</span>
+      <span>Producción certificada</span>
+    </div>
+  </div>
+</section>
+
+<!-- ORIGEN -->
+<section class="origen">
+  <div class="container origen-grid">
+    <div class="origen-img"></div>
+    <div class="origen-text">
+      <div class="eyebrow-dark">El origen</div>
+      <h2 class="section-title">Conocimiento <i>botánico</i>, aplicado</h2>
+      <p>Botanic Care nace de una convicción específica: que la cosmética verdaderamente eficaz puede ser cien por ciento natural si se formula con el rigor que cada activo merece. Esa convicción tiene una raíz académica concreta —biología, plantas medicinales, formulación cosmética— y una raíz geográfica igual de concreta: Guatemala y la riqueza botánica de Centroamérica.</p>
+      <p>Lo que comenzó en 2019 como las primeras formulaciones de Ana Cristina Hentze creció rápido hacia donde la calidad lo exigía. Hoy producimos en plantas certificadas, con registros sanitarios completos, controles de calidad por lote, y la misma intención de formulación que tuvo el primer producto: ingredientes que se puedan nombrar uno por uno, eficacia medible, y respeto absoluto por la materia prima.</p>
+      <div class="pull-quote">
+        "No quería crear una marca más. Quería aplicar lo que sé sobre plantas medicinales a productos que la gente pudiera usar todos los días, con la seguridad de saber exactamente qué se está poniendo en la piel."
+        <span class="quote-author">Ana Cristina Hentze · Bióloga & Fundadora</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="timeline">
+  <div class="container">
+    <div class="timeline-head">
+      <div class="eyebrow-dark">Línea de tiempo</div>
+      <h2 class="section-title">Hitos del <i>camino</i></h2>
+    </div>
+    <div class="tl-wrap">
+      <div class="tl-item left">
+        <div class="tl-year">2019</div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <h3>Las primeras fórmulas</h3>
+          <p>Ana Cristina, bióloga con maestría en plantas medicinales, desarrolla sus primeras formulaciones aplicando conocimiento académico a productos cosméticos naturales.</p>
+        </div>
+      </div>
+      <div class="tl-item right">
+        <div class="tl-content">
+          <h3>Lanzamiento al mercado</h3>
+          <p>Botanic Care se constituye como marca con su catálogo inicial. Primeros aromas firma y la apuesta por una estética propia que combina ciencia y botánica.</p>
+        </div>
+        <div class="tl-dot"></div>
+        <div class="tl-year">2021</div>
+      </div>
+      <div class="tl-item left">
+        <div class="tl-year">2022</div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <h3>Producción certificada</h3>
+          <p>Salto a plantas de producción con todos los estándares sanitarios. Registros de ley, controles por lote y la infraestructura para escalar sin comprometer la formulación.</p>
+        </div>
+      </div>
+      <div class="tl-item right">
+        <div class="tl-content">
+          <h3>Línea facial completa</h3>
+          <p>Se incorpora la línea facial: jabones, sueros, tónicos y cremas. El catálogo crece a más de 30 productos formulados con activos botánicos centroamericanos.</p>
+        </div>
+        <div class="tl-dot"></div>
+        <div class="tl-year">2023</div>
+      </div>
+      <div class="tl-item left">
+        <div class="tl-year">2025</div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <span class="tl-badge">★ Hito reciente</span>
+          <h3>Shark Tank Guatemala T2</h3>
+          <p>Participación en la segunda temporada del programa e ingreso de inversión para escalar producción y expandir el alcance de la marca.</p>
+        </div>
+      </div>
+      <div class="tl-item right">
+        <div class="tl-content">
+          <h3>Una nueva era</h3>
+          <p>Rediseño de marca, expansión del catálogo a 42 productos y arquitectura por aroma. Botanic Care entra en su capítulo de consolidación regional.</p>
+        </div>
+        <div class="tl-dot"></div>
+        <div class="tl-year">2026</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FILOSOFIA -->
+<section class="filosofia">
+  <div class="container">
+    <div class="filo-head">
+      <div class="eyebrow-dark">Lo que nos mueve</div>
+      <h2 class="section-title">Nuestra <i>filosofía</i></h2>
+    </div>
+    <div class="filo-grid">
+      <div class="filo-card">
+        <div class="filo-num">I.</div>
+        <h4>Plantas primero</h4>
+        <p>Cada fórmula parte de ingredientes vegetales seleccionados por su perfil activo. Nada de origen animal, nada que no podamos rastrear hasta su raíz.</p>
+      </div>
+      <div class="filo-card">
+        <div class="filo-num">II.</div>
+        <h4>Formulación con criterio</h4>
+        <p>Nuestras fórmulas son desarrolladas por una bióloga con maestría en plantas medicinales y especialidad en cosmética natural. La ciencia da el método; la botánica da el alma.</p>
+      </div>
+      <div class="filo-card">
+        <div class="filo-num">III.</div>
+        <h4>Calidad certificada</h4>
+        <p>Producción en plantas con todos los registros sanitarios de ley, controles por lote y los estándares que exige cualquier producto que va a tu piel.</p>
+      </div>
+      <div class="filo-card">
+        <div class="filo-num">IV.</div>
+        <h4>Origen consciente</h4>
+        <p>Activos botánicos centroamericanos, empaques reciclables, proveedores locales. La piel y el planeta merecen el mismo cuidado.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORMULACION -->
+<section class="proceso">
+  <div class="container">
+    <div class="proceso-head">
+      <div class="eyebrow-dark">El método</div>
+      <h2 class="section-title">La ciencia botánica <i>detrás</i></h2>
+      <p class="proc-intro">Cada producto Botanic Care recorre un proceso de cuatro etapas que combina investigación botánica, formulación cosmética y control de calidad certificado. No es artesanía romántica: es método.</p>
+    </div>
+    <div class="proceso-steps">
+      <div class="proc-step">
+        <div class="proc-img">i</div>
+        <h4>Investigación botánica</h4>
+        <p>Identificamos activos vegetales con evidencia científica para cada necesidad de la piel, priorizando ingredientes centroamericanos.</p>
+      </div>
+      <div class="proc-step">
+        <div class="proc-img">ii</div>
+        <h4>Formulación</h4>
+        <p>Desarrollamos cada fórmula bajo dirección de nuestra bióloga formuladora, ajustando concentraciones, sinergias y textura.</p>
+      </div>
+      <div class="proc-step">
+        <div class="proc-img">iii</div>
+        <h4>Producción certificada</h4>
+        <p>Manufactura en plantas con registros sanitarios completos y controles de calidad por lote, bajo nuestros estándares.</p>
+      </div>
+      <div class="proc-step">
+        <div class="proc-img">iv</div>
+        <h4>Validación</h4>
+        <p>Cada lote es revisado contra los parámetros de la fórmula original antes de salir al mercado.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GUATEMALA -->
+<section class="guate">
+  <div class="container guate-grid">
+    <div class="guate-img"></div>
+    <div class="guate-text">
+      <div class="eyebrow-dark">Terroir</div>
+      <h2 class="section-title">Guatemala como <i>fuente</i></h2>
+      <p>Centroamérica concentra una de las riquezas botánicas más diversas del planeta. Cardamomo, lemongrass, cítricos, cacao, café, vainilla, hierbas medicinales que han formado parte de la tradición fitoterapéutica local durante siglos. Esa biodiversidad es la materia prima de Botanic Care.</p>
+      <p>Guatemala no es solo el lugar donde producimos. Es el origen de los activos que dan a cada fórmula su carácter, y el contexto cultural que sustenta nuestra estética y nuestro approach botánico. Como Provenza para los grandes referentes europeos, lo nuestro tiene nombre y geografía.</p>
+      <div class="guate-stats">
+        <div>
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Plant-based</div>
+        </div>
+        <div>
+          <div class="stat-num">42</div>
+          <div class="stat-label">Productos en catálogo</div>
+        </div>
+        <div>
+          <div class="stat-num">+5</div>
+          <div class="stat-label">Años en el mercado</div>
+        </div>
+        <div>
+          <div class="stat-num">✓</div>
+          <div class="stat-label">Registros sanitarios</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EQUIPO -->
+<section class="equipo">
+  <div class="container">
+    <div class="equipo-head">
+      <div class="eyebrow-dark">El equipo</div>
+      <h2 class="section-title">Detrás de la <i>marca</i></h2>
+    </div>
+    <div class="equipo-grid">
+      <div class="persona">
+        <div class="persona-img"></div>
+        <h4>Ana Cristina Hentze</h4>
+        <div class="persona-role">Bióloga · MSc Plantas Medicinales · Fundadora</div>
+        <p>Bióloga de formación con maestría en plantas medicinales y especialidad en formulación de cosmética natural. Lidera la dirección científica y creativa de cada producto Botanic Care.</p>
+      </div>
+      <!-- TEAM PLACEHOLDER START
+           Para añadir miembros del equipo, duplicar el bloque .persona de arriba.
+           Estructura: persona-img (foto), h4 (nombre), persona-role (cargo), p (bio corta).
+           El grid se ajusta automáticamente a 3 columnas en desktop.
+      -->
+      <!-- <div class="persona">
+        <div class="persona-img"></div>
+        <h4>Nombre Apellido</h4>
+        <div class="persona-role">Cargo</div>
+        <p>Bio corta del miembro del equipo.</p>
+      </div> -->
+      <!-- TEAM PLACEHOLDER END -->
+    </div>
+  </div>
+</section>
+
+<!-- PRENSA -->
+<section class="prensa">
+  <div class="container">
+    <div class="prensa-head">
+      <div class="eyebrow-dark">Reconocimientos</div>
+      <h2 class="section-title">Nos han <i>visto</i></h2>
+    </div>
+    <div class="prensa-logos">
+      <div class="prensa-logo">Shark Tank GT</div>
+      <div class="prensa-logo">Prensa Libre</div>
+      <div class="prensa-logo">Soy502</div>
+      <div class="prensa-logo">Revista Amiga</div>
+      <div class="prensa-logo">Forbes CA</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="container">
+    <h2>Botánica que <i>funciona</i></h2>
+    <p>Descubre los productos formulados con esta filosofía. Cada uno con propósito, cada uno con criterio.</p>
+    <a href="#" class="btn">Explorar la tienda</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="logo"><svg class="mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g fill="currentColor"><ellipse cx="50" cy="22" rx="6" ry="14"/><ellipse cx="34" cy="34" rx="5.5" ry="13" transform="rotate(-45 34 34)"/><ellipse cx="66" cy="34" rx="5.5" ry="13" transform="rotate(45 66 34)"/><ellipse cx="34" cy="62" rx="5.5" ry="13" transform="rotate(45 34 62)"/><ellipse cx="66" cy="62" rx="5.5" ry="13" transform="rotate(-45 66 62)"/><ellipse cx="50" cy="76" rx="6" ry="16"/><circle cx="20" cy="48" r="3"/><circle cx="80" cy="48" r="3"/></g></svg><span class="logo-text">BOTANIC <i>care</i></span></div>
+        <p>Cosmética 100% natural, formulada por bióloga, producida bajo estándares certificados en Guatemala. Plant-based, cruelty-free, con criterio.</p>
+      </div>
+      <div>
+        <h5>Tienda</h5>
+        <ul><li>Cuerpo</li><li>Manos</li><li>Facial</li><li>Kits</li></ul>
+      </div>
+      <div>
+        <h5>Aromas</h5>
+        <ul><li>Lavanda</li><li>Vainilla</li><li>Cítricos</li><li>Cardamomo</li></ul>
+      </div>
+      <div>
+        <h5>Marca</h5>
+        <ul><li><a href="/historia.html">Historia</a></li><li>Sostenibilidad</li><li>Prensa</li><li><a href="/contactanos.html">Contáctanos</a></li></ul>
+      </div>
+      <div>
+        <h5>Ayuda</h5>
+        <ul><li>Envíos</li><li>Devoluciones</li><li>FAQ</li><li>WhatsApp</li></ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Botanic Care · Hecho en Guatemala</span>
+      <span>Términos · Privacidad</span>
+    </div>
+  </div>
+</footer>
+
+<a href="#" class="wa">✦</a>
+
+<script src="/botanic-cart.js"></script>
+</body>
+</html>

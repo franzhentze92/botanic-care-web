@@ -291,13 +291,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
             {/* Center Logo */}
             <div className="flex-1 flex flex-col items-center justify-center">
-              <Link to="/" className="text-center flex items-center justify-center">
+              <a href="/" className="text-center flex items-center justify-center">
                 <img
                   src="/Logotipo_BotanicCare_Full Color.png"
                   alt="Botanic Care Logo"
                   className="h-24 md:h-20 object-contain"
                 />
-              </Link>
+              </a>
             </div>
 
             {/* Right Side - Search and Icons */}
@@ -428,8 +428,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               {/* Navigation Links */}
               <nav className="px-4 py-4 space-y-1">
                 {/* Main Navigation Links */}
-                <Link
-                  to="/"
+                <a
+                  href="/"
                   className={`block py-2 text-sm font-medium font-body ${
                     location.pathname === '/'
                       ? 'text-white'
@@ -438,7 +438,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Inicio
-                </Link>
+                </a>
                 
                 <Link
                   to="/about"
@@ -691,9 +691,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <h3 className="text-lg font-normal mb-4 font-gilda-display">Enlaces Rápidos</h3>
               <ul className="space-y-2">
                 <li>
-                  <Link to="/" className="text-white/80 hover:text-white transition-colors font-body">
+                  <a href="/" className="text-white/80 hover:text-white transition-colors font-body">
                     Inicio
-                  </Link>
+                  </a>
                 </li>
                 <li>
                   <Link to="/about" className="text-white/80 hover:text-white transition-colors font-body">

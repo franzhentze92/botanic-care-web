@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Botanic Care — En armonía con la naturaleza</title>
+<title>Contáctanos — Botanic Care</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -571,9 +571,7 @@
   .aroma-track{
     display:flex;
     gap:30px;
-    max-width:fit-content;
-    margin:0 auto;
-    padding:0 40px;
+    padding:0 80px;
     overflow-x:auto;
     scroll-snap-type:x mandatory;
     scrollbar-width:none;
@@ -1982,6 +1980,179 @@
     .sustain-pillars{grid-template-columns:1fr}
     .aroma-card{flex:0 0 280px}
   }
+
+  /* ============ CONTACT PAGE ============ */
+  nav a.menu-link.nav-link-current{color:var(--terracotta)}
+  nav a.menu-link.nav-link-current::after{width:100%}
+  .contact-shell{background:var(--paper);width:100%;max-width:100%;overflow-x:hidden}
+  .contact-hero-top{
+    background:linear-gradient(135deg, #2a2e1d 0%, #313522 50%, #3d4128 100%);
+    color:var(--cream);
+    padding:100px clamp(24px,6vw,96px) 88px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+    width:100%;
+    box-sizing:border-box;
+  }
+  .contact-hero-top::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image:
+      radial-gradient(circle at 20% 80%, rgba(185,160,53,0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(125,135,104,0.15) 0%, transparent 50%);
+    pointer-events:none;
+  }
+  .contact-hero-inner{
+    position:relative;
+    z-index:2;
+    max-width:min(920px,100%);
+    margin:0 auto;
+    padding:0;
+  }
+  /* Match .hero-eyebrow / .hero h1 / .hero p.lede from home */
+  .contact-hero-top .contact-eyebrow{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    font-family:var(--body);
+    font-size:11px;
+    letter-spacing:0.24em;
+    text-transform:uppercase;
+    color:var(--gold-soft);
+    margin-bottom:32px;
+    font-weight:500;
+  }
+  .contact-hero-top .contact-eyebrow::before{
+    content:"";
+    width:32px;
+    height:1px;
+    background:var(--gold-soft);
+    flex-shrink:0;
+  }
+  .contact-hero-top h1{
+    font-family:var(--display);
+    font-size:clamp(48px, 6.5vw, 92px);
+    line-height:0.96;
+    font-weight:300;
+    letter-spacing:-0.01em;
+    color:var(--cream);
+    margin-bottom:32px;
+  }
+  .contact-hero-top h1 .italic{
+    font-style:italic;
+    color:var(--gold-soft);
+    font-weight:300;
+  }
+  .contact-hero-top .contact-lede{
+    font-family:var(--body);
+    font-size:17px;
+    line-height:1.7;
+    max-width:480px;
+    margin-left:auto;
+    margin-right:auto;
+    color:rgba(245,241,232,0.78);
+    font-weight:300;
+  }
+  .contact-wrap{
+    width:100%;
+    max-width:none;
+    margin:0;
+    padding:64px clamp(24px,6vw,96px) 100px;
+    box-sizing:border-box;
+  }
+  .contact-grid{
+    display:grid;
+    grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
+    gap:clamp(40px,5vw,80px);
+    align-items:start;
+    width:100%;
+  }
+  .contact-form-card{
+    background:var(--cream);
+    border:1px solid var(--line);
+    border-radius:2px;
+    padding:40px 40px 44px;
+    box-shadow:0 12px 40px rgba(49,53,34,0.06);
+  }
+  .contact-form-card h2{
+    font-family:var(--display);
+    font-size:28px;
+    font-weight:400;
+    color:var(--green-deep);
+    margin-bottom:8px;
+  }
+  .contact-form-card .form-hint{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.6}
+  .contact-form label{display:block;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:var(--green-deep);margin-bottom:8px}
+  .contact-form input,.contact-form textarea,.contact-form select{
+    width:100%;
+    padding:14px 16px;
+    font-family:var(--body);
+    font-size:15px;
+    border:1px solid var(--line);
+    border-radius:2px;
+    background:var(--paper);
+    color:var(--ink);
+    margin-bottom:22px;
+    transition:border-color 0.2s;
+  }
+  .contact-form input:focus,.contact-form textarea:focus,.contact-form select:focus{
+    outline:none;border-color:var(--green-sage);
+  }
+  .contact-form textarea{min-height:140px;resize:vertical}
+  .contact-form button[type="submit"]{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    padding:16px 36px;
+    font-family:var(--body);
+    font-size:12px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    font-weight:500;
+    background:var(--green-deep);
+    color:var(--cream);
+    border:none;
+    border-radius:2px;
+    cursor:pointer;
+    transition:background 0.3s, transform 0.2s;
+  }
+  .contact-form button[type="submit"]:hover{background:var(--terracotta)}
+  .contact-aside{padding-top:8px}
+  .contact-aside h3{
+    font-family:var(--display);
+    font-size:22px;
+    font-weight:400;
+    color:var(--green-deep);
+    margin-bottom:24px;
+  }
+  .contact-info-block{
+    border-top:1px solid var(--line);
+    padding:22px 0;
+    font-size:14px;
+    line-height:1.7;
+    color:var(--muted);
+  }
+  .contact-info-block:first-of-type{border-top:none;padding-top:0}
+  .contact-info-block strong{display:block;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--terracotta);margin-bottom:6px;font-weight:600}
+  .contact-info-block a{color:var(--green-deep);transition:color 0.2s}
+  .contact-info-block a:hover{color:var(--terracotta)}
+  .contact-wa-note{margin-top:28px;padding:20px 22px;background:var(--green-pale);border-radius:2px;font-size:13px;color:var(--ink);line-height:1.65}
+  .contact-wa-note a{font-weight:600;color:var(--green-deep)}
+  nav a.logo{color:inherit;text-decoration:none}
+  @media (max-width:1100px){
+    .contact-hero-top{padding:80px clamp(24px,5vw,48px) 64px}
+    .contact-grid{grid-template-columns:1fr;gap:48px}
+  }
+  @media (max-width:700px){
+    .contact-wrap{padding:48px clamp(20px,5vw,24px) 80px}
+    .contact-hero-top{padding:60px clamp(20px,5vw,24px) 52px}
+    .contact-hero-top h1{font-size:48px}
+    .contact-form-card{padding:28px 24px 32px}
+  }
 </style>
 </head>
 <body>
@@ -2008,29 +2179,24 @@
     </div>
     <a href="/historia.html" class="menu-link">Historia</a>
   </div>
-  <div class="logo">
+  <a href="/" class="logo">
     <svg class="mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <g fill="currentColor">
-        <!-- Pétalo superior vertical -->
         <ellipse cx="50" cy="22" rx="6" ry="14"/>
-        <!-- Pétalos diagonales superiores -->
         <ellipse cx="34" cy="34" rx="5.5" ry="13" transform="rotate(-45 34 34)"/>
         <ellipse cx="66" cy="34" rx="5.5" ry="13" transform="rotate(45 66 34)"/>
-        <!-- Pétalos diagonales inferiores -->
         <ellipse cx="34" cy="62" rx="5.5" ry="13" transform="rotate(45 34 62)"/>
         <ellipse cx="66" cy="62" rx="5.5" ry="13" transform="rotate(-45 66 62)"/>
-        <!-- Pétalo inferior vertical (ligeramente más largo, forma de gota) -->
         <ellipse cx="50" cy="76" rx="6" ry="16"/>
-        <!-- Círculos laterales -->
         <circle cx="20" cy="48" r="3"/>
         <circle cx="80" cy="48" r="3"/>
       </g>
     </svg>
     <span class="name">BOTANIC</span>
     <span class="care">care</span>
-  </div>
+  </a>
   <div class="nav-right">
-    <a href="/contactanos.html" class="menu-link">Contáctanos</a>
+    <a href="/contactanos.html" class="menu-link nav-link-current" aria-current="page">Contáctanos</a>
     <div class="nav-icons">
       <div class="nav-icon">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -2056,827 +2222,74 @@
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero" style="padding:0">
-  <div class="hero-content">
-    <div class="hero-eyebrow">100% Natural · Hecho en Guatemala</div>
-    <h1>
-      En armonía<br>
-      <span class="block">con la <span class="italic">naturaleza</span></span>
-    </h1>
-    <p class="lede">Cosmética botánica formulada con criterio a partir de activos en su estado más puro. Ciencia botánica aplicada a la riqueza vegetal de Centroamérica.</p>
-    <div class="hero-cta">
-      <button class="btn btn-primary">Descubrir la colección <span class="btn-arrow"></span></button>
-      <a href="/historia.html" class="btn btn-ghost">Nuestra historia <span class="btn-arrow"></span></a>
+<!-- CONTACT -->
+<main class="contact-shell">
+  <section class="contact-hero-top" aria-labelledby="contact-heading">
+    <div class="contact-hero-inner">
+      <p class="contact-eyebrow">Estamos para ayudarte</p>
+      <h1 id="contact-heading">Contácta<span class="italic">nos</span></h1>
+      <p class="contact-lede">Pedidos, ingredientes, mayoreo o colaboraciones: escríbenos y el equipo te responderá lo antes posible.</p>
     </div>
-  </div>
-  <div class="hero-visual">
-    <div class="leaf-decoration leaf-1">
-      <svg viewBox="0 0 100 100" fill="currentColor" style="color:#b9a035">
-        <path d="M50 10 Q30 30, 25 60 Q30 80, 50 90 Q70 80, 75 60 Q70 30, 50 10 Z M50 10 L50 90"/>
-      </svg>
-    </div>
-    <div class="leaf-decoration leaf-2">
-      <svg viewBox="0 0 100 100" fill="currentColor" style="color:#7d8768">
-        <path d="M50 10 Q25 35, 20 65 Q35 85, 50 90 Q65 85, 80 65 Q75 35, 50 10 Z M50 10 L50 90"/>
-      </svg>
-    </div>
-    <div class="leaf-decoration leaf-3">
-      <svg viewBox="0 0 100 100" fill="currentColor" style="color:#d4bf6c">
-        <path d="M50 5 Q20 30, 15 60 Q30 88, 50 95 Q70 88, 85 60 Q80 30, 50 5 Z"/>
-      </svg>
-    </div>
-    <div class="hero-bottle">
-      <img class="bottle-illustration" src="/botanic-images/1.png" alt="Botanic Care" width="420" height="560" loading="eager" decoding="async" />
-    </div>
-    <div class="ingredient-tag tag-1">Manteca de Karité</div>
-    <div class="ingredient-tag tag-2">Aceites esenciales</div>
-    <div class="ingredient-tag tag-3">Aloe vera</div>
-  </div>
-  <div class="hero-meta">
-    <div class="meta-item">
-      <div class="meta-num">100<span style="font-size:18px">%</span></div>
-      <div class="meta-label">Natural</div>
-    </div>
-    <div class="meta-item">
-      <div class="meta-num">42</div>
-      <div class="meta-label">Productos</div>
-    </div>
-    <div class="meta-item">
-      <div class="meta-num">8</div>
-      <div class="meta-label">Aromas únicos</div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- MARQUEE -->
-<div class="marquee">
-  <div class="marquee-track">
-    <span class="marquee-item">Plant Based</span>
-    <span class="marquee-item">Cruelty Free</span>
-    <span class="marquee-item">Made in Guatemala</span>
-    <span class="marquee-item">Sustainable</span>
-    <span class="marquee-item">Formulado por bióloga</span>
-    <span class="marquee-item">Plant Based</span>
-    <span class="marquee-item">Cruelty Free</span>
-    <span class="marquee-item">Made in Guatemala</span>
-    <span class="marquee-item">Sustainable</span>
-    <span class="marquee-item">Formulado por bióloga</span>
-  </div>
-</div>
+  <div class="contact-wrap">
+    <div class="contact-grid">
+      <div class="contact-form-card">
+        <h2>Envíanos un mensaje</h2>
+        <p class="form-hint">Completa el formulario y nos pondremos en contacto por correo o WhatsApp.</p>
+        <form class="contact-form" action="#" method="post">
+          <label for="contact-name">Nombre</label>
+          <input id="contact-name" name="name" type="text" required autocomplete="name" placeholder="Tu nombre">
 
-<!-- CATEGORIES -->
-<section class="categories">
-  <div class="cat-header">
-    <div>
-      <div class="section-eyebrow">Explora la colección</div>
-      <h2 class="section-title">Cuidado <span class="italic">para todo el cuerpo</span></h2>
-    </div>
-    <p>Cada fórmula es el resultado de un proceso minucioso de selección de ingredientes botánicos para nutrir cada parte de tu piel.</p>
-  </div>
-  <div class="cat-grid">
-    <div class="cat-card cat-1">
-      <div class="cat-card-bg"></div>
-      <div class="cat-card-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M12 2 Q6 8, 6 14 Q6 20, 12 22 Q18 20, 18 14 Q18 8, 12 2 Z"/>
-          <path d="M12 2 L12 22"/>
-        </svg>
-      </div>
-      <div class="cat-card-content">
-        <h3>Cuerpo</h3>
-        <div class="count">12 productos</div>
-      </div>
-    </div>
-    <div class="cat-card cat-2">
-      <div class="cat-card-bg"></div>
-      <div class="cat-card-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M9 11V6a3 3 0 0 1 6 0v5"/>
-          <path d="M5 11h14v8a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3z"/>
-        </svg>
-      </div>
-      <div class="cat-card-content">
-        <h3>Manos</h3>
-        <div class="count">6 productos</div>
-      </div>
-    </div>
-    <div class="cat-card cat-3">
-      <div class="cat-card-bg"></div>
-      <div class="cat-card-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M9 9h.01M15 9h.01M9 15c1 1 2 1.5 3 1.5s2-.5 3-1.5"/>
-        </svg>
-      </div>
-      <div class="cat-card-content">
-        <h3>Facial</h3>
-        <div class="count">14 productos</div>
-      </div>
-    </div>
-    <div class="cat-card cat-4">
-      <div class="cat-card-bg"></div>
-      <div class="cat-card-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <rect x="3" y="8" width="18" height="13" rx="2"/>
-          <path d="M3 8 L12 3 L21 8"/>
-          <path d="M12 3 L12 21"/>
-        </svg>
-      </div>
-      <div class="cat-card-content">
-        <h3>Kits & Regalo</h3>
-        <div class="count">2 kits</div>
-      </div>
-    </div>
-  </div>
-</section>
+          <label for="contact-email">Correo electrónico</label>
+          <input id="contact-email" name="email" type="email" required autocomplete="email" placeholder="hola@ejemplo.com">
 
-<!-- AROMAS -->
-<section class="aromas">
-  <div class="aromas-intro">
-    <div class="section-eyebrow">Una experiencia sensorial</div>
-    <h2 class="section-title">Encuentra <span class="italic">tu aroma</span></h2>
-    <p>Cada fórmula nace de un aroma. Lavanda para calmar, vainilla para reconfortar, cítricos para energizar. Descubre tu colección personal y construye tu ritual completo.</p>
-  </div>
-  <div class="aroma-track">
-    <div class="aroma-card aroma-1">
-      <div class="aroma-visual">
-        <span class="aroma-num">01</span>
-        <span class="aroma-icon-decor">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
-            <path d="M12 2 L13 8 L19 9 L14 13 L15 19 L12 16 L9 19 L10 13 L5 9 L11 8 Z"/>
-          </svg>
-        </span>
-        <svg class="aroma-bottle" viewBox="0 0 110 240" xmlns="http://www.w3.org/2000/svg">
-          <rect x="40" y="0" width="30" height="30" rx="3" fill="#1a1c12"/>
-          <rect x="20" y="30" width="70" height="200" rx="6" fill="rgba(245,241,232,0.95)"/>
-          <rect x="28" y="80" width="54" height="120" rx="2" fill="#9d627b"/>
-          <text x="55" y="120" text-anchor="middle" font-family="Cormorant Garamond" font-size="10" fill="#f5f1e8" font-weight="500">BOTANIC</text>
-          <text x="55" y="135" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="8" fill="#f5f1e8">care</text>
-          <line x1="38" y1="150" x2="72" y2="150" stroke="#f5f1e8" stroke-width="0.5" opacity="0.6"/>
-          <text x="55" y="170" text-anchor="middle" font-family="Cormorant Garamond" font-size="9" fill="#f5f1e8" font-style="italic">Lavanda</text>
-        </svg>
-      </div>
-      <div class="aroma-meta">
-        <div>
-          <h3>Lavanda</h3>
-          <div class="subtitle">Calma · Equilibrio</div>
-        </div>
-        <span class="aroma-explore">Ver →</span>
-      </div>
-    </div>
-    <div class="aroma-card aroma-2">
-      <div class="aroma-visual">
-        <span class="aroma-num">02</span>
-        <span class="aroma-icon-decor">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
-            <path d="M12 2 L14 8 L20 8 L15 13 L17 19 L12 16 L7 19 L9 13 L4 8 L10 8 Z"/>
-          </svg>
-        </span>
-        <svg class="aroma-bottle" viewBox="0 0 110 240" xmlns="http://www.w3.org/2000/svg">
-          <rect x="40" y="0" width="30" height="30" rx="3" fill="#1a1c12"/>
-          <rect x="20" y="30" width="70" height="200" rx="6" fill="rgba(245,241,232,0.95)"/>
-          <rect x="28" y="80" width="54" height="120" rx="2" fill="#a39386"/>
-          <text x="55" y="120" text-anchor="middle" font-family="Cormorant Garamond" font-size="10" fill="#f5f1e8" font-weight="500">BOTANIC</text>
-          <text x="55" y="135" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="8" fill="#f5f1e8">care</text>
-          <line x1="38" y1="150" x2="72" y2="150" stroke="#f5f1e8" stroke-width="0.5" opacity="0.6"/>
-          <text x="55" y="170" text-anchor="middle" font-family="Cormorant Garamond" font-size="9" fill="#f5f1e8" font-style="italic">Vainilla</text>
-        </svg>
-      </div>
-      <div class="aroma-meta">
-        <div>
-          <h3>Vainilla</h3>
-          <div class="subtitle">Cálido · Reconfortante</div>
-        </div>
-        <span class="aroma-explore">Ver →</span>
-      </div>
-    </div>
-    <div class="aroma-card aroma-3">
-      <div class="aroma-visual">
-        <span class="aroma-num">03</span>
-        <span class="aroma-icon-decor">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
-            <circle cx="12" cy="12" r="9"/>
-            <path d="M12 3 L12 21 M3 12 L21 12"/>
-          </svg>
-        </span>
-        <svg class="aroma-bottle" viewBox="0 0 110 240" xmlns="http://www.w3.org/2000/svg">
-          <rect x="40" y="0" width="30" height="30" rx="3" fill="#1a1c12"/>
-          <rect x="20" y="30" width="70" height="200" rx="6" fill="rgba(245,241,232,0.95)"/>
-          <rect x="28" y="80" width="54" height="120" rx="2" fill="#80876e"/>
-          <text x="55" y="120" text-anchor="middle" font-family="Cormorant Garamond" font-size="10" fill="#f5f1e8" font-weight="500">BOTANIC</text>
-          <text x="55" y="135" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="8" fill="#f5f1e8">care</text>
-          <line x1="38" y1="150" x2="72" y2="150" stroke="#f5f1e8" stroke-width="0.5" opacity="0.6"/>
-          <text x="55" y="170" text-anchor="middle" font-family="Cormorant Garamond" font-size="9" fill="#f5f1e8" font-style="italic">Cítricos</text>
-        </svg>
-      </div>
-      <div class="aroma-meta">
-        <div>
-          <h3>Cítricos</h3>
-          <div class="subtitle">Frescura · Energía</div>
-        </div>
-        <span class="aroma-explore">Ver →</span>
-      </div>
-    </div>
-    <div class="aroma-card aroma-4">
-      <div class="aroma-visual">
-        <span class="aroma-num">04</span>
-        <span class="aroma-icon-decor">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
-            <path d="M12 2 Q8 8, 12 14 Q16 8, 12 2 Z M12 14 L12 22"/>
-          </svg>
-        </span>
-        <svg class="aroma-bottle" viewBox="0 0 110 240" xmlns="http://www.w3.org/2000/svg">
-          <rect x="40" y="0" width="30" height="30" rx="3" fill="#1a1c12"/>
-          <rect x="20" y="30" width="70" height="200" rx="6" fill="rgba(245,241,232,0.95)"/>
-          <rect x="28" y="80" width="54" height="120" rx="2" fill="#765c4c"/>
-          <text x="55" y="120" text-anchor="middle" font-family="Cormorant Garamond" font-size="10" fill="#f5f1e8" font-weight="500">BOTANIC</text>
-          <text x="55" y="135" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="8" fill="#f5f1e8">care</text>
-          <line x1="38" y1="150" x2="72" y2="150" stroke="#f5f1e8" stroke-width="0.5" opacity="0.6"/>
-          <text x="55" y="170" text-anchor="middle" font-family="Cormorant Garamond" font-size="9" fill="#f5f1e8" font-style="italic">Cardamomo</text>
-        </svg>
-      </div>
-      <div class="aroma-meta">
-        <div>
-          <h3>Cardamomo</h3>
-          <div class="subtitle">Especiado · Revitalizante</div>
-        </div>
-        <span class="aroma-explore">Ver →</span>
-      </div>
-    </div>
-  </div>
-</section>
+          <label for="contact-phone">Teléfono (opcional)</label>
+          <input id="contact-phone" name="phone" type="tel" autocomplete="tel" placeholder="+502 0000 0000">
 
-<!-- QUIZ -->
-<section class="quiz">
-  <div class="quiz-card">
-    <span class="quiz-floating-leaves quiz-leaf-1">❋</span>
-    <span class="quiz-floating-leaves quiz-leaf-2">❋</span>
-    <div class="quiz-text">
-      <div class="section-eyebrow">Personalizado para ti</div>
-      <h2>Encuentra <span class="italic">tu producto ideal</span></h2>
-      <p>Cada piel es única. Responde 5 preguntas y te recomendaremos la rutina y los productos perfectos para tus necesidades, tipo de piel y aroma favorito.</p>
-      <div class="quiz-features">
-        <div class="quiz-feature">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          2 minutos
-        </div>
-        <div class="quiz-feature">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          5 preguntas
-        </div>
-        <div class="quiz-feature">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          Recomendación única
-        </div>
-      </div>
-      <div class="quiz-cta-row">
-        <button class="btn btn-dark">Comenzar el quiz <span class="btn-arrow"></span></button>
-        <span class="quiz-time">— Sin compromiso</span>
-      </div>
-    </div>
-    <div class="quiz-visual">
-      <div class="quiz-circle">
-        <div class="quiz-circle-inner">
-          <span class="quiz-icon-big">❋</span>
-          <div class="quiz-q">¿Cuál es tu mayor preocupación de la piel?</div>
-          <div class="quiz-options">
-            <button class="quiz-option">Hidratación</button>
-            <button class="quiz-option">Antiedad</button>
-            <button class="quiz-option">Acné</button>
-            <button class="quiz-option">Sensibilidad</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+          <label for="contact-topic">Motivo</label>
+          <select id="contact-topic" name="topic">
+            <option value="pedido">Pedido o envío</option>
+            <option value="producto">Consulta sobre un producto</option>
+            <option value="mayoreo">Mayoreo / distribución</option>
+            <option value="prensa">Prensa o colaboraciones</option>
+            <option value="otro">Otro</option>
+          </select>
 
-<!-- RITUAL FEATURE -->
-<section class="ritual">
-  <div class="ritual-grid">
-    <div class="ritual-text">
-      <div class="section-eyebrow">Ritual destacado</div>
-      <h2>Ready, Set, <span class="italic">Glow!</span></h2>
-      <p>Tu ritual de cuidado empieza aquí. Cinco pasos esenciales para revelar una piel luminosa y equilibrada. Perfecto para descubrir nuestros favoritos, viajar o regalar bienestar.</p>
-      <button class="btn btn-primary">Comprar el ritual — Q195 <span class="btn-arrow"></span></button>
-      <div class="ritual-steps">
-        <div class="ritual-step">
-          <div class="step-num">PASO 01</div>
-          <h4>Limpia</h4>
-          <p>Limpiador facial con ingredientes botánicos</p>
-        </div>
-        <div class="ritual-step">
-          <div class="step-num">PASO 02</div>
-          <h4>Hidrata</h4>
-          <p>Tónico de rosa y manzanilla</p>
-        </div>
-        <div class="ritual-step">
-          <div class="step-num">PASO 03</div>
-          <h4>Humecta</h4>
-          <p>Crema facial hidratante</p>
-        </div>
-        <div class="ritual-step">
-          <div class="step-num">PASO 04</div>
-          <h4>Nutre</h4>
-          <p>Body wash y body lotion</p>
-        </div>
-      </div>
-    </div>
-    <div class="ritual-visual">
-      <div class="ritual-price-tag">
-        <div class="label">Sampler Kit</div>
-        <div class="price">Q195</div>
-      </div>
-      <div class="ritual-bottles">
-        <div class="ritual-bottle"></div>
-        <div class="ritual-bottle"></div>
-        <div class="ritual-bottle"></div>
-        <div class="ritual-bottle"></div>
-        <div class="ritual-bottle"></div>
-      </div>
-    </div>
-  </div>
-</section>
+          <label for="contact-message">Mensaje</label>
+          <textarea id="contact-message" name="message" required placeholder="Cuéntanos en qué podemos ayudarte"></textarea>
 
-<!-- BESTSELLERS -->
-<section class="bestsellers">
-  <div class="best-header">
-    <div>
-      <div class="section-eyebrow">Lo más amado</div>
-      <h2 class="section-title">Bestsellers <span class="italic">de la casa</span></h2>
-    </div>
-    <div class="best-tabs">
-      <button class="best-tab active">Todos</button>
-      <button class="best-tab">Cuerpo</button>
-      <button class="best-tab">Facial</button>
-      <button class="best-tab">Manos</button>
-    </div>
-  </div>
-  <div class="best-grid">
-    <div class="product-card">
-      <div class="product-image">
-        <span class="product-badge">Bestseller</span>
-        <span class="product-fav">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-          </svg>
-        </span>
-        <svg class="product-bottle" viewBox="0 0 90 200" xmlns="http://www.w3.org/2000/svg">
-          <rect x="35" y="0" width="20" height="22" rx="2" fill="#1a1c12"/>
-          <rect x="15" y="22" width="60" height="170" rx="5" fill="#a9b394"/>
-          <rect x="22" y="60" width="46" height="110" rx="2" fill="#587e52"/>
-          <text x="45" y="95" text-anchor="middle" font-family="Cormorant Garamond" font-size="9" fill="#f5f1e8" font-weight="500">BOTANIC</text>
-          <text x="45" y="108" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="7" fill="#f5f1e8">care</text>
-          <text x="45" y="135" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="8" fill="#f5f1e8">Lavanda</text>
-        </svg>
+          <button type="submit">Enviar mensaje</button>
+        </form>
       </div>
-      <div class="product-info">
-        <span class="product-cat">Crema Corporal</span>
-        <h3 class="product-name">Lavanda Nutritiva</h3>
-        <div class="product-bottom">
-          <span class="product-price">Q175</span>
-          <div class="product-rating">
-            <span class="stars">★★★★★</span>
-            <span>(124)</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="product-card">
-      <div class="product-image">
-        <span class="product-badge">Nuevo</span>
-        <span class="product-fav">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-          </svg>
-        </span>
-        <svg class="product-bottle" viewBox="0 0 90 200" xmlns="http://www.w3.org/2000/svg">
-          <rect x="35" y="0" width="20" height="18" rx="2" fill="#1a1c12"/>
-          <ellipse cx="45" cy="20" rx="22" ry="6" fill="#1a1c12"/>
-          <rect x="20" y="22" width="50" height="160" rx="6" fill="#8e421e"/>
-          <rect x="26" y="60" width="38" height="100" rx="2" fill="#ac7446"/>
-          <text x="45" y="95" text-anchor="middle" font-family="Cormorant Garamond" font-size="9" fill="#f5f1e8" font-weight="500">BOTANIC</text>
-          <text x="45" y="108" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="7" fill="#f5f1e8">care</text>
-          <text x="45" y="135" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="7" fill="#f5f1e8">Suero</text>
-        </svg>
-      </div>
-      <div class="product-info">
-        <span class="product-cat">Suero Facial</span>
-        <h3 class="product-name">Hialurónico & Colágeno</h3>
-        <div class="product-bottom">
-          <span class="product-price">Q215</span>
-          <div class="product-rating">
-            <span class="stars">★★★★★</span>
-            <span>(89)</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="product-card">
-      <div class="product-image">
-        <span class="product-badge">Top</span>
-        <span class="product-fav">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-          </svg>
-        </span>
-        <svg class="product-bottle" viewBox="0 0 90 200" xmlns="http://www.w3.org/2000/svg">
-          <rect x="20" y="40" width="50" height="14" rx="2" fill="#a9b394"/>
-          <rect x="15" y="54" width="60" height="135" rx="6" fill="#a9b394"/>
-          <rect x="22" y="80" width="46" height="100" rx="2" fill="#587e52"/>
-          <text x="45" y="115" text-anchor="middle" font-family="Cormorant Garamond" font-size="9" fill="#f5f1e8" font-weight="500">BOTANIC</text>
-          <text x="45" y="128" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="7" fill="#f5f1e8">care</text>
-          <text x="45" y="155" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="7" fill="#f5f1e8">Crema manos</text>
-        </svg>
-      </div>
-      <div class="product-info">
-        <span class="product-cat">Crema de Manos</span>
-        <h3 class="product-name">Cardamomo Superfoods</h3>
-        <div class="product-bottom">
-          <span class="product-price">Q75</span>
-          <div class="product-rating">
-            <span class="stars">★★★★★</span>
-            <span>(203)</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="product-card">
-      <div class="product-image">
-        <span class="product-badge">Edición</span>
-        <span class="product-fav">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-          </svg>
-        </span>
-        <svg class="product-bottle" viewBox="0 0 90 200" xmlns="http://www.w3.org/2000/svg">
-          <rect x="35" y="0" width="20" height="22" rx="2" fill="#1a1c12"/>
-          <rect x="15" y="22" width="60" height="170" rx="5" fill="#a9b394"/>
-          <rect x="22" y="60" width="46" height="110" rx="2" fill="#a39386"/>
-          <text x="45" y="95" text-anchor="middle" font-family="Cormorant Garamond" font-size="9" fill="#f5f1e8" font-weight="500">BOTANIC</text>
-          <text x="45" y="108" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="7" fill="#f5f1e8">care</text>
-          <text x="45" y="135" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="8" fill="#f5f1e8">Vainilla</text>
-        </svg>
-      </div>
-      <div class="product-info">
-        <span class="product-cat">Crema Corporal</span>
-        <h3 class="product-name">Vainilla Calmante</h3>
-        <div class="product-bottom">
-          <span class="product-price">Q175</span>
-          <div class="product-rating">
-            <span class="stars">★★★★★</span>
-            <span>(167)</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- COMING SOON -->
-<section class="coming">
-  <div class="coming-header">
-    <div class="section-eyebrow">Próximamente</div>
-    <h2 class="section-title">Lo que <span class="italic">se viene</span></h2>
-    <p>Nuevas fórmulas en desarrollo. Cada lanzamiento es el resultado de meses de investigación con ingredientes botánicos seleccionados con propósito.</p>
-  </div>
-  <div class="coming-grid">
-    <div class="coming-card coming-1">
-      <div class="coming-card-bg"></div>
-      <div class="coming-overlay"></div>
-      <svg class="coming-bottle" viewBox="0 0 110 240" xmlns="http://www.w3.org/2000/svg">
-        <rect x="40" y="0" width="30" height="30" rx="3" fill="#1a1c12"/>
-        <rect x="20" y="30" width="70" height="200" rx="6" fill="rgba(245,241,232,0.2)" stroke="rgba(245,241,232,0.4)" stroke-width="0.5"/>
-        <rect x="28" y="80" width="54" height="120" rx="2" fill="rgba(245,241,232,0.15)" stroke="rgba(245,241,232,0.3)" stroke-width="0.5"/>
-        <text x="55" y="120" text-anchor="middle" font-family="Cormorant Garamond" font-size="10" fill="#f5f1e8" font-weight="500" opacity="0.7">BOTANIC</text>
-        <text x="55" y="135" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="8" fill="#f5f1e8" opacity="0.7">care</text>
-        <text x="55" y="160" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="9" fill="#f5f1e8" opacity="0.7">?</text>
-      </svg>
-      <div class="coming-card-content">
-        <div class="coming-top">
-          <span class="coming-tag">Coming Soon</span>
-          <span class="coming-num">N° 01</span>
+      <aside class="contact-aside" aria-label="Datos de contacto">
+        <h3>Datos directos</h3>
+        <div class="contact-info-block">
+          <strong>Correo</strong>
+          <a href="mailto:hola@botaniccare.com">hola@botaniccare.com</a>
         </div>
-        <div class="coming-bottom">
-          <h3>Mascarilla de Arcilla</h3>
-          <div class="subtitle">Detox profundo · Línea facial</div>
-          <div class="coming-launch">
-            <div class="launch-date">
-              <span class="launch-label">Lanzamiento</span>
-              <span class="launch-when">Mayo 2026</span>
-            </div>
-            <div class="coming-arrow">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </div>
-          </div>
+        <div class="contact-info-block">
+          <strong>Teléfono / WhatsApp</strong>
+          <a href="https://wa.me/50200000000">+502 0000-0000</a>
         </div>
-      </div>
-    </div>
-    <div class="coming-card coming-2">
-      <div class="coming-card-bg"></div>
-      <div class="coming-overlay"></div>
-      <svg class="coming-bottle" viewBox="0 0 110 240" xmlns="http://www.w3.org/2000/svg">
-        <rect x="40" y="0" width="30" height="30" rx="3" fill="#1a1c12"/>
-        <rect x="20" y="30" width="70" height="200" rx="6" fill="rgba(245,241,232,0.2)" stroke="rgba(245,241,232,0.4)" stroke-width="0.5"/>
-        <rect x="28" y="80" width="54" height="120" rx="2" fill="rgba(245,241,232,0.15)" stroke="rgba(245,241,232,0.3)" stroke-width="0.5"/>
-        <text x="55" y="120" text-anchor="middle" font-family="Cormorant Garamond" font-size="10" fill="#f5f1e8" font-weight="500" opacity="0.7">BOTANIC</text>
-        <text x="55" y="135" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="8" fill="#f5f1e8" opacity="0.7">care</text>
-        <text x="55" y="160" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="9" fill="#f5f1e8" opacity="0.7">?</text>
-      </svg>
-      <div class="coming-card-content">
-        <div class="coming-top">
-          <span class="coming-tag">Coming Soon</span>
-          <span class="coming-num">N° 02</span>
+        <div class="contact-info-block">
+          <strong>Horario</strong>
+          Lunes a viernes · 9:00 – 18:00 (GMT-6)<br>
+          Sábados · 10:00 – 14:00
         </div>
-        <div class="coming-bottom">
-          <h3>Aceite Capilar</h3>
-          <div class="subtitle">Nutrición · Línea capilar</div>
-          <div class="coming-launch">
-            <div class="launch-date">
-              <span class="launch-label">Lanzamiento</span>
-              <span class="launch-when">Junio 2026</span>
-            </div>
-            <div class="coming-arrow">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </div>
-          </div>
+        <div class="contact-info-block">
+          <strong>Ubicación</strong>
+          Ciudad de Guatemala, Guatemala<br>
+          <span style="font-size:13px;">Envíos a todo el país.</span>
         </div>
-      </div>
-    </div>
-    <div class="coming-card coming-3">
-      <div class="coming-card-bg"></div>
-      <div class="coming-overlay"></div>
-      <svg class="coming-bottle" viewBox="0 0 110 240" xmlns="http://www.w3.org/2000/svg">
-        <rect x="40" y="0" width="30" height="30" rx="3" fill="#1a1c12"/>
-        <rect x="20" y="30" width="70" height="200" rx="6" fill="rgba(245,241,232,0.2)" stroke="rgba(245,241,232,0.4)" stroke-width="0.5"/>
-        <rect x="28" y="80" width="54" height="120" rx="2" fill="rgba(245,241,232,0.15)" stroke="rgba(245,241,232,0.3)" stroke-width="0.5"/>
-        <text x="55" y="120" text-anchor="middle" font-family="Cormorant Garamond" font-size="10" fill="#f5f1e8" font-weight="500" opacity="0.7">BOTANIC</text>
-        <text x="55" y="135" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="8" fill="#f5f1e8" opacity="0.7">care</text>
-        <text x="55" y="160" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="9" fill="#f5f1e8" opacity="0.7">?</text>
-      </svg>
-      <div class="coming-card-content">
-        <div class="coming-top">
-          <span class="coming-tag">Coming Soon</span>
-          <span class="coming-num">N° 03</span>
+        <div class="contact-wa-note">
+          ¿Prefieres WhatsApp? Escríbenos y te respondemos en el día. <a href="#">Abrir chat</a>
         </div>
-        <div class="coming-bottom">
-          <h3>Bálsamo Labial</h3>
-          <div class="subtitle">Hidratación intensa · Edición limitada</div>
-          <div class="coming-launch">
-            <div class="launch-date">
-              <span class="launch-label">Lanzamiento</span>
-              <span class="launch-when">Julio 2026</span>
-            </div>
-            <div class="coming-arrow">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </div>
-          </div>
-        </div>
-      </div>
+      </aside>
     </div>
   </div>
-</section>
-
-<!-- STORY -->
-<section class="story" style="padding:0">
-  <div class="story-image">
-    <span class="story-leaf story-leaf-1">❋</span>
-    <span class="story-leaf story-leaf-2">❋</span>
-    <div class="story-emblem">
-      <div class="story-emblem-inner">
-        <div class="emblem-icon">❋</div>
-        <div class="emblem-text">Botanic<br>Care<br>· Est. 2020 ·</div>
-      </div>
-    </div>
-  </div>
-  <div class="story-content">
-    <div class="section-eyebrow">Nuestra historia</div>
-    <h2>El poder de las plantas, <span class="italic">en tus manos</span></h2>
-    <p>Botanic Care nace del cruce entre conocimiento académico y la riqueza botánica de Centroamérica. Cada fórmula se desarrolla en Guatemala bajo un proceso riguroso de selección de activos botánicos, producción certificada y controles por lote.</p>
-    <p>Creemos en el poder de las plantas para restaurar nuestro equilibrio. Por eso trabajamos sin tóxicos, sin pruebas en animales y con empaques que respetan al planeta.</p>
-    <div class="story-stats">
-      <div>
-        <div class="stat-num">5+</div>
-        <div class="stat-label">Años creando</div>
-      </div>
-      <div>
-        <div class="stat-num">42</div>
-        <div class="stat-label">Productos únicos</div>
-      </div>
-      <div>
-        <div class="stat-num">100%</div>
-        <div class="stat-label">Plant based</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SHARK TANK -->
-<section class="shark">
-  <div class="shark-content">
-    <div class="shark-left">
-      <div class="shark-badge">
-        <div class="shark-badge-text">As seen on<strong>SHARK TANK</strong>Guatemala T2</div>
-      </div>
-      <div class="shark-text">
-        <h3>Pronto en <span class="italic">Shark Tank Guatemala</span></h3>
-        <p>Estamos llevando el poder de la cosmética natural guatemalteca a millones de hogares. Únete al movimiento y forma parte de nuestra historia.</p>
-      </div>
-    </div>
-    <button class="btn btn-primary">Conocer más <span class="btn-arrow"></span></button>
-  </div>
-</section>
-
-<!-- INGREDIENTS -->
-<section class="ingredients">
-  <div class="ing-header">
-    <div class="section-eyebrow">Ingredientes hero</div>
-    <h2 class="section-title">El poder de <span class="italic">la naturaleza</span></h2>
-    <p>Cada fórmula combina ingredientes de origen orgánico cuidadosamente seleccionados por sus propiedades únicas. Conoce los protagonistas detrás de Botanic Care.</p>
-  </div>
-  <div class="ing-grid">
-    <div class="ing-card">
-      <div class="ing-icon">
-        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.2">
-          <path d="M32 8 Q20 20, 18 36 Q22 52, 32 56 Q42 52, 46 36 Q44 20, 32 8 Z"/>
-          <path d="M32 8 L32 56 M22 28 L42 28 M20 40 L44 40"/>
-        </svg>
-      </div>
-      <h4>Manteca de Karité</h4>
-      <div class="latin">Vitellaria paradoxa</div>
-      <p>Profundamente hidratante y reparadora, ideal para pieles secas o castigadas.</p>
-    </div>
-    <div class="ing-card">
-      <div class="ing-icon">
-        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.2">
-          <circle cx="32" cy="32" r="20"/>
-          <circle cx="32" cy="32" r="14"/>
-          <circle cx="32" cy="32" r="8"/>
-          <path d="M32 12 L32 52 M12 32 L52 32 M18 18 L46 46 M46 18 L18 46"/>
-        </svg>
-      </div>
-      <h4>Aloe Vera</h4>
-      <div class="latin">Aloe barbadensis</div>
-      <p>Calmante natural rico en minerales y vitaminas para regenerar la piel.</p>
-    </div>
-    <div class="ing-card">
-      <div class="ing-icon">
-        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.2">
-          <path d="M32 8 Q24 16, 24 28 Q24 36, 32 40 Q40 36, 40 28 Q40 16, 32 8 Z"/>
-          <path d="M32 40 L32 56 M28 48 L36 48"/>
-        </svg>
-      </div>
-      <h4>Rosa Mosqueta</h4>
-      <div class="latin">Rosa canina</div>
-      <p>Regenera tejidos y reduce líneas de expresión gracias a su alta concentración de vitamina C.</p>
-    </div>
-    <div class="ing-card">
-      <div class="ing-icon">
-        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.2">
-          <ellipse cx="32" cy="32" rx="16" ry="22"/>
-          <path d="M32 10 L32 54 M16 32 L48 32"/>
-          <circle cx="32" cy="22" r="3"/>
-          <circle cx="32" cy="42" r="3"/>
-        </svg>
-      </div>
-      <h4>Gotu Kola</h4>
-      <div class="latin">Centella asiatica</div>
-      <p>Extracto regenerativo usado para tratar cicatrices, estrías y revitalizar la piel.</p>
-    </div>
-  </div>
-</section>
-
-<!-- SUSTAINABILITY -->
-<section class="sustain">
-  <div class="sustain-grid">
-    <div class="sustain-text">
-      <div class="section-eyebrow">Nuestro compromiso</div>
-      <h2>Cuidamos tu piel <span class="italic">y el planeta</span></h2>
-      <p>Cada decisión que tomamos en Botanic Care responde a una pregunta: ¿es bueno para tu cuerpo y para la tierra que nos sostiene? Si la respuesta no es sí a las dos, no lo hacemos.</p>
-      <a href="#" class="sustain-link">Conoce nuestro impacto <span class="btn-arrow"></span></a>
-    </div>
-    <div class="sustain-pillars">
-      <div class="pillar">
-        <span class="pillar-num">01</span>
-        <div class="pillar-icon">
-          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3">
-            <path d="M24 4 Q12 14, 12 26 Q12 38, 24 44 Q36 38, 36 26 Q36 14, 24 4 Z"/>
-            <path d="M24 4 L24 44 M14 22 L34 22"/>
-          </svg>
-        </div>
-        <h4>100% Plant Based</h4>
-        <p>Toda nuestra materia prima es derivada de plantas. Sin químicos, sin tóxicos, sin atajos.</p>
-      </div>
-      <div class="pillar">
-        <span class="pillar-num">02</span>
-        <div class="pillar-icon">
-          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3">
-            <circle cx="24" cy="24" r="18"/>
-            <path d="M16 24 L22 30 L34 18"/>
-          </svg>
-        </div>
-        <h4>Cruelty Free</h4>
-        <p>Jamás probamos en animales. Nuestras fórmulas se desarrollan con respeto a toda forma de vida.</p>
-      </div>
-      <div class="pillar">
-        <span class="pillar-num">03</span>
-        <div class="pillar-icon">
-          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3">
-            <rect x="10" y="14" width="28" height="26" rx="2"/>
-            <path d="M16 14 L16 8 Q16 4, 20 4 L28 4 Q32 4, 32 8 L32 14"/>
-            <path d="M18 24 L24 30 L34 20"/>
-          </svg>
-        </div>
-        <h4>Empaques Reciclables</h4>
-        <p>Botellas de aluminio, vidrio y papel encerado. Diseñamos cada empaque pensando en su segunda vida.</p>
-      </div>
-      <div class="pillar">
-        <span class="pillar-num">04</span>
-        <div class="pillar-icon">
-          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3">
-            <path d="M8 32 Q8 24, 16 24 Q24 24, 24 16 Q24 8, 32 8 Q40 8, 40 16"/>
-            <path d="M40 16 Q40 24, 32 24 Q24 24, 24 32 Q24 40, 16 40 Q8 40, 8 32"/>
-          </svg>
-        </div>
-        <h4>Producción certificada en Guatemala</h4>
-        <p>Cada fórmula se produce bajo estándares certificados, con registros sanitarios completos y controles por lote. Activos botánicos centroamericanos, método riguroso.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section class="testimonials">
-  <div class="test-header">
-    <div>
-      <div class="section-eyebrow">Lo que dicen</div>
-      <h2 class="section-title">Voces que <span class="italic">nos inspiran</span></h2>
-    </div>
-  </div>
-  <div class="test-grid">
-    <div class="test-card">
-      <span class="test-quote">"</span>
-      <div class="stars">★★★★★</div>
-      <p>"La mejor crema de manos que he probado. El aroma a cardamomo es adictivo y mi piel nunca había estado tan suave."</p>
-      <div class="test-author">
-        <div>
-          <div class="test-name">María José L.</div>
-          <div class="test-product">Crema de manos Cardamomo</div>
-        </div>
-        <div class="test-verified">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-          Verificada
-        </div>
-      </div>
-    </div>
-    <div class="test-card">
-      <span class="test-quote">"</span>
-      <div class="stars">★★★★★</div>
-      <p>"Después de probar muchas marcas, encontré en Botanic Care la rutina facial que mi piel necesitaba. Resultados visibles en dos semanas."</p>
-      <div class="test-author">
-        <div>
-          <div class="test-name">Andrea R.</div>
-          <div class="test-product">Ritual facial completo</div>
-        </div>
-        <div class="test-verified">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-          Verificada
-        </div>
-      </div>
-    </div>
-    <div class="test-card">
-      <span class="test-quote">"</span>
-      <div class="stars">★★★★★</div>
-      <p>"Compré el kit Skin-tastic para mi hija de 13 años. Por fin productos que puedo confiar para su piel sensible. Es nuestra marca de cabecera."</p>
-      <div class="test-author">
-        <div>
-          <div class="test-name">Carmen V.</div>
-          <div class="test-product">Teenage Kit</div>
-        </div>
-        <div class="test-verified">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-          Verificada
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- NEWSLETTER -->
-<section class="newsletter">
-  <div class="newsletter-content">
-    <div class="section-eyebrow">Únete a la familia</div>
-    <h2>Bienestar para tu <span class="italic">bandeja de entrada</span></h2>
-    <p>Recibe primeros accesos a lanzamientos, rituales exclusivos y el conocimiento botánico de nuestro equipo de formulación. Más un 10% en tu primera compra.</p>
-    <div class="newsletter-form">
-      <input type="email" placeholder="tu@correo.com">
-      <button>Suscribirme <span class="btn-arrow"></span></button>
-    </div>
-    <p class="newsletter-disclaimer">Sin spam. Cancela cuando quieras.</p>
-  </div>
-</section>
-
+</main>
 <!-- FOOTER -->
 <footer>
   <div class="footer-grid">

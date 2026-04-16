@@ -8,7 +8,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import ScrollToTop from "@/components/ScrollToTop";
 import { CartProvider } from "@/contexts/CartContext";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
-import Home from "./pages/Home";
+import { MarketingHomeRedirect } from "@/components/MarketingHomeRedirect";
 import About from "./pages/About";
 import Shop from "./pages/Shop";
 import ProductDetail from "./pages/ProductDetail";
@@ -118,7 +118,7 @@ const App = () => (
             >
               <ScrollToTop />
               <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<MarketingHomeRedirect />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/shop" element={<Shop />} />
                 <Route path="/shop/product/:id" element={<ProductDetail />} />

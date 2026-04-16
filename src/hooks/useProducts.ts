@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { supabase, supabasePublic } from '@/lib/supabase';
 import { Product, productToUI, ProductUI } from '@/types/product';
+import { isShopifyConfigured, shopifyGidToNumericId, shopifyStorefrontFetch } from '@/lib/shopify';
 
 export interface UseProductsOptions {
   category?: string;
@@ -10,231 +10,183 @@ export interface UseProductsOptions {
   nutrientId?: number;
 }
 
-export function useProducts(options: UseProductsOptions = {}) {
-  return useQuery({
-    queryKey: ['products', JSON.stringify(options)],
-    queryFn: async (): Promise<ProductUI[]> => {
-      console.log('🔍 useProducts: Iniciando fetch de productos...', options);
-      try {
-        // If filtering by nutrient, we need to join with product_nutrients
-        if (options.nutrientId) {
-          // First, get product IDs that have this nutrient
-        const { data: productNutrients, error: pnError } = await supabase
-          .from('product_nutrients')
-          .select('product_id')
-          .eq('nutrient_id', options.nutrientId);
+interface ShopifyProductNode {
+  id: string;
+  handle: string;
+  title: string;
+  description: string;
+  productType: string;
+  featuredImage: { url: string; altText?: string | null } | null;
+  priceRange: {
+    minVariantPrice: { amount: string; currencyCode: string };
+  };
+  availableForSale: boolean;
+  tags: string[];
+}
 
-        if (pnError) {
-          throw new Error(`Failed to fetch product nutrients: ${pnError.message}`);
-        }
+interface ProductsQueryData {
+  products: {
+    edges: { node: ShopifyProductNode }[];
+  };
+}
 
-        const productIds = (productNutrients || []).map(pn => pn.product_id);
+interface CollectionProductsData {
+  collection: {
+    products: { edges: { node: ShopifyProductNode }[] };
+  } | null;
+}
 
-        if (productIds.length === 0) {
-          return []; // No products with this nutrient
-        }
+const PRODUCT_FIELDS = `
+  id
+  handle
+  title
+  description
+  productType
+  featuredImage { url altText }
+  priceRange { minVariantPrice { amount currencyCode } }
+  availableForSale
+  tags
+`;
 
-        // Now query products with these IDs
-        // Usar cliente público para evitar problemas con sesiones de usuarios nuevos
-        let query = supabasePublic
-          .from('products')
-          .select('*')
-          .eq('in_stock', true)
-          .in('id', productIds)
-          .order('created_at', { ascending: false });
+function mapShopifyNodeToProduct(node: ShopifyProductNode): Product {
+  const id = shopifyGidToNumericId(node.id);
+  const price = parseFloat(node.priceRange.minVariantPrice.amount) || 0;
+  const tags = node.tags || [];
+  const badge = tags.find((t) => /bestseller|nuevo|sale|top|new/i.test(t)) || null;
 
-        // Apply other filters
-        if (options.category && options.category !== 'all') {
-          query = query.eq('category', options.category);
-        }
+  return {
+    id,
+    name: node.title,
+    category: node.productType || 'Producto',
+    price,
+    original_price: null,
+    image_url: node.featuredImage?.url ?? null,
+    emoji: null,
+    rating: 5,
+    reviews_count: 0,
+    badge,
+    description: node.description?.replace(/<[^>]+>/g, '')?.slice(0, 200) || node.title,
+    long_description: node.description,
+    ingredients: null,
+    benefits: null,
+    size: null,
+    in_stock: node.availableForSale,
+    sku: node.handle,
+  };
+}
 
-        if (options.minPrice !== undefined) {
-          query = query.gte('price', options.minPrice);
-        }
+function applyPriceAndSearch(
+  rows: ProductUI[],
+  options: UseProductsOptions
+): ProductUI[] {
+  let out = rows;
+  const q = options.searchQuery?.trim().toLowerCase();
+  if (q) {
+    out = out.filter(
+      (p) =>
+        p.name.toLowerCase().includes(q) ||
+        p.description.toLowerCase().includes(q)
+    );
+  }
+  if (options.minPrice !== undefined) {
+    out = out.filter((p) => p.price >= options.minPrice!);
+  }
+  if (options.maxPrice !== undefined) {
+    out = out.filter((p) => p.price <= options.maxPrice!);
+  }
+  return out;
+}
 
-        if (options.maxPrice !== undefined) {
-          query = query.lte('price', options.maxPrice);
-        }
+async function fetchShopifyProducts(options: UseProductsOptions): Promise<ProductUI[]> {
+  if (options.nutrientId) {
+    return [];
+  }
 
-        if (options.searchQuery) {
-          query = query.or(
-            `name.ilike.%${options.searchQuery}%,description.ilike.%${options.searchQuery}%`
-          );
-        }
+  let edges: { node: ShopifyProductNode }[];
 
-        console.log('🔍 useProducts (nutrient): Ejecutando query...');
-        console.log('🔍 useProducts (nutrient): Query construida, esperando respuesta...');
-        
-        // Agregar timeout real
-        try {
-          const { data, error } = await Promise.race([
-            query,
-            new Promise((_, reject) => 
-              setTimeout(() => reject(new Error('Query timeout')), 5000)
-            )
-          ]) as any;
-          
-          console.log('🔍 useProducts (nutrient): Query completada', { 
-            dataLength: data?.length || 0, 
-            error: error ? { code: error.code, message: error.message, details: error.details, hint: error.hint } : null 
-          });
-
-          if (error) {
-            console.error('❌ Error fetching products with nutrient filter:', error);
-            // Si es error de permisos, intentar sin filtro in_stock
-            if (error.code === 'PGRST301' || error.message?.includes('permission') || error.message?.includes('policy') || error.message?.includes('RLS')) {
-              console.warn('Error de permisos, intentando obtener productos sin filtro...');
-              let fallbackQuery = supabasePublic
-                .from('products')
-                .select('*')
-                .in('id', productIds)
-                .order('created_at', { ascending: false });
-              
-              if (options.category && options.category !== 'all') {
-                fallbackQuery = fallbackQuery.eq('category', options.category);
-              }
-              
-              const { data: allData, error: allError } = await fallbackQuery;
-              
-              if (allError) {
-                console.error('Error incluso sin filtro:', allError);
-                return [];
-              }
-              
-              // Filtrar manualmente los que están en stock
-              return (allData || []).filter(p => p.in_stock === true).map(productToUI);
-            }
-            return [];
+  if (options.category && options.category !== 'all') {
+    const data = await shopifyStorefrontFetch<CollectionProductsData>(
+      `
+      query CollectionProducts($handle: String!, $first: Int!) {
+        collection(handle: $handle) {
+          products(first: $first) {
+            edges { node { ${PRODUCT_FIELDS} } }
           }
-
-          return (data || []).map(productToUI);
-        } catch (queryError: any) {
-          console.error('❌ Error en la query de productos (nutrient):', queryError);
-          if (queryError.message?.includes('timeout')) {
-            console.error('⏱️ TIMEOUT: La query de productos (nutrient) se colgó después de 5 segundos');
-          }
-          return [];
-        }
-      } else {
-        // Normal query without nutrient filter
-        // Usar cliente público para evitar problemas con sesiones de usuarios nuevos
-        let query = supabasePublic
-          .from('products')
-          .select('*')
-          .eq('in_stock', true)
-          .order('created_at', { ascending: false });
-
-        // Apply filters
-        if (options.category && options.category !== 'all') {
-          query = query.eq('category', options.category);
-        }
-
-        if (options.minPrice !== undefined) {
-          query = query.gte('price', options.minPrice);
-        }
-
-        if (options.maxPrice !== undefined) {
-          query = query.lte('price', options.maxPrice);
-        }
-
-        if (options.searchQuery) {
-          query = query.or(
-            `name.ilike.%${options.searchQuery}%,description.ilike.%${options.searchQuery}%`
-          );
-        }
-
-        console.log('🔍 useProducts (normal): Ejecutando query...');
-        console.log('🔍 useProducts (normal): Query construida, esperando respuesta...');
-        
-        // Agregar timeout real con AbortController
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => {
-          controller.abort();
-          console.error('⏱️ TIMEOUT: La query se colgó después de 5 segundos');
-        }, 5000);
-        
-        try {
-          const { data, error } = await Promise.race([
-            query,
-            new Promise((_, reject) => 
-              setTimeout(() => reject(new Error('Query timeout')), 5000)
-            )
-          ]) as any;
-          
-          clearTimeout(timeoutId);
-          console.log('🔍 useProducts (normal): Query completada', { 
-            dataLength: data?.length || 0, 
-            error: error ? { code: error.code, message: error.message, details: error.details, hint: error.hint } : null 
-          });
-
-          if (error) {
-            console.error('❌ Error fetching products:', error);
-            // Si es error de permisos, intentar sin filtro in_stock
-            if (error.code === 'PGRST301' || error.message?.includes('permission') || error.message?.includes('policy') || error.message?.includes('RLS')) {
-              console.warn('Error de permisos, intentando obtener todos los productos...');
-              const { data: allData, error: allError } = await supabasePublic
-                .from('products')
-                .select('*')
-                .order('created_at', { ascending: false });
-              
-              if (allError) {
-                console.error('Error incluso sin filtro:', allError);
-                return [];
-              }
-              
-              // Filtrar manualmente los que están en stock
-              return (allData || []).filter(p => p.in_stock === true).map(productToUI);
-            }
-            return [];
-          }
-
-          const products = (data || []).map(productToUI);
-          console.log('✅ useProducts: Productos obtenidos:', products.length);
-          return products;
-        } catch (queryError: any) {
-          console.error('❌ Error en la query de productos:', queryError);
-          if (queryError.message?.includes('timeout')) {
-            console.error('⏱️ TIMEOUT: La query se colgó después de 5 segundos. Probable problema de RLS.');
-            console.error('💡 SOLUCIÓN: Ejecuta el script supabase/disable-rls-temporary.sql en Supabase');
-          }
-          return [];
         }
       }
-      } catch (err: any) {
-        console.error('❌ Error en useProducts:', err);
-        // Retornar array vacío en lugar de lanzar error para no romper la UI
+    `,
+      { handle: options.category, first: 48 }
+    );
+    edges = data.collection?.products?.edges ?? [];
+  } else {
+    const data = await shopifyStorefrontFetch<ProductsQueryData>(
+      `
+      query CatalogProducts($first: Int!) {
+        products(first: $first) {
+          edges { node { ${PRODUCT_FIELDS} } }
+        }
+      }
+    `,
+      { first: 48 }
+    );
+    edges = data.products.edges;
+  }
+
+  let rows = edges.map((e) => mapShopifyNodeToProduct(e.node)).map(productToUI);
+  rows = applyPriceAndSearch(rows, options);
+  return rows;
+}
+
+export function useProducts(options: UseProductsOptions = {}) {
+  return useQuery({
+    queryKey: ['products', 'shopify', JSON.stringify(options)],
+    queryFn: async (): Promise<ProductUI[]> => {
+      if (!isShopifyConfigured()) {
+        console.warn('[useProducts] Set VITE_SHOPIFY_STORE_DOMAIN and VITE_SHOPIFY_STOREFRONT_TOKEN');
+        return [];
+      }
+      try {
+        return await fetchShopifyProducts(options);
+      } catch (e) {
+        console.error('[useProducts]', e);
         return [];
       }
     },
-    staleTime: 1000 * 60 * 5, // 5 minutos
+    staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
-    refetchOnMount: true, // Permitir refetch al montar
+    refetchOnMount: true,
     refetchOnReconnect: false,
-    retry: 2, // Reintentar 2 veces
-    throwOnError: false, // No lanzar error, retornar datos vacíos
+    retry: 1,
+    throwOnError: false,
   });
+}
+
+interface NodeQueryData {
+  node: (ShopifyProductNode & { __typename?: string }) | null;
 }
 
 export function useProduct(id: number) {
   return useQuery({
-    queryKey: ['product', id],
+    queryKey: ['product', 'shopify', id],
     queryFn: async (): Promise<ProductUI | null> => {
-      const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .eq('id', id)
-        .single();
-
-      if (error) {
-        if (error.code === 'PGRST116') {
-          return null; // Not found
+      if (!id || !isShopifyConfigured()) return null;
+      const gid = `gid://shopify/Product/${id}`;
+      const data = await shopifyStorefrontFetch<NodeQueryData>(
+        `
+        query ProductNode($id: ID!) {
+          node(id: $id) {
+            ... on Product {
+              ${PRODUCT_FIELDS}
+            }
+          }
         }
-        throw new Error(`Failed to fetch product: ${error.message}`);
-      }
-
-      return data ? productToUI(data as Product) : null;
+      `,
+        { id: gid }
+      );
+      const node = data.node;
+      if (!node || !('handle' in node)) return null;
+      return productToUI(mapShopifyNodeToProduct(node as ShopifyProductNode));
     },
-    enabled: !!id,
+    enabled: !!id && isShopifyConfigured(),
   });
 }
-

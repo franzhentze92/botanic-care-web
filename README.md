@@ -1,73 +1,47 @@
-# Botanic Care - E-commerce Platform
+# Botanic Care
 
-A modern e-commerce platform for natural skincare and wellness products built with React, TypeScript, Vite, and Supabase.
+Marketing site (static HTML in `botanic-html/`) plus a React app (`app.html`) for extra routes. **Product data and checkout are intended to live in Shopify**, not in a custom database.
 
-## Features
+## Shopify (catalog & checkout)
 
-- 🛍️ Product catalog with filtering and search
-- 🛒 Shopping cart and wishlist functionality
-- 💳 Multiple payment methods
-- 🎨 Beautiful, modern UI with custom branding
-- 📱 Fully responsive design
-- 🔐 Supabase backend integration
-
-## Setup Instructions
-
-### 1. Install Dependencies
-
-```bash
-npm install
-```
-
-### 2. Set Up Supabase
-
-1. Create a new project at [supabase.com](https://supabase.com)
-2. Go to your project's SQL Editor
-3. Run the SQL script from `supabase-schema.sql` to create the products table
-4. Get your project URL and anon key from Settings > API
-
-### 3. Configure Environment Variables
-
-Create a `.env` file in the root directory:
+1. Create a **custom app** in Shopify Admin and enable the **Storefront API**.
+2. Copy the **Storefront API public access token** and your shop domain (`your-store.myshopify.com`).
+3. Add to `.env` in the project root:
 
 ```env
-VITE_SUPABASE_URL=your_supabase_project_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+VITE_SHOPIFY_STORE_DOMAIN=your-store.myshopify.com
+VITE_SHOPIFY_STOREFRONT_TOKEN=your_storefront_api_token
+# Public shop URL for customer login links (optional, no trailing slash)
+VITE_SHOPIFY_STORE_URL=https://your-custom-domain.com
+```
 
-# Web3Forms Configuration (for contact form)
-# Get your access key from https://web3forms.com
+The React **Shop** page (`/shop`) loads products via the Storefront API (`src/hooks/useProducts.ts`, `src/lib/shopify.ts`). Static pages under `public/*.html` use hand-authored HTML; you can later add a small script to hydrate the grid from the same API.
+
+**Customer accounts:** sign-in / register in the React app are disabled in favor of **Shopify customer accounts** (`AuthContext` points users to the storefront). Adjust copy and links as needed.
+
+## Legacy React admin
+
+Older admin and dashboard screens were built against a remote database. That dependency has been removed; a small **`src/lib/supabase.ts` stub** keeps those modules compiling while returning empty data. **Operate the real store in [Shopify Admin](https://admin.shopify.com)** (products, orders, discounts, blog, etc.).
+
+## Other environment variables
+
+```env
+# Contact form (optional)
 VITE_WEB3FORMS_ACCESS_KEY=your_web3forms_access_key
 ```
 
-#### Setting up Web3Forms:
-
-1. Go to [web3forms.com](https://web3forms.com) and sign up
-2. Verify your email address
-3. Get your Access Key from the dashboard
-4. Add it to your `.env` file as `VITE_WEB3FORMS_ACCESS_KEY`
-
-### 4. Run the Development Server
+## Scripts
 
 ```bash
+npm install
 npm run dev
+npm run build
 ```
 
-## Database Schema
+`predev` / `prebuild` run `scripts/copy-home-html.mjs` to sync `botanic-html/*.html` into `index.html` and `public/`.
 
-The application uses a `products` table with the following structure:
-- Product information (name, description, price)
-- Category classification
-- Images and media
-- Inventory status
-- Ratings and reviews
-- Ingredients and benefits
+## Tech stack
 
-See `supabase-schema.sql` for the complete schema definition.
-
-## Tech Stack
-
-- **Frontend**: React 18, TypeScript, Vite
-- **UI Components**: shadcn/ui, Tailwind CSS
-- **Backend**: Supabase (PostgreSQL)
-- **State Management**: React Query, Context API
-- **Routing**: React Router v6
+- Vite, React 18, TypeScript, Tailwind, shadcn/ui
+- **Shopify Storefront API** for product listing in the React shop
+- Supabase **removed** from dependencies

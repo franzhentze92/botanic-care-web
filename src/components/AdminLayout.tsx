@@ -324,10 +324,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link to="/" className="cursor-pointer">
+                  <a href="/" className="cursor-pointer">
                     <Home className="mr-2 h-4 w-4" />
                     Ir al Sitio
-                  </Link>
+                  </a>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/dashboard" className="cursor-pointer">
@@ -361,9 +361,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
             {/* Right side - Icons */}
             <div className="flex items-center gap-4">
               <Button variant="ghost" size="icon" asChild>
-                <Link to="/">
+                <a href="/">
                   <Home className="h-5 w-5" />
-                </Link>
+                </a>
               </Button>
               <Button variant="ghost" size="icon" asChild>
                 <Link to="/cart">
@@ -391,10 +391,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                   </div>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link to="/" className="cursor-pointer">
+                    <a href="/" className="cursor-pointer">
                       <Home className="mr-2 h-4 w-4" />
                       Ir al Sitio
-                    </Link>
+                    </a>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link to="/dashboard" className="cursor-pointer">

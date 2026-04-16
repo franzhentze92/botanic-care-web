@@ -1,69 +1,83 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+/**
+ * Local shim: the app catalog uses Shopify (see @/lib/shopify).
+ * Legacy admin/dashboard code still imports `supabase`; this stub returns empty data
+ * so the bundle builds. Manage products, orders, and media in Shopify Admin.
+ */
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-let supabase: SupabaseClient;
-let supabasePublic: SupabaseClient; // Cliente sin autenticación para queries públicas
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('⚠️ Missing Supabase environment variables!');
-  console.error('Please create a .env file in the root directory with:');
-  console.error('VITE_SUPABASE_URL=your_supabase_project_url');
-  console.error('VITE_SUPABASE_ANON_KEY=your_supabase_anon_key');
-  console.error('');
-  console.error('Get these values from your Supabase project:');
-  console.error('1. Go to https://supabase.com');
-  console.error('2. Open your project');
-  console.error('3. Go to Settings > API');
-  console.error('4. Copy the Project URL and anon/public key');
-  
-  // Create a dummy client to prevent crashes during development
-  // This allows the app to load, but API calls will fail gracefully
-  supabase = createClient(
-    'https://placeholder.supabase.co',
-    'placeholder-key'
-  );
-  supabasePublic = supabase;
-} else {
-  // Validate URL format
-  try {
-    new URL(supabaseUrl);
-    supabase = createClient(supabaseUrl, supabaseAnonKey);
-    
-    // Crear cliente público sin autenticación para queries públicas
-    // Esto evita problemas con sesiones de usuarios nuevos
-    // Usar una storage key única para evitar conflictos
-    supabasePublic = createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        persistSession: false,
-        autoRefreshToken: false,
-        detectSessionInUrl: false,
-        storage: typeof window !== 'undefined' ? {
-          getItem: () => null,
-          setItem: () => {},
-          removeItem: () => {}
-        } : undefined,
-        storageKey: 'supabase-public-no-auth'
-      },
-      global: {
-        headers: {
-          'apikey': supabaseAnonKey
-        }
-      }
-    });
-  } catch (error) {
-    console.error('❌ Invalid Supabase URL format:', supabaseUrl);
-    console.error('URL must be a valid HTTPS URL (e.g., https://xxxxx.supabase.co)');
-    
-    // Create a dummy client to prevent crashes
-    supabase = createClient(
-      'https://placeholder.supabase.co',
-      'placeholder-key'
-    );
-    supabasePublic = supabase;
-  }
+function emptyList() {
+  return Promise.resolve({ data: [], error: null });
 }
 
-export { supabase, supabasePublic };
+function notFoundRow() {
+  return Promise.resolve({
+    data: null,
+    error: { code: 'PGRST116', message: 'No rows', details: null, hint: null },
+  });
+}
 
+function chain(): Record<string, unknown> {
+  const b: Record<string, unknown> = {};
+  const next = () => b;
+  const keys = [
+    'select',
+    'eq',
+    'neq',
+    'in',
+    'not',
+    'or',
+    'order',
+    'limit',
+    'range',
+    'gte',
+    'lte',
+    'match',
+    'contains',
+    'insert',
+    'update',
+    'delete',
+    'upsert',
+  ];
+  keys.forEach((k) => {
+    b[k] = next;
+  });
+  b.single = () => notFoundRow();
+  b.maybeSingle = () => Promise.resolve({ data: null, error: null });
+  b.then = (onFulfilled: (v: unknown) => unknown) => emptyList().then(onFulfilled);
+  return b;
+}
+
+const storageBucket = () => ({
+  upload: async () => ({ data: null, error: { message: 'Use Shopify Admin for files' } }),
+  getPublicUrl: () => ({ data: { publicUrl: '' } }),
+});
+
+export const supabase = {
+  auth: {
+    getSession: async () => ({ data: { session: null } }),
+    onAuthStateChange: () => ({
+      data: { subscription: { unsubscribe: () => {} } },
+    }),
+    signUp: async () => ({
+      data: { user: null, session: null },
+      error: { message: 'Use Shopify customer accounts' },
+    }),
+    signInWithPassword: async () => ({
+      data: { user: null, session: null },
+      error: { message: 'Use Shopify customer accounts' },
+    }),
+    signOut: async () => {},
+    resetPasswordForEmail: async () => ({ error: null }),
+    getUser: async () => ({ data: { user: null } }),
+    updateUser: async () => ({
+      data: { user: null },
+      error: null,
+    }),
+  },
+  storage: {
+    from: () => storageBucket(),
+  },
+  rpc: async () => ({ data: null, error: null }),
+  from: () => chain(),
+};
+
+export const supabasePublic = supabase;

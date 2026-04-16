@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
-import { AlertCircle, Loader2, Mail, Lock, User, Eye, EyeOff, CheckCircle } from 'lucide-react';
+import { AlertCircle, Loader2, Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
 import Layout from '@/components/Layout';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { supabase } from '@/lib/supabase';
 
 const Register: React.FC = () => {
   const [name, setName] = useState('');
@@ -18,11 +17,8 @@ const Register: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
-  const [requiresEmailConfirmation, setRequiresEmailConfirmation] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { signUp } = useAuth();
-  const navigate = useNavigate();
 
   const validatePassword = (pwd: string) => {
     return pwd.length >= 6;
@@ -31,7 +27,6 @@ const Register: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    setSuccess(false);
 
     if (!validatePassword(password)) {
       setError('La contraseña debe tener al menos 6 caracteres');
@@ -64,21 +59,6 @@ const Register: React.FC = () => {
         
         setError(errorMessage);
         setIsLoading(false);
-      } else {
-        setSuccess(true);
-        // Verificar si hay sesión activa (si no hay, requiere confirmación de email)
-        // Esperar un momento para que la sesión se establezca
-        setTimeout(async () => {
-          const { data: { session: currentSession } } = await supabase.auth.getSession();
-          if (currentSession) {
-            // Si hay sesión, redirigir al dashboard
-            navigate('/dashboard');
-          } else {
-            // Si no hay sesión, el usuario necesita confirmar su email
-            setRequiresEmailConfirmation(true);
-            setIsLoading(false);
-          }
-        }, 1000);
       }
     } catch (err: any) {
       console.error('Error during registration:', err);
@@ -111,24 +91,6 @@ const Register: React.FC = () => {
                   <Alert variant="destructive">
                     <AlertCircle className="h-4 w-4" />
                     <AlertDescription>{error}</AlertDescription>
-                  </Alert>
-                )}
-
-                {success && (
-                  <Alert className={`${requiresEmailConfirmation ? 'bg-blue-50 border-blue-200' : 'bg-green-50 border-green-200'}`}>
-                    <CheckCircle className={`h-4 w-4 ${requiresEmailConfirmation ? 'text-blue-600' : 'text-green-600'}`} />
-                    <AlertDescription className={requiresEmailConfirmation ? 'text-blue-800' : 'text-green-800'}>
-                      {requiresEmailConfirmation ? (
-                        <>
-                          <strong>¡Cuenta creada exitosamente!</strong>
-                          <br />
-                          Por favor, revisa tu correo electrónico y haz clic en el enlace de confirmación para activar tu cuenta.
-                          Una vez confirmado, podrás iniciar sesión.
-                        </>
-                      ) : (
-                        '¡Cuenta creada exitosamente! Redirigiendo...'
-                      )}
-                    </AlertDescription>
                   </Alert>
                 )}
 
